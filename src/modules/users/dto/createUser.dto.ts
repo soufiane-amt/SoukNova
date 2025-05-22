@@ -1,8 +1,6 @@
 import {
   IsString,
   IsEmail,
-  isString,
-  isEmail,
   IsStrongPassword,
 } from 'class-validator';
 
