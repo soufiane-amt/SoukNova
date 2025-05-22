@@ -28,6 +28,9 @@ jobs:
       - name: 🛠 Ensure Prisma CLI is available
         run: npx prisma --version
 
+      - name: 🏠 Show current directory contents
+        run: ls
+        
       - name: ⚙️ Generate Prisma client
         run: npm run prisma:generate
 
