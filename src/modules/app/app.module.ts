@@ -3,9 +3,16 @@ import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../auth/auth.module';
 import { AppController } from './controllers/app.controller';
 import { AppService } from './services/app.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UsersModule, AuthModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // Makes config available everywhere
+    }),
+    UsersModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
