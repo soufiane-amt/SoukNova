@@ -27,13 +27,13 @@ export class UsersService {
 
   async checkIfCredentialsAreValid(
     userCredentials: UserCredentialsDto,
-  ): Promise<boolean> {
+  ): Promise<User | null> {
     const whereClause: Prisma.UserWhereUniqueInput = userCredentials.username
       ? { username: userCredentials.username }
       : { email: userCredentials.email };
 
     const user = await this.checkIfExists(whereClause);
-    if (user?.password == userCredentials.password) return true;
-    return false;
+    if (user?.password == userCredentials.password) return user;
+    return null;
   }
 }

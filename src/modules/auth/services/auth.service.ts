@@ -41,17 +41,15 @@ export class AuthService {
 
   async signIn(
     userCredentialsDto: UserCredentialsDto,
-  ): Promise<{ message: string; user: { username?: string; email?: string } }> {
+  ): Promise<{ access_token: string }> {
     const user =
       await this.userService.checkIfCredentialsAreValid(userCredentialsDto);
 
     if (!user) throw new UnauthorizedException('Invalid credentials!');
+    const payload = { sub: user?.id, username: user?.username };
+
     return {
-      message: 'Credentials are successful, user authenticated',
-      user: {
-        username: userCredentialsDto.username,
-        email: userCredentialsDto.email,
-      },
+      access_token: await this.jwtService.signAsync(payload),
     };
   }
 }
