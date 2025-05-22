@@ -3,21 +3,37 @@ import {
   Injectable,
   ConflictException,
 } from '@nestjs/common';
-import { User } from 'generated/prisma';
+import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/modules/users/dto/createUser.dto';
 import { UserCredentialsDto } from 'src/modules/users/dto/userCredentials.dto';
 import { UsersService } from 'src/modules/users/services/users.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
 
-  async signUp(createUserDto: CreateUserDto): Promise<User> {
+  getSecret() {
+    return this.configService.get<string>('JWT_SECRET');
+  }
+
+  async signUp(
+    createUserDto: CreateUserDto,
+  ): Promise<{ access_token: string }> {
     const user = await this.userService.checkIfExists({
       email: createUserDto.email,
     });
     if (!user) {
-      return await this.userService.createUser(createUserDto);
+      const user = await this.userService.createUser(createUserDto);
+      const payload = { sub: user.id, username: user.username };
+      console.log('payload : ', payload);
+      return {
+        access_token: await this.jwtService.signAsync(payload),
+      };
     } else {
       throw new ConflictException('The user already exists!');
     }
