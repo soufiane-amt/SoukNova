@@ -1,0 +1,49 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - feature/user-authentication # Run on push to any branch
+  pull_request:
+    branches:
+      - feature/user-authentication # Run on push to any branch
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🟢 Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+      
+      - name: 📦 Install dependencies
+        run: npm ci
+        
+      - name: 🏠 Show current directory contents
+        run: ls
+
+      - name: 🛠 Ensure Prisma CLI is available
+        run: npx prisma --version
+
+      - name: 🏠 Show current directory contents
+        run: ls
+        
+      - name: ⚙️ Generate Prisma client
+        run: npm run prisma:generate
+
+      - name: 🏗️ Build project
+        run: npm run build
+
+      - name: ✅ Lint code
+        run: npm run lint
+
+      - name: 🧪 Run unit tests
+        run: npm test
+
+      - name: 📊 Generate test coverage
+        run: npm run test:cov
