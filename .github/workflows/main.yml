@@ -1,12 +1,12 @@
-name: CI Pipeline
+name: CI
 
 on:
   push:
     branches:
-      - '*'       # runs on push to any branch
+      - '*'
   pull_request:
     branches:
-      - '*'       # runs on PR targeting any branch
+      - '*'
 
 jobs:
   build-test:
