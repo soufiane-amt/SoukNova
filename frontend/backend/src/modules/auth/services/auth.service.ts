@@ -30,7 +30,6 @@ export class AuthService {
     if (!user) {
       const user = await this.userService.createUser(createUserDto);
       const payload = { sub: user.id, username: user.username };
-      console.log('payload : ', payload);
       return {
         access_token: await this.jwtService.signAsync(payload),
       };
