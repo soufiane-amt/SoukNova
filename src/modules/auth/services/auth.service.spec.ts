@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { UsersService } from 'src/modules/users/services/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { ConflictException, UnauthorizedException } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from 'src/modules/users/dto/createUser.dto';
 import { UserCredentialsDto } from 'src/modules/users/dto/userCredentials.dto';
 
