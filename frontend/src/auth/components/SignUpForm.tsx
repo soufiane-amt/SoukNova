@@ -1,5 +1,6 @@
 'use client';
 import { useForm } from 'react-hook-form';
+import { motion } from 'framer-motion';
 import { SignUpSchema, SignUpInput } from '../schemas/signUpSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -20,7 +21,12 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className=" m-auto w-full max-w-sm font-sans md:mx-10 px-5">
+    <motion.div
+      className=" m-auto w-full max-w-sm font-sans md:mx-10 px-5"
+      initial={{ y: -200, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, ease: 'easeOut' }}
+    >
       <div className=" md:my-8 my-4">
         <div className="md:my-6">
           <h1 className="text-[#141718] text-2xl md:text-4xl font-bold ">
@@ -83,9 +89,13 @@ export default function SignUpForm() {
           />
           <label className="text-[#6C7275] text-xs md:text-base">
             I agree with&nbsp;
-            <a className="font-bold text-black hover:underline cursor-pointer">Privacy Policy</a>
+            <a className="font-bold text-black hover:underline cursor-pointer">
+              Privacy Policy
+            </a>
             &nbsp;and&nbsp;
-            <a className="font-bold text-black hover:underline cursor-pointer">Terms of Use</a>
+            <a className="font-bold text-black hover:underline cursor-pointer">
+              Terms of Use
+            </a>
           </label>
         </div>
         <div className="flex justify-center">
@@ -98,6 +108,6 @@ export default function SignUpForm() {
         </div>
       </form>
       {/* #47555a */}
-    </div>
+    </motion.div>
   );
 }
