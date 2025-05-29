@@ -3,6 +3,9 @@ import { useForm } from 'react-hook-form';
 import { SignUpSchema, SignUpInput } from '../schemas/signUpSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+const inputClass =
+  'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-[#6C7275] md:text-base';
+
 export default function SignUpForm() {
   const {
     register,
@@ -19,7 +22,7 @@ export default function SignUpForm() {
   return (
     <div className=" m-auto w-full max-w-sm font-sans md:mx-10 px-5">
       <div className=" md:my-8 my-4">
-        <div className="md:my-6 my:3">
+        <div className="md:my-6">
           <h1 className="text-[#141718] text-2xl md:text-4xl font-bold ">
             Sign up
           </h1>
@@ -27,14 +30,16 @@ export default function SignUpForm() {
         <div>
           <label className="text-[#6C7275] text-sm md:text-base ">
             Already have an account?&nbsp;
-            <a className="font-bold text-black">Sign in</a>
+            <a className="font-bold text-black" href="#">
+              Sign in
+            </a>
           </label>
         </div>
       </div>
       <form className="" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4 md:mb-8">
           <input
-            className="w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-[#6C7275] text-xs md:text-base"
+            className={inputClass}
             {...register('firstName')}
             placeholder="First Name"
           />
@@ -43,7 +48,7 @@ export default function SignUpForm() {
 
         <div className="mb-4 md:mb-8">
           <input
-            className="w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-[#6C7275] text-xs md:text-base"
+            className={inputClass}
             {...register('lastName')}
             placeholder="Last Name"
           />
@@ -52,7 +57,7 @@ export default function SignUpForm() {
 
         <div className="mb-4 md:mb-8">
           <input
-            className="w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-[#6C7275] text-xs md:text-base"
+            className={inputClass}
             {...register('email')}
             type="email"
             placeholder="Email address"
@@ -62,7 +67,7 @@ export default function SignUpForm() {
 
         <div className="mb-4 md:mb-8">
           <input
-            className="w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-[#6C7275] text-xs md:text-base"
+            className={inputClass}
             {...register('password')}
             type="password"
             placeholder="Password"
@@ -71,12 +76,16 @@ export default function SignUpForm() {
         </div>
 
         <div className="flex items-center my-4 md:my-8">
-          <input type="checkbox" className="w-4 h-4 mr-3" />
+          <input
+            type="checkbox"
+            className="w-4 h-4 mr-3"
+            {...register('acceptTerms')}
+          />
           <label className="text-[#6C7275] text-xs md:text-base">
             I agree with&nbsp;
-            <a className="font-bold text-black">Privacy Policy</a>
+            <a className="font-bold text-black hover:underline cursor-pointer">Privacy Policy</a>
             &nbsp;and&nbsp;
-            <a className="font-bold text-black">Terms of Use</a>
+            <a className="font-bold text-black hover:underline cursor-pointer">Terms of Use</a>
           </label>
         </div>
         <div className="flex justify-center">
