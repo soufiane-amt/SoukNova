@@ -3,9 +3,11 @@ import SignUpForm from './features/auth/components/SignUpForm';
 
 export default function Home() {
   return (
-    <div className='flex flex-col md:flex-row justify-center'>
+    <div className="flex min-h-screen flex-col md:flex-row">
       <AuthSidePanel />
       <SignUpForm />
     </div>
   );
 }
+
+    // <div className="flex min-h-screen flex-col items-center justify-center md:flex-row ">

@@ -3,11 +3,10 @@ const imageUrl = '/images/backgrounds/auth_back_image.png';
 
 export default function AuthSidePanel() {
   return (
-    <div className="w-full md:w-[50%] h-[40vh] md:h-screen relative bg-[#F3F5F7]  flex justify-center">
-      <h1 className="absolute top-4 left-1/2 font-bold text-xl">3legant.</h1>
-      <div className="w-full h-full [@media(min-width:980px)]:w-[80%] [@media(min-width:980px)]:h-[80%]">
-        <img
-          className=" "
+    <div className="w-[100vw] md:w-[50%] md:h-[100vh] bg-[#F3F5F7] z-[-1] relative">
+      <h1 className=" top-4 left-1/2 font-bold text-xl absolute">3legant.</h1>
+      <div className="w-full flex justify-center items-center">
+        <img className="w-[200px] md:w-[600px] object-cover z-[-1] "
           src={imageUrl}
           alt="Side visual"
         />
@@ -15,3 +14,5 @@ export default function AuthSidePanel() {
     </div>
   );
 }
+
+// bg-[#F3F5F7]

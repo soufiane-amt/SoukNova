@@ -5,28 +5,7 @@
   ----breakpoint-small-tablet: 650px; /* Define your custom breakpoint here */
 }
 
-img {
-  object-fit: cover;
-  width: 1%; /* Default width */
-  height: 1%; /* Default height */
-}
-
-@media (max-width: var(----breakpoint-medium-tablet)) {
-  img {
-    width: 80%; /* Smaller width for screens <= 921px */
-    height: 70%; /* Smaller height for screens <= 921px */
-    margin-left: auto; /* Center the image */
-    margin-right: auto;
-    display: block; /* Necessary for auto margins to work */
-  }
-}
-
-@media (max-width: var(----breakpoint-small-tablet)) {
-  img {
-    width: 50%; /* Smaller width for screens <= 921px */
-    height: 30%; /* Smaller height for screens <= 921px */
-    margin-left: auto; /* Center the image */
-    margin-right: auto;
-    display: block; /* Necessary for auto margins to work */
-  }
+body {
+  margin: 0;
+  padding: 0;
 }
