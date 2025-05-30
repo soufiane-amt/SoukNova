@@ -24,12 +24,11 @@ export class AuthService {
   async signUp(
     createUserDto: CreateUserDto,
   ): Promise<{ access_token: string }> {
-    const user = await this.userService.checkIfExists({
-      email: createUserDto.email,
-    });
+    const user = await this.userService.checkIfExists(createUserDto.email);
     if (!user) {
+      console.log('pass', createUserDto.password);
       const user = await this.userService.createUser(createUserDto);
-      const payload = { sub: user.id, username: user.username };
+      const payload = { sub: user.id, email: user.email };
       return {
         access_token: await this.jwtService.signAsync(payload),
       };
@@ -45,7 +44,7 @@ export class AuthService {
       await this.userService.checkIfCredentialsAreValid(userCredentialsDto);
 
     if (!user) throw new UnauthorizedException('Invalid credentials!');
-    const payload = { sub: user?.id, username: user?.username };
+    const payload = { sub: user?.id, username: user?.email };
 
     return {
       access_token: await this.jwtService.signAsync(payload),

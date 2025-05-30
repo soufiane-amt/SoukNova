@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/createUser.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { Prisma, User } from 'generated/prisma';
+import { User } from 'generated/prisma';
 import { UserCredentialsDto } from '../dto/userCredentials.dto';
 import * as bcrypt from 'bcrypt';
 
@@ -18,9 +18,9 @@ export class UsersService {
     return bcrypt.compare(plainText, hashed);
   }
 
-  async checkIfExists(userWhereUniqueInput: Prisma.UserWhereUniqueInput) {
+  async checkIfExists(email: string) {
     return this.prisma.user.findUnique({
-      where: userWhereUniqueInput,
+      where: { email: email },
     });
   }
 
@@ -29,8 +29,8 @@ export class UsersService {
 
     return this.prisma.user.create({
       data: {
-        username: createUserDto.username,
-        name: createUserDto.name,
+        firstName: createUserDto.firstName,
+        lastName: createUserDto.lastName,
         email: createUserDto.email,
         password: hashedPassword,
       },
@@ -40,11 +40,7 @@ export class UsersService {
   async checkIfCredentialsAreValid(
     userCredentials: UserCredentialsDto,
   ): Promise<User | null> {
-    const whereClause: Prisma.UserWhereUniqueInput = userCredentials.username
-      ? { username: userCredentials.username }
-      : { email: userCredentials.email };
-
-    const user = await this.checkIfExists(whereClause);
+    const user = await this.checkIfExists(userCredentials.email);
     if (
       user &&
       (await this.comparePasswords(userCredentials.password, user.password))
