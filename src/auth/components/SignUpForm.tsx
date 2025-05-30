@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { SignUpSchema, SignUpInput } from '../schemas/signUpSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import api from '@/utils/axios';
+import { useState } from 'react';
 
 const inputClass =
   'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-[#6C7275] md:text-base';
@@ -15,9 +17,16 @@ export default function SignUpForm() {
   } = useForm<SignUpInput>({
     resolver: zodResolver(SignUpSchema),
   });
+  const [serverMessage, setServerMessage] = useState('');
 
-  const onSubmit = (data: SignUpInput) => {
-    console.log('Form Data:', data);
+  const onSubmit = async (data: SignUpInput) => {
+    try {
+      await api.post('/auth/signup', data);
+      setServerMessage('');
+    } catch (error: any) {
+      const msg = error.response?.data?.message || 'Signup failed';
+      setServerMessage(msg);
+    }
   };
 
   return (
@@ -106,8 +115,10 @@ export default function SignUpForm() {
             Sign Up
           </button>
         </div>
+        <div className="flex justify-center">
+          <p className="text-red-500 text-xs md:text-sm">{serverMessage}</p>
+        </div>
       </form>
-      {/* #47555a */}
     </motion.div>
   );
 }
