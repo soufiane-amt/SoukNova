@@ -57,10 +57,8 @@ export default function NavBar() {
         <div className="hidden md:inline">
           <List sx={{ display: 'flex' }}>
             {navItems.map((item) => (
-              <ListItem key={item} disablePadding>
-                <ListItem>
+              <ListItem key={item} >
                   <ListItemText primary={item} />
-                </ListItem>
               </ListItem>
             ))}
           </List>
