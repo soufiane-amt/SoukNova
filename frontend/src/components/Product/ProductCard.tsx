@@ -22,16 +22,40 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   image,
 }) => {
   return (
-    <div className="w-[150px]">
-      <div>
-        <Image src={image} alt={`${productName}`} width={270} height={300}/>
+    <div className="w-[262px] flex-shrink-0 cursor-pointer">
+      <div className="relative">
+        <Image
+          src={image}
+          alt={`${productName}`}
+          width={500}
+          height={349}
+          className=" h-[349px]"
+        />
+        <div className="absolute left-3 top-3 flex flex-col gap-2">
+          {isNew && (
+            <Typography className="rounded flex justify-center !text-md !font-bold !bg-[#FFFFFF] px-3  ">
+              NEW
+            </Typography>
+          )}
+          {discountPercentage && (
+            <Typography className="rounded px-3 !text-md bg-[#38CB89] text-white !font-bold">
+              -{discountPercentage}%
+            </Typography>
+          )}
+        </div>
       </div>
-      <div>
+      <div className='mt-3'>
         <RatingStars isStatic={true} defaultValue={rating} />
-        <Typography className="!font-bold">{productName}</Typography>
-        <div className="flex justify-between">
-          <Typography className="!font-bold">${`${currentPrice}`} </Typography>
-          <Typography>${`${originalPrice}`}</Typography>
+        <div className='mb-1'>
+          <Typography className="!font-bold">{productName}</Typography>
+        </div>
+        <div className="flex gap-4">
+          <Typography className="!font-semibold  !text-sm">
+            ${Number(currentPrice).toFixed(2)}
+          </Typography>
+          <Typography className="text-[#6C7275] line-through !text-sm">
+            ${Number(originalPrice).toFixed(2)}
+          </Typography>
         </div>
       </div>
     </div>
