@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+@theme {
+  --font-sans: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  ----breakpoint-medium-tablet: 921px; /* Define your custom breakpoint here */
+  ----breakpoint-small-tablet: 650px; /* Define your custom breakpoint here */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px; /* Width of the vertical scrollbar */
+  height: 10px; /* Height of the horizontal scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the scrollbar track */
+  border-radius: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #343839; /* Color of the scrollbar thumb */
+  border-radius: 5px; /* Rounded corners for the thumb */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #2b2b2b; /* Color on hover */
+}
+
+/* Custom Scrollbar Styles for Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: #343839 #f1f1f1; /* thumb color track color */
+}
