@@ -1,6 +1,6 @@
-import { Button, Typography } from '@mui/material';
+import CustomButton from '@/components/CustomButton';
+import { Typography } from '@mui/material';
 import Image from 'next/image';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 const promoHighlightImage = '/images/home/fourniture.png';
@@ -48,26 +48,7 @@ export function PromoHighlightSection() {
             It’s more affordable than ever to give every room in your home a
             stylish makeover
           </Typography>
-          <Button
-            variant="outlined"
-            disableElevation
-            disableRipple
-            disableFocusRipple
-            sx={{
-              all: 'unset',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              color: 'inherit',
-              textDecoration: 'underline',
-              paddingBlock: '10px',
-              justifyItems: 'center',
-              marginTop: '15px',
-            }}
-            endIcon={<ArrowForwardIcon sx={{ width: 18 }} />}
-          >
-            Shop Now
-          </Button>
+          <CustomButton label="Shop Now"/>
         </div>
       </div>
     </div>
