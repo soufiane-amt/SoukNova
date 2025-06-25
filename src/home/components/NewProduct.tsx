@@ -9,7 +9,7 @@ export default function NewProduct() {
       <div className='w-20'>
         <h1 className='text-3xl bold-font'>New Arrivals</h1>
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-end mt-8">
         <CustomButton label='More products'/>
       </div>
     </div>

@@ -2,7 +2,6 @@ import CustomButton from '@/components/CustomButton';
 import { Typography } from '@mui/material';
 import Image from 'next/image';
 
-
 const promoHighlightImage = '/images/home/fourniture.png';
 
 export function PromoHighlightSection() {
@@ -48,7 +47,9 @@ export function PromoHighlightSection() {
             It’s more affordable than ever to give every room in your home a
             stylish makeover
           </Typography>
-          <CustomButton label="Shop Now"/>
+          <div className="mt-8">
+            <CustomButton label="Shop Now" />
+          </div>
         </div>
       </div>
     </div>
