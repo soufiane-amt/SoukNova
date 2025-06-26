@@ -21,7 +21,17 @@ export function ArticleSection() {
   return (
     <div className="flex flex-col items-center justify-center gap-10">
       <div className="flex justify-between w-full max-w-6xl items-center">
-        <Typography variant="h3" sx={{ fontWeight: 'semibold' }}>
+        <Typography
+          variant="h3"
+          sx={{
+            fontWeight: 'semibold',
+            fontSize: {
+              xs: '1.5rem',
+              sm: '2rem',
+              md: '2.5rem',
+            },
+          }}
+        >
           Articles
         </Typography>
         <CustomButton label="More articles" />
