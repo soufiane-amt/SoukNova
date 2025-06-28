@@ -12,16 +12,18 @@ function HomePage() {
     <div>
       <div className="px-6 md:px-12 lg:px-24 max-w-screen-2xl mx-auto">
         <CustomCarousel />
-        <PromoSection />
-        {/* <div className="my-10">
+        <div>
+          <PromoSection />
+        </div>
+        <div className="my-12">
           <NewArrivalSection />
         </div>
         <div className="my-10">
           <BenefitsDisplay />
-        </div> */}
+        </div>
       </div>
 
-      {/* <div className="w-full mt-10">
+      <div className="w-full mt-10">
         <PromoHighlightSection />
       </div>
       <div className="px-4 md:px-12 lg:px-24 max-w-screen-2xl mx-auto my-12">
@@ -30,7 +32,7 @@ function HomePage() {
       <div className="w-full">
         <NewsLetterSub />
         <SiteFooter />
-      </div> */}
+      </div>
     </div>
   );
 }
