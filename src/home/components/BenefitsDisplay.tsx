@@ -27,9 +27,9 @@ function BenefitsDisplay() {
     },
   ];
 
-  return (
+  return ( 
     <Box>
-      <Grid className="flex justify-center items-center" container spacing={2}>
+      <Grid className="flex justify-between items-center" container spacing={2}>
         {benefits.map((benefit, index) => (
           <BenefitCard
             key={index}

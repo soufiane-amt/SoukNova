@@ -4,7 +4,9 @@ import { NewsLetterSub } from '@/home/components/NewsLetterSub';
 import { PromoHighlightSection } from '@/home/components/PromoHighlightSection';
 import React from 'react';
 import { SiteFooter } from '../components/SiteFooter';
+import NewArrivalSection from '@/home/components/NewArrivalSection';
+import HomePage from './home';
 
 export default function main() {
-  return <SiteFooter />;
+  return <HomePage/>;
 }

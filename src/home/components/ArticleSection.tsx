@@ -19,8 +19,8 @@ export function ArticleSection() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center gap-10">
-      <div className="flex justify-between w-full max-w-6xl items-center">
+    <div className="flex flex-col items-between justify-center">
+      <div className="flex justify-between w-full items-center mb-7">
         <Typography
           variant="h3"
           sx={{
@@ -37,7 +37,7 @@ export function ArticleSection() {
         <CustomButton label="More articles" />
       </div>
 
-      <div className="flex flex-col md:flex-row gap-10 items-center justify-center">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-x-5">
         {articals.map((item, index) => (
           <ArticleCard key={index} title={item.title} image={item.image} />
         ))}
