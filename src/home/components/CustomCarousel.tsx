@@ -31,7 +31,7 @@ const images = [
 ];
 
 const CustomCarousel = () => (
-  <div className="w-[80%] mx-auto mt-5">
+  <div className=" mx-auto mt-5">
     <Swiper
       modules={[Navigation, Pagination, Autoplay]}
       spaceBetween={30}

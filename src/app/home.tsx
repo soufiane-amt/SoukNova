@@ -12,13 +12,13 @@ function HomePage() {
     <div>
       <div className="px-6 md:px-12 lg:px-24 max-w-screen-2xl mx-auto">
         <CustomCarousel />
-        <div>
+        <div className='my-12'>
           <PromoSection />
         </div>
         <div className="my-12">
           <NewArrivalSection />
         </div>
-        <div className="my-10">
+        <div className="my-12">
           <BenefitsDisplay />
         </div>
       </div>
