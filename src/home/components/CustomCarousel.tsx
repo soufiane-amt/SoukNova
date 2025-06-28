@@ -9,29 +9,25 @@ import 'swiper/css/pagination';
 
 const images = [
   {
-    src: 'https://digitalma.ma/wp-content/uploads/2024/03/blog2.jpg',
+    src: '/images/home/carousel/carousel_img1.png',
     alt: 'Image 1',
   },
   {
-    src: 'https://digitalma.ma/wp-content/uploads/2024/03/blog2.jpg',
+    src: '/images/home/carousel/carousel_img2.jpg',
     alt: 'Image 2',
   },
   {
-    src: 'https://placehold.co/1200x600/0000FF/FFFFFF?text=Slide+3',
+    src: '/images/home/carousel/carousel_img3.jpg',
     alt: 'Slide 3',
   },
   {
-    src: 'https://placehold.co/1200x600/FFFF00/000000?text=Slide+4',
+    src: '/images/home/carousel/carousel_img4.jpg',
     alt: 'Slide 4',
-  },
-  {
-    src: 'https://placehold.co/1200x600/FFA500/FFFFFF?text=Slide+5',
-    alt: 'Slide 5',
   },
 ];
 
 const CustomCarousel = () => (
-  <div className=" mx-auto mt-5">
+  <div className="mx-auto mt-5 ">
     <Swiper
       modules={[Navigation, Pagination, Autoplay]}
       spaceBetween={30}
@@ -46,7 +42,7 @@ const CustomCarousel = () => (
           <img
             src={img.src}
             alt={img.alt}
-            className="w-full h-[500px] object-cover rounded-xl"
+            className="w-full md:h-[536px] h-[336px] object-cover"
             onError={(e) =>
               (e.currentTarget.src =
                 'https://placehold.co/1200x600/CCCCCC/666666?text=Image+Error')
