@@ -11,12 +11,7 @@ export const PromoCardSmall: React.FC<PromoCardProps> = ({ title, image }) => {
     <div className="bg-[#F3F5F7] h-full">
       <div className="relative h-full w-full flex flex-col justify-between items-center">
         <div className="absolute bottom-8 left-8 z-10">
-          <h5 className="text-2xl md:text-4xl">{title}</h5>
-          {/* <div className="mt-3">
-            <button className="underline cursor-pointer text-md md:text-lg">
-              Shop now
-            </button>
-          </div> */}
+          <h5 className="text-2xl md:text-4xl bold">{title}</h5>
           <CustomButton label='Shop now'/>
         </div>
 

@@ -20,7 +20,7 @@ export const PromoCardLarge: React.FC<PromoCardProps> = ({ title, image }) => {
           />
         </div>
         <div className="absolute top-7 left-7">
-          <h5 className="md:text-4xl text-2xl">{title}</h5>
+          <h5 className="md:text-4xl text-2xl bold">{title}</h5>
           <CustomButton label='Shop now'/>
         </div>
       </div>
