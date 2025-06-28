@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 
-
 @theme {
   --font-sans: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   ----breakpoint-medium-tablet: 921px; /* Define your custom breakpoint here */
@@ -35,3 +34,44 @@ body {
   scrollbar-width: thin; /* "auto" or "thin" */
   scrollbar-color: #343839 #f1f1f1; /* thumb color track color */
 }
+
+.swiper-button-next {
+  color: #ff0000;
+}
+
+.swiper-button-prev {
+  color: #0000ff;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  color: #ffffff !important;
+  font-size: 30px !important;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 60px !important;
+  height: 60px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.swiper-button-next.swiper-button-white::after,
+.swiper-button-prev.swiper-button-white::after {
+  color: #000 !important;
+}
+
+.swiper-button-next.swiper-button-black::after,
+.swiper-button-prev.swiper-button-black::after {
+  color: #fff !important;
+}
+
