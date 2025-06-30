@@ -32,9 +32,14 @@ function SocialIcons() {
 
 export default function NavBar() {
   const [isOpen, setOpen] = useState(false);
+  const [selected, setSelected] = useState<number>(0);
 
   const toggleDrawer = (state: boolean) => () => {
     setOpen(state);
+  };
+
+  const handleClick = (index: number) => {
+    setSelected(index);
   };
 
   return (
@@ -48,46 +53,59 @@ export default function NavBar() {
                 setOpen(!isOpen);
               }}
             >
-              {isOpen ? <X className="w-6 h-6 transform transition-transform duration-300 rotate-90" /> : <Menu className="w-6 h-6 transform transition-transform duration-300" />}
+              {isOpen ? (
+                <X className="w-6 h-6 transform transition-transform duration-300 rotate-90" />
+              ) : (
+                <Menu className="w-6 h-6 transform transition-transform duration-300" />
+              )}
             </button>
           </div>
           <div>
-            <h1 className="text-xl font-bold ">3legant.</h1>
+            <h1 className="text-2xl font-bold ">3legant.</h1>
           </div>
         </div>
         <div className="hidden md:inline">
           <List sx={{ display: 'flex' }}>
-            {navItems.map((item) => (
-              <ListItem key={item} className="group relative cursor-pointer overflow-hidden">
-                <ListItemText primary={item} className="relative z-10" />
-                {/* Animated underline */}
+            {navItems.map((item, index) => (
+              <ListItem
+                key={index}
+                className="group relative cursor-pointer overflow-hidden"
+                onClick={() => handleClick(index)}
+              >
+                <ListItemText
+                  primary={item}
+                  className="relative z-10"
+                  primaryTypographyProps={{
+                    sx: {
+                      color: index === selected ? '#6C7275' : 'black',
+                      fontSize: '18px',
+                    },
+                  }}
+                />
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-800 transition-all duration-300 group-hover:w-full"></span>
               </ListItem>
             ))}
           </List>
         </div>
         <div className="flex items-center">
-          <div className='ml-4 md:inline hidden'>
+          <div className="ml-4 md:inline hidden">
             <button className="transform transition-transform duration-200 hover:scale-110">
               <Search className="w-6 h-6 text-gray-800" />
             </button>
           </div>
-          <div className='ml-4 md:inline hidden'>
+          <div className="ml-4 md:inline hidden">
             <button className="transform transition-transform duration-200 hover:scale-110">
               <CircleUserRound className="w-6 h-6 text-gray-800" />
             </button>
           </div>
-          <div className='ml-4 '>
+          <div className="ml-4 ">
             <button className="transform transition-transform duration-200 hover:scale-110">
               <ShoppingBag className="w-6 h-6 text-gray-800" />
             </button>
           </div>
         </div>
       </nav>
-      <Drawer anchor="left" open={isOpen} onClose={toggleDrawer(false)}
-        // MUI Drawer naturally handles slide animation based on 'open' state
-        // You can customize it further with TransitionComponent prop if needed
-      >
+      <Drawer anchor="left" open={isOpen} onClose={toggleDrawer(false)}>
         <div className="mx-3 my-2 flex flex-col h-full">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-md font-bold">3legant.</h1>
@@ -115,7 +133,7 @@ export default function NavBar() {
             onClick={toggleDrawer(false)}
             onKeyDown={toggleDrawer(false)}
             style={{ width: 320 }}
-            className="flex-grow flex flex-col justify-between" // This helps push social icons to bottom
+            className="flex-grow flex flex-col justify-between"
           >
             <List disablePadding>
               {['Home', 'Shop', 'About', 'Contact'].map((text, index) => (
@@ -124,12 +142,11 @@ export default function NavBar() {
                   sx={{ px: 0 }}
                   button
                   key={text}
-                  // Optional: Add a slight delay for each item for a "staggered" effect
                   style={{ transitionDelay: `${index * 50}ms` }}
                 >
                   <ListItemText
                     primaryTypographyProps={{
-                      fontSize: '0.9rem', // Increased font size for better readability in drawer
+                      fontSize: '0.9rem',
                       fontWeight: 600,
                     }}
                     primary={text}
@@ -137,7 +154,7 @@ export default function NavBar() {
                 </ListItem>
               ))}
             </List>
-            <div className="mt-auto pb-4"> {/* Use mt-auto to push to the bottom */}
+            <div className="mt-auto pb-4">
               <List disablePadding>
                 <ListItem
                   className="border-b border-gray-200 transition-all duration-300 hover:bg-gray-100"

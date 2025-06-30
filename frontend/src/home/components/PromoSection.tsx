@@ -50,10 +50,3 @@ export const PromoSection = () => {
     </div>
   );
 };
-
-// <div>
-//   <h1 className="text-[72px]">
-//     Simply Unique<span className="text-red-400">/</span> Simply Better{' '}
-//     <span className="text-red-400">.</span>
-//   </h1>
-// </div>

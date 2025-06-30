@@ -45,13 +45,13 @@ body {
 
 .swiper-button-next::after,
 .swiper-button-prev::after {
-  color: #ffffff !important;
+  color: rgba(0, 0, 0, 0.5) !important;
   font-size: 30px !important;
 }
 
 .swiper-button-next,
 .swiper-button-prev {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255);
   border-radius: 50%;
   width: 60px !important;
   height: 60px !important;
@@ -62,7 +62,7 @@ body {
 
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(204, 192, 192, 0.7);
 }
 
 .swiper-button-next.swiper-button-white::after,
