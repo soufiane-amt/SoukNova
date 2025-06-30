@@ -1,7 +1,7 @@
 import BenefitCard from '@/home/components/BenifitCard';
-import Grid from '@mui/material/Grid'; // Import Material-UI Grid
+import Grid from '@mui/material/Grid';
 import React from 'react';
-import Box from '@mui/material/Box'; // For padding the whole section
+import Box from '@mui/material/Box';
 
 function BenefitsDisplay() {
   const benefits = [
@@ -35,12 +35,14 @@ function BenefitsDisplay() {
         justifyContent={{ xs: 'center', md: 'space-between' }}
       >
         {benefits.map((benefit, index) => (
-          <BenefitCard
-            key={index}
-            iconName={benefit.icon}
-            title={benefit.title}
-            description={benefit.description}
-          />
+          <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
+            <BenefitCard
+              key={index}
+              iconName={benefit.icon}
+              title={benefit.title}
+              description={benefit.description}
+            />
+          </div>
         ))}
       </Grid>
     </Box>

@@ -1,6 +1,5 @@
 import CustomButton from '@/components/CustomButton';
 import { Typography } from '@mui/material';
-import { Poppins } from 'next/font/google';
 import Image from 'next/image';
 
 interface ArticleCardProps {

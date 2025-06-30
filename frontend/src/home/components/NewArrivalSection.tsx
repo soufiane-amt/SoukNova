@@ -48,7 +48,7 @@ const arivals = [
 export default function NewArrivalSection() {
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex justify-between" data-aos="fade-up">
         <div className="w-20">
           <h1 className="text-3xl bold-font">New Arrivals</h1>
         </div>
@@ -56,18 +56,20 @@ export default function NewArrivalSection() {
           <CustomButton label="More products" />
         </div>
       </div>
-      <div className="flex overflow-x-auto space-x-6 py-10 custom-scrollbar">
+      <div className="flex overflow-x-auto overflow-y-hidden space-x-6 py-10 custom-scrollbar">
         {arivals.map((item, index) => (
-          <ProductCard
-            key={index}
-            productName={item.productName}
-            currentPrice={item.currentPrice}
-            originalPrice={item.originalPrice}
-            isNew={item.isNew}
-            discountPercentage={item.discountPercentage}
-            rating={item.rating}
-            image={item.image}
-          />
+          <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
+            <ProductCard
+              key={index}
+              productName={item.productName}
+              currentPrice={item.currentPrice}
+              originalPrice={item.originalPrice}
+              isNew={item.isNew}
+              discountPercentage={item.discountPercentage}
+              rating={item.rating}
+              image={item.image}
+            />
+          </div>
         ))}
       </div>
     </div>

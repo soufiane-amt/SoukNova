@@ -6,8 +6,8 @@ const promoHighlightImage = '/images/home/fourniture.png';
 
 export function PromoHighlightSection() {
   return (
-    <div className="w-full md:flex md:h-[532px]">
-      <div className="flex-1">
+    <div className="w-full md:flex md:h-[532px]" >
+      <div className="flex-1" data-aos="fade-left" data-aos-duration="1000">
         <Image
           src={promoHighlightImage}
           alt="Highlight promotion"
@@ -16,7 +16,7 @@ export function PromoHighlightSection() {
           className="w-full h-[367px] md:h-[532px]"
         />
       </div>
-      <div className="flex  items-center bg-[#F3F5F7] flex-1 ">
+      <div className="flex  items-center bg-[#F3F5F7] flex-1" data-aos="fade-right" data-aos-duration="1000">
         <div className=" px-15 py-12 w-2/3">
           <Typography
             variant="subtitle1"
