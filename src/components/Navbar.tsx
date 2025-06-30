@@ -61,7 +61,7 @@ export default function NavBar() {
             </button>
           </div>
           <div>
-            <h1 className="text-2xl font-bold ">3legant.</h1>
+            <h1 className="text-2xl font-bold">3legant.</h1>
           </div>
         </div>
         <div className="hidden md:inline">
