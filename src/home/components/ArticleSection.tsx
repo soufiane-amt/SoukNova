@@ -19,7 +19,7 @@ export function ArticleSection() {
   ];
 
   return (
-    <div className="flex flex-col items-between justify-center">
+    <div className="flex flex-col justify-center">
       <div className="flex justify-between w-full items-center mb-7">
         <Typography
           variant="h3"
@@ -39,7 +39,9 @@ export function ArticleSection() {
 
       <div className="flex flex-col md:flex-row items-center justify-between gap-x-5">
         {articals.map((item, index) => (
-          <ArticleCard key={index} title={item.title} image={item.image} />
+          <div key={index} data-aos="fade-up" data-aos-delay={index * 150}>
+            <ArticleCard title={item.title} image={item.image} />
+          </div>
         ))}
       </div>
     </div>

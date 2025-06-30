@@ -8,10 +8,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { Facebook, Instagram, Pointer, Youtube } from 'lucide-react';
-// import InstagramIcon from '@mui/icons-material/Instagram';
-// import FacebookIcon from '@mui/icons-material/Facebook';
-// import YouTubeIcon from '@mui/icons-material/YouTube';
+import { Facebook, Instagram, Youtube } from 'lucide-react';
 
 const socialLinks = [
   { icon: <Instagram />, url: 'https://instagram.com/', label: 'Instagram' },

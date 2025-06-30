@@ -29,7 +29,7 @@ function HomePage() {
       <div className="px-4 md:px-12 lg:px-24 max-w-screen-2xl mx-auto my-12">
         <ArticleSection />
       </div>
-      <div className="w-full">
+      <div className="w-full" data-aos="fade-up" data-aos-delay="200">
         <NewsLetterSub />
         <SiteFooter />
       </div>

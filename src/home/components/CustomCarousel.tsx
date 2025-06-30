@@ -1,4 +1,4 @@
-'use client'; // <--- Add this line
+'use client';
 
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -27,7 +27,7 @@ const images = [
 ];
 
 const CustomCarousel = () => (
-  <div className="mx-auto mt-5 ">
+  <div className="mx-auto mt-5 " data-aos="fade-up">
     <Swiper
       modules={[Navigation, Pagination, Autoplay]}
       spaceBetween={30}
