@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { ArticleCard } from './ArticleCard';
-import CustomButton from '@/components/CustomButton';
+import CustomButton from '@/components/ui/CustomButton';
 
 export function ArticleSection() {
   const articals = [

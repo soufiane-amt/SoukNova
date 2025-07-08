@@ -1,7 +1,7 @@
-import BenefitCard from '@/home/components/BenifitCard';
 import Grid from '@mui/material/Grid';
 import React from 'react';
 import Box from '@mui/material/Box';
+import BenefitCard from './BenefitCard';
 
 function BenefitsDisplay() {
   const benefits = [
