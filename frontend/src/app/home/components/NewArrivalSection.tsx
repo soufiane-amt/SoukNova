@@ -1,5 +1,5 @@
-import CustomButton from "@/components/ui/CustomButton";
-import { ProductCard } from "@/components/ui/ProductCard";
+import CustomButton from '../../../components/ui/CustomButton';
+import { ProductCard } from '../../../components/ui/ProductCard';
 
 const arrivals = [
   {

@@ -19,7 +19,7 @@ export function NewsLetterSub() {
             Sign up for deals, new products and promotions
           </Typography>
         </div>
-        <div className="text-xs text-[#6C7275] border-b border-b-[#6C7275] w-full flex justify-between">
+        <div className="text-xs text-color-primary border-b border-b-[#6C7275] w-full flex justify-between">
           <div className="flex items-center">
             <EmailOutlinedIcon
               sx={{ fontSize: 24, color: '#6C7275', paddingRight: '5px' }}

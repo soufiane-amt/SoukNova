@@ -1,6 +1,6 @@
-import CustomButton from '@/components/ui/CustomButton';
 import { Typography } from '@mui/material';
 import Image from 'next/image';
+import CustomButton from '../../../components/ui/CustomButton';
 
 interface ArticleCardProps {
   title: string;

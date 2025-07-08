@@ -44,16 +44,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </div>
       </div>
-      <div className='mt-3'>
+      <div className="mt-3">
         <RatingStars isStatic={true} defaultValue={rating} />
-        <div className='mb-1'>
+        <div className="mb-1">
           <Typography className="!font-bold">{productName}</Typography>
         </div>
         <div className="flex gap-4">
           <Typography className="!font-semibold  !text-sm">
             ${Number(currentPrice).toFixed(2)}
           </Typography>
-          <Typography className="text-[#6C7275] line-through !text-sm">
+          <Typography className="text-color-primary line-through !text-sm">
             ${Number(originalPrice).toFixed(2)}
           </Typography>
         </div>

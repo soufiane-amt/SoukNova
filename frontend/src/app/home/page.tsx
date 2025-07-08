@@ -1,5 +1,5 @@
+import { SiteFooter } from '../../components/layout/SiteFooter';
 import { ArticleSection } from './components/ArticleSection';
-import { SiteFooter } from '@/components/layout/SiteFooter';
 import BenefitsDisplay from './components/BenefitsDisplay';
 import CustomCarousel from './components/CustomCarousel';
 import NewArrivalSection from './components/NewArrivalSection';

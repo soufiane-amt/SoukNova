@@ -22,6 +22,7 @@ export function DesktopNav({ navItems, toggleDrawer }: DesktopNavProps) {
       <div className="flex items-center">
         <div className="md:hidden mr-2">
           <button
+            aria-label="Open navigation drawer"
             className="h-full flex items-center"
             onClick={toggleDrawer(true)}
           >
@@ -29,14 +30,17 @@ export function DesktopNav({ navItems, toggleDrawer }: DesktopNavProps) {
           </button>
         </div>
         <div>
-          <h1 className="text-2xl font-bold">3legant.</h1>
+          <h1 className="text-2xl font-bold" aria-label="Brand name">
+            3legant.
+          </h1>
         </div>
       </div>
       <div className="hidden md:inline">
         <List sx={{ display: 'flex' }}>
           {navItems.map((item, index) => (
             <ListItem
-              key={index}
+              component="button"
+              key={item}
               className="group relative cursor-pointer overflow-hidden"
               onClick={() => handleClick(index)}
             >
@@ -45,7 +49,7 @@ export function DesktopNav({ navItems, toggleDrawer }: DesktopNavProps) {
                 className="relative z-10"
                 primaryTypographyProps={{
                   sx: {
-                    color: index === selected ? '#6C7275' : 'black',
+                    color: index === selected ? 'var(--color-text-primary)' : 'black',
                     fontSize: '18px',
                   },
                 }}
@@ -56,18 +60,25 @@ export function DesktopNav({ navItems, toggleDrawer }: DesktopNavProps) {
         </List>
       </div>
       <div className="flex items-center">
-        <div className="ml-4 md:inline hidden">
-          <button className="transform transition-transform duration-200 hover:scale-110">
+        <div className="hidden md:flex">
+          <button
+            aria-label="Search"
+            className="ml-4 transform transition-transform duration-200 hover:scale-110"
+          >
             <Search className="w-6 h-6 text-gray-800" />
           </button>
-        </div>
-        <div className="ml-4 md:inline hidden">
-          <button className="transform transition-transform duration-200 hover:scale-110">
+          <button
+            aria-label="User profile"
+            className="ml-4 transform transition-transform duration-200 hover:scale-110"
+          >
             <CircleUserRound className="w-6 h-6 text-gray-800" />
           </button>
         </div>
-        <div className="ml-4 ">
-          <button className="transform transition-transform duration-200 hover:scale-110">
+        <div className="ml-4 flex justify-end">
+          <button
+            aria-label="Shopping bag"
+            className="transform transition-transform duration-200 hover:scale-110"
+          >
             <ShoppingBag className="w-6 h-6 text-gray-800" />
           </button>
         </div>
