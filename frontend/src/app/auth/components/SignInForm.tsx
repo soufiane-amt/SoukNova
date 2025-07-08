@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import { SignInSchema, SignInInput } from '../schemas/signInSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import api from '@/utils/axios';
 import { useState } from 'react';
 
 const inputClass =

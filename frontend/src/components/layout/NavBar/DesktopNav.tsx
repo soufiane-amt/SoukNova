@@ -49,7 +49,8 @@ export function DesktopNav({ navItems, toggleDrawer }: DesktopNavProps) {
                 className="relative z-10"
                 primaryTypographyProps={{
                   sx: {
-                    color: index === selected ? 'var(--color-text-primary)' : 'black',
+                    color:
+                      index === selected ? 'var(--color-primary)' : 'black',
                     fontSize: '18px',
                   },
                 }}

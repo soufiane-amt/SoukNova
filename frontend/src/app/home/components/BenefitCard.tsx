@@ -41,7 +41,7 @@ const BenefitCard = ({ iconName, title, description }: BenefitCardProps) => {
         flexDirection: 'column',
         m: 1,
         boxShadow: 0,
-        backgroundColor: "#F3F5F7"
+        backgroundColor: '#F3F5F7',
       }}
     >
       <CardContent
@@ -51,16 +51,19 @@ const BenefitCard = ({ iconName, title, description }: BenefitCardProps) => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'start',
-          marginLeft: "10px"
+          marginLeft: '10px',
         }}
       >
-        {IconComponent && (
-          <IconComponent sx={{ fontSize: 60, mb: 2 }} />
-        )}
-        <Typography variant="h6" component="div"sx={{ fontFamily: "'Poppins', sans-serif" }} gutterBottom>
+        {IconComponent && <IconComponent sx={{ fontSize: 60, mb: 2 }} />}
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ fontFamily: "'Poppins', sans-serif" }}
+          gutterBottom
+        >
           {title}
         </Typography>
-        <Typography variant="body2" color="#6C7275">
+        <Typography variant="body2" color="var(--color-primary)">
           {description}
         </Typography>
       </CardContent>
