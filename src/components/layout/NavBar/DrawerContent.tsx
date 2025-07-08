@@ -83,7 +83,7 @@ export function DrawerContent({
                   primaryTypographyProps={{
                     fontSize: '0.9rem',
                     fontWeight: 600,
-                    color: '#6C7275',
+                    color: 'var(--color-primary)',
                   }}
                   primary={'Cart'}
                 />
@@ -101,7 +101,7 @@ export function DrawerContent({
                   primaryTypographyProps={{
                     fontSize: '0.9rem',
                     fontWeight: 600,
-                    color: '#6C7275',
+                    color: 'var(--color-primary)',
                   }}
                   primary={'Wishlist'}
                 />

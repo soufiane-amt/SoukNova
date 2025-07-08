@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { SignUpSchema, SignUpInput } from '../schemas/signUpSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import api from '@/utils/axios';
 import { useState } from 'react';
+import api from '../../../utils/axios';
 
 const inputClass =
   'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
