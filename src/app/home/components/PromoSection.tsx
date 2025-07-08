@@ -28,7 +28,7 @@ export const PromoSection = () => {
           data-aos="fade-left"
           data-aos-delay="200"
         >
-          <p className="text-[#6C7275]">
+          <p className="text-color-primary">
             <span className="text-black">3legant</span> is a gift & decorations
             store based in HCMC, Vietnam. Est since 2019.
           </p>

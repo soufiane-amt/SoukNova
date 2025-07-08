@@ -7,7 +7,7 @@ import api from '@/utils/axios';
 import { useState } from 'react';
 
 const inputClass =
-  'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-[#6C7275] md:text-base';
+  'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
 
 export default function SignInForm() {
   const [error, setError] = useState('');

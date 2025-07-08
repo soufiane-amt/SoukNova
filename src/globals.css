@@ -4,6 +4,7 @@
   --font-sans: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   ----breakpoint-medium-tablet: 921px; /* Define your custom breakpoint here */
   ----breakpoint-small-tablet: 650px; /* Define your custom breakpoint here */
+  --color-text-primary: #6C7275;
 }
 
 body {
@@ -75,3 +76,7 @@ body {
   color: #fff !important;
 }
 
+
+.text-color-primary{
+  color: var(--color-text-primary);
+}

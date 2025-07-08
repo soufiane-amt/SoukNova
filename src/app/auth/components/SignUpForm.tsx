@@ -7,7 +7,7 @@ import api from '@/utils/axios';
 import { useState } from 'react';
 
 const inputClass =
-  'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-[#6C7275] md:text-base';
+  'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
 
 export default function SignUpForm() {
   const {
@@ -43,7 +43,7 @@ export default function SignUpForm() {
           </h1>
         </div>
         <div>
-          <label className="text-[#6C7275] text-sm md:text-base ">
+          <label className="text-color-primary text-sm md:text-base ">
             Already have an account?&nbsp;
             <a className="font-bold text-black" href="#">
               Sign in
@@ -96,7 +96,7 @@ export default function SignUpForm() {
             className="w-4 h-4 mr-3"
             {...register('acceptTerms')}
           />
-          <label className="text-[#6C7275] text-xs md:text-base">
+          <label className="text-color-primary text-xs md:text-base">
             I agree with&nbsp;
             <a className="font-bold text-black hover:underline cursor-pointer">
               Privacy Policy
