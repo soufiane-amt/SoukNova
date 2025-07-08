@@ -1,18 +1,18 @@
-import { SiteFooter } from '@/components/SiteFooter';
-import { ArticleSection } from '@/home/components/ArticleSection';
-import BenefitsDisplay from '@/home/components/BenefitsDisplay';
-import CustomCarousel from '@/home/components/CustomCarousel';
-import NewArrivalSection from '@/home/components/NewArrivalSection';
-import { NewsLetterSub } from '@/home/components/NewsLetterSub';
-import { PromoHighlightSection } from '@/home/components/PromoHighlightSection';
-import { PromoSection } from '@/home/components/PromoSection';
+import { ArticleSection } from './components/ArticleSection';
+import { SiteFooter } from '@/components/layout/SiteFooter';
+import BenefitsDisplay from './components/BenefitsDisplay';
+import CustomCarousel from './components/CustomCarousel';
+import NewArrivalSection from './components/NewArrivalSection';
+import { NewsLetterSub } from './components/NewsLetterSub';
+import { PromoHighlightSection } from './components/PromoHighlightSection';
+import { PromoSection } from './components/PromoSection';
 
 function HomePage() {
   return (
     <div>
       <div className="px-6 md:px-12 lg:px-25 max-w-screen-2xl mx-auto">
         <CustomCarousel />
-        <div className='my-12'>
+        <div className="my-12">
           <PromoSection />
         </div>
         <div className="my-12">

@@ -1,4 +1,4 @@
-import CustomButton from '@/components/CustomButton';
+import CustomButton from '@/components/ui/CustomButton';
 import Image from 'next/image';
 
 interface PromoCardProps {

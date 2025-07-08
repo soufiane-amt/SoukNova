@@ -1,7 +1,7 @@
-import CustomButton from '@/components/CustomButton';
-import { ProductCard } from '@/components/Product/ProductCard';
+import CustomButton from "@/components/ui/CustomButton";
+import { ProductCard } from "@/components/ui/ProductCard";
 
-const arivals = [
+const arrivals = [
   {
     productName: 'Classic White Sneakers',
     currentPrice: 59.99,
@@ -9,7 +9,7 @@ const arivals = [
     isNew: true,
     discountPercentage: 33,
     rating: 4.5,
-    image: '/images/home/arivals/arival1.png',
+    image: '/images/home/arrivals/arival1.png',
   },
   {
     productName: 'Casual Denim Jacket',
@@ -18,14 +18,14 @@ const arivals = [
     isNew: false,
     discountPercentage: 27,
     rating: 4.2,
-    image: '/images/home/arivals/arival2.png',
+    image: '/images/home/arrivals/arival2.png',
   },
   {
     productName: 'Slim Fit Chinos',
     currentPrice: 39.99,
     isNew: true,
     rating: 4.7,
-    image: '/images/home/arivals/arival3.png',
+    image: '/images/home/arrivals/arival3.png',
   },
   {
     productName: 'Leather Handbag',
@@ -34,14 +34,14 @@ const arivals = [
     isNew: false,
     discountPercentage: 19,
     rating: 4.8,
-    image: '/images/home/arivals/arival4.png',
+    image: '/images/home/arrivals/arival4.png',
   },
   {
     productName: 'Sporty Smartwatch',
     currentPrice: 199.99,
     isNew: true,
     rating: 4.9,
-    image: '/images/home/arivals/arival5.png',
+    image: '/images/home/arrivals/arival5.png',
   },
 ];
 
@@ -57,7 +57,7 @@ export default function NewArrivalSection() {
         </div>
       </div>
       <div className="flex overflow-x-auto overflow-y-hidden space-x-6 py-10 custom-scrollbar">
-        {arivals.map((item, index) => (
+        {arrivals.map((item, index) => (
           <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
             <ProductCard
               key={index}
