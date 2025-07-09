@@ -9,6 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Facebook, Instagram, Youtube } from 'lucide-react';
+import { NAV_ITEMS } from '../../constants/navItems';
 
 const socialLinks = [
   { icon: <Instagram />, url: 'https://instagram.com/', label: 'Instagram' },
@@ -16,7 +17,6 @@ const socialLinks = [
   { icon: <Youtube />, url: 'https://youtube.com/', label: 'YouTube' },
 ];
 
-const navItems = ['Home', 'Shop', 'Product', 'blog', 'Contact'];
 
 function SocialIcons() {
   return (
@@ -61,7 +61,7 @@ export function SiteFooter() {
               alignItems: 'center',
             }}
           >
-            {navItems.map((item) => (
+            {NAV_ITEMS.map((item) => (
               <ListItem key={item}>
                 <ListItemText
                   primary={item}

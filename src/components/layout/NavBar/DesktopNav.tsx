@@ -4,13 +4,13 @@ import { ShoppingBag, CircleUserRound, Search } from 'lucide-react';
 import { Menu } from 'lucide-react';
 import { List, ListItem, ListItemText } from '@mui/material';
 import { useState } from 'react';
+import { NAV_ITEMS } from '../../../constants/navItems';
 
 interface DesktopNavProps {
-  navItems: string[];
   toggleDrawer: (state: boolean) => () => void;
 }
 
-export function DesktopNav({ navItems, toggleDrawer }: DesktopNavProps) {
+export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
   const [selected, setSelected] = useState<number>(0);
 
   const handleClick = (index: number) => {
@@ -37,7 +37,7 @@ export function DesktopNav({ navItems, toggleDrawer }: DesktopNavProps) {
       </div>
       <div className="hidden md:inline">
         <List sx={{ display: 'flex' }}>
-          {navItems.map((item, index) => (
+          {NAV_ITEMS.map((item, index) => (
             <ListItem
               component="button"
               key={item}

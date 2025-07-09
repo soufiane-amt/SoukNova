@@ -9,6 +9,7 @@ import {
 import FavoriteBorderSharpIcon from '@mui/icons-material/FavoriteBorderSharp';
 import { SearchIcon, ShoppingBag, X } from 'lucide-react';
 import { SocialIcons } from './SocialIcons';
+import { NAV_ITEMS } from '../../../constants/navItems';
 
 interface DrawerItemProps {
   label: string;
@@ -39,13 +40,11 @@ function DrawerItem({ label, icon }: DrawerItemProps) {
 interface DrawerContentProps {
   toggleDrawer: (state: boolean) => () => void;
   isOpen: boolean;
-  navItems: string[];
 }
 
 export function DrawerContent({
   toggleDrawer,
   isOpen,
-  navItems,
 }: DrawerContentProps) {
   return (
     <Drawer anchor="left" open={isOpen} onClose={toggleDrawer(false)}>
@@ -79,7 +78,7 @@ export function DrawerContent({
           className="flex-grow flex flex-col justify-between"
         >
           <List disablePadding>
-            {navItems.map((text, index) => (
+            {NAV_ITEMS.map((text, index) => (
               <ListItemButton
                 className="border-b border-gray-200 transition-all duration-300 hover:bg-gray-100"
                 sx={{ px: 0 }}
