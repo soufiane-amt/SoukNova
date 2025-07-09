@@ -12,7 +12,7 @@ export const PromoSection = () => {
   }, []);
 
   return (
-    <div>
+    <section aria-labelledby="promotions" className='my-12'>
       <div className="md:flex md:items-center md:justify-between mb-8">
         <div className="md:w-1/2" data-aos="fade-right">
           <h1 className="font-semibold md:text-[72px] text-[40px] md:leading-[80px] leading-[45px]">
@@ -44,6 +44,6 @@ export const PromoSection = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };

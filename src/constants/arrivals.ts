@@ -1,0 +1,43 @@
+export const arrivals = [
+  {
+    productName: 'Classic White Sneakers',
+    currentPrice: 59.99,
+    originalPrice: 89.99,
+    isNew: true,
+    discountPercentage: 33,
+    rating: 4.5,
+    image: '/images/home/arrivals/arival1.png',
+  },
+  {
+    productName: 'Casual Denim Jacket',
+    currentPrice: 79.99,
+    originalPrice: 109.99,
+    isNew: false,
+    discountPercentage: 27,
+    rating: 4.2,
+    image: '/images/home/arrivals/arival2.png',
+  },
+  {
+    productName: 'Slim Fit Chinos',
+    currentPrice: 39.99,
+    isNew: true,
+    rating: 4.7,
+    image: '/images/home/arrivals/arival3.png',
+  },
+  {
+    productName: 'Leather Handbag',
+    currentPrice: 129.99,
+    originalPrice: 159.99,
+    isNew: false,
+    discountPercentage: 19,
+    rating: 4.8,
+    image: '/images/home/arrivals/arival4.png',
+  },
+  {
+    productName: 'Sporty Smartwatch',
+    currentPrice: 199.99,
+    isNew: true,
+    rating: 4.9,
+    image: '/images/home/arrivals/arival5.png',
+  },
+];
