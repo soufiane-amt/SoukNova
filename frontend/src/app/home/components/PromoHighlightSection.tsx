@@ -6,7 +6,7 @@ const promoHighlightImage = '/images/home/fourniture.png';
 
 export function PromoHighlightSection() {
   return (
-    <div className="w-full md:flex md:h-[532px]">
+    <section className="w-full md:flex md:h-[532px] mt-10">
       <div className="flex-1" data-aos="fade-left" data-aos-duration="1000">
         <Image
           src={promoHighlightImage}
@@ -21,7 +21,7 @@ export function PromoHighlightSection() {
         data-aos="fade-right"
         data-aos-duration="1000"
       >
-        <div className="px-15 py-12 w-2/3">
+        <div className="px-16 py-12 w-2/3">
           <Typography
             variant="subtitle1"
             component="div"
@@ -36,7 +36,7 @@ export function PromoHighlightSection() {
             component="div"
             gutterBottom
             color="main.primary"
-            style={{ fontWeight: 'bold' }}
+            sx={{ fontWeight: 'bold' }}
           >
             HUNDREDS of New lower prices!
           </Typography>
@@ -56,6 +56,6 @@ export function PromoHighlightSection() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

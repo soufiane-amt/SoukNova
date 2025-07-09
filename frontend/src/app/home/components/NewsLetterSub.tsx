@@ -6,10 +6,14 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 export function NewsLetterSub() {
   return (
-    <div className="w-full h-[360px] bg-[url('/images/home/newsLetterBack.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center px-6">
+    <section
+      className="w-full h-[360px] bg-[url('/images/home/newsLetterBack.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center px-6 "
+      data-aos="fade-up"
+      data-aos-delay="200"
+    >
       <div className="flex flex-col items-center text-center md:w-1/4 sm:w-1/3">
         <div className="mb-8">
-          <Typography variant="h4" sx={{ fontWeight: 'medium-bold' }}>
+          <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
             Join Our Newsletter
           </Typography>
           <Typography
@@ -31,12 +35,12 @@ export function NewsLetterSub() {
             <input
               placeholder="Email address"
               type="email"
-              className="border-bottom"
+              aria-label="Email address"
             />
           </div>
           <button>Signup</button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
