@@ -8,7 +8,7 @@ interface PromoCardProps {
 
 export const PromoCardSmall: React.FC<PromoCardProps> = ({ title, image }) => {
   return (
-    <div className="bg-[#F3F5F7] h-full">
+    <div className="bg-neutral-bg h-full">
       <div className="relative h-full w-full flex flex-col justify-between items-center">
         <div className="absolute bottom-8 left-8 z-10">
           <h5 className="text-2xl md:text-4xl bold">{title}</h5>
@@ -29,7 +29,7 @@ export const PromoCardSmall: React.FC<PromoCardProps> = ({ title, image }) => {
 
 // <div className="flex flex-col h-full w-full">
 //   <div className="relative h-full w-full">
-//     <div className="bg-[#F3F5F7] h-full w-full ">
+//     <div className="bg-neutral-bg h-full w-full ">
 //       <Image
 //         src={image}
 //         alt="Description"

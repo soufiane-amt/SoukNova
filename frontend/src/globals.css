@@ -4,7 +4,8 @@
   --font-sans: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   ----breakpoint-medium-tablet: 921px; /* Define your custom breakpoint here */
   ----breakpoint-small-tablet: 650px; /* Define your custom breakpoint here */
-  --color-primary: #6C7275;
+  --color-primary: #6c7275;
+  --color-neutral-bg: #f3f5f7;
 }
 
 body {
@@ -75,5 +76,3 @@ body {
 .swiper-button-prev.swiper-button-black::after {
   color: #fff !important;
 }
-
-

@@ -4,10 +4,7 @@ import { PromoCardLarge } from './PromoCardLarge';
 import { PromoCardSmall } from './PromoCardSmall';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
-const promoImg1 = '/images/home/promoImg1.png';
-const promoImg2 = '/images/home/promoImg2.png';
-const promoImg3 = '/images/home/promoImg3.png';
+import { PROMO_IMAGES } from '../../../constants/promoImages';
 
 export const PromoSection = () => {
   useEffect(() => {
@@ -36,14 +33,14 @@ export const PromoSection = () => {
       </div>
       <div className="md:flex gap-4 min-h-[560px]">
         <div className="flex-1 mb-5 md:mb-0" data-aos="fade-up">
-          <PromoCardLarge title="Living room" image={promoImg3} />
+          <PromoCardLarge title="Living room" image={PROMO_IMAGES.livingRoom} />
         </div>
         <div className="flex-1 flex flex-col gap-4">
           <div className="flex-1" data-aos="fade-up" data-aos-delay="100">
-            <PromoCardSmall title="Kitchen" image={promoImg2} />
+            <PromoCardSmall title="Kitchen" image={PROMO_IMAGES.kitchen} />
           </div>
           <div className="flex-1" data-aos="fade-up" data-aos-delay="200">
-            <PromoCardSmall title="Bedroom" image={promoImg1} />
+            <PromoCardSmall title="Bedroom" image={PROMO_IMAGES.bedroom} />
           </div>
         </div>
       </div>

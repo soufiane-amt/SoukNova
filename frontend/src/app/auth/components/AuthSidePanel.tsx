@@ -8,7 +8,7 @@ const imageUrl = '/images/backgrounds/auth_back_image.png';
 
 export default function AuthSidePanel() {
   return (
-    <div className="w-screen md:w-[50%] md:h-screen bg-[#F3F5F7] z-[0] relative">
+    <div className="w-screen md:w-[50%] md:h-screen bg-neutral-bg z-[0] relative">
       <TypeAnimation
         sequence={['3legant.', 1000]}
         speed={50}

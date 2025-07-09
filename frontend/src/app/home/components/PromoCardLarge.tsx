@@ -10,7 +10,7 @@ export const PromoCardLarge: React.FC<PromoCardProps> = ({ title, image }) => {
   return (
     <div className="md:mr-2 flex flex-col items-center h-full">
       <div className="relative w-full  h-full">
-        <div className="bg-[#F3F5F7] h-full ">
+        <div className="bg-neutral-bg h-full ">
           <Image
             src={image}
             alt={title}
