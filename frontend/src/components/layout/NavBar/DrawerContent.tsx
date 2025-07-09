@@ -2,13 +2,39 @@ import {
   TextField,
   Drawer,
   InputAdornment,
-  ListItem,
   List,
   ListItemText,
+  ListItemButton,
 } from '@mui/material';
 import FavoriteBorderSharpIcon from '@mui/icons-material/FavoriteBorderSharp';
 import { SearchIcon, ShoppingBag, X } from 'lucide-react';
 import { SocialIcons } from './SocialIcons';
+
+interface DrawerItemProps {
+  label: string;
+  icon: React.ReactNode;
+}
+
+function DrawerItem({ label, icon }: DrawerItemProps) {
+  return (
+    <ListItemButton
+      className="border-b border-gray-200 transition-all duration-300 hover:bg-gray-100"
+      sx={{ px: 0 }}
+    >
+      <ListItemText
+        primaryTypographyProps={{
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          color: 'var(--color-primary)',
+        }}
+        primary={label}
+      />
+      <button className="transform transition-transform duration-200 hover:scale-110">
+        {icon}
+      </button>
+    </ListItemButton>
+  );
+}
 
 interface DrawerContentProps {
   toggleDrawer: (state: boolean) => () => void;
@@ -54,10 +80,9 @@ export function DrawerContent({
         >
           <List disablePadding>
             {navItems.map((text, index) => (
-              <ListItem
+              <ListItemButton
                 className="border-b border-gray-200 transition-all duration-300 hover:bg-gray-100"
                 sx={{ px: 0 }}
-                button
                 key={text}
                 style={{ transitionDelay: `${index * 50}ms` }}
               >
@@ -68,47 +93,21 @@ export function DrawerContent({
                   }}
                   primary={text}
                 />
-              </ListItem>
+              </ListItemButton>
             ))}
           </List>
           <div className="mt-auto pb-4">
             <List disablePadding>
-              <ListItem
-                className="border-b border-gray-200 transition-all duration-300 hover:bg-gray-100"
-                sx={{ px: 0 }}
-                button
-                key={'cart'}
-              >
-                <ListItemText
-                  primaryTypographyProps={{
-                    fontSize: '0.9rem',
-                    fontWeight: 600,
-                    color: 'var(--color-primary)',
-                  }}
-                  primary={'Cart'}
-                />
-                <button className="transform transition-transform duration-200 hover:scale-110">
-                  <ShoppingBag className="w-6 h-6 text-gray-800" />
-                </button>
-              </ListItem>
-              <ListItem
-                className="border-b border-gray-200 transition-all duration-300 hover:bg-gray-100"
-                sx={{ px: 0 }}
-                button
-                key={'wishlist'}
-              >
-                <ListItemText
-                  primaryTypographyProps={{
-                    fontSize: '0.9rem',
-                    fontWeight: 600,
-                    color: 'var(--color-primary)',
-                  }}
-                  primary={'Wishlist'}
-                />
-                <button className="transform transition-transform duration-200 hover:scale-110">
+              <DrawerItem
+                label="Cart"
+                icon={<ShoppingBag className="w-6 h-6 text-gray-800" />}
+              />
+              <DrawerItem
+                label="Wishlist"
+                icon={
                   <FavoriteBorderSharpIcon className="w-6 h-6 text-gray-800" />
-                </button>
-              </ListItem>
+                }
+              />
             </List>
             <div className="flex justify-center my-4">
               <button
