@@ -17,11 +17,11 @@ export function PromoHighlightSection() {
         />
       </div>
       <div
-        className="flex  items-center bg-[#F3F5F7] flex-1"
+        className="flex  items-center bg-neutral-bg flex-1"
         data-aos="fade-right"
         data-aos-duration="1000"
       >
-        <div className=" px-15 py-12 w-2/3">
+        <div className="px-15 py-12 w-2/3">
           <Typography
             variant="subtitle1"
             component="div"
