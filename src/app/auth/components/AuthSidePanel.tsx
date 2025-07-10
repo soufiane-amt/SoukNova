@@ -8,9 +8,9 @@ const imageUrl = '/images/backgrounds/auth_back_image.png';
 
 export default function AuthSidePanel() {
   return (
-    <div className="w-screen md:w-[50%] md:h-screen bg-neutral-bg z-[0] relative">
+    <section className="w-screen md:w-[50%] md:h-screen bg-neutral-bg z-[0] relative">
       <TypeAnimation
-        sequence={['3legant.', 1000]}
+        sequence={['3legant.', 1000, 'Design.', 1000, 'Inspire.', 1000]}
         speed={50}
         className=" top-4 left-[40%] font-bold text-xl absolute"
         wrapper="h1"
@@ -32,6 +32,6 @@ export default function AuthSidePanel() {
           priority
         />
       </motion.div>
-    </div>
+    </section>
   );
 }

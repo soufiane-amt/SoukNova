@@ -4,13 +4,13 @@ import { SignInSchema, SignInInput } from '../schemas/signInSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import api from '../../../utils/axios';
 
 const inputClass =
   'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
 
 export default function SignInForm() {
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [serverMessage, setServerMessage] = useState('');
 
   const {
     register,
@@ -19,6 +19,16 @@ export default function SignInForm() {
   } = useForm<SignInInput>({
     resolver: zodResolver(SignInSchema),
   });
+
+  const onSubmit = async (data: SignInInput) => {
+    try {
+      await api.post('/auth/signin', data);
+      setServerMessage('');
+    } catch (error: any) {
+      const msg = error.response?.data?.message || 'Signin failed';
+      setServerMessage(msg);
+    }
+  };
 
   return (
     <motion.div
@@ -34,15 +44,15 @@ export default function SignInForm() {
           </h1>
         </div>
       </div>
-      <form onSubmit={handleSubmit(handleSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4 md:mb-8">
           <input
             className={inputClass}
-            {...register('identifier')}
-            type="identifier"
+            {...register('email')}
+            type="email"
             placeholder="Username or email address"
           />
-          <p className="text-red-500 text-xs">{errors.identifier?.message}</p>
+          <p className="text-red-500 text-xs">{errors.email?.message}</p>
         </div>
 
         <div className="mb-4 md:mb-8">
@@ -62,6 +72,9 @@ export default function SignInForm() {
           >
             Sign In
           </button>
+        </div>
+        <div className="flex justify-center">
+          <p className="text-red-500 text-xs md:text-sm">{serverMessage}</p>
         </div>
       </form>
     </motion.div>

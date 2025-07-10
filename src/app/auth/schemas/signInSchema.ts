@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const SignInSchema = z.object({
-  identifier: z.union([
+  email: z.union([
     z.string().min(6, 'Invalid username'),
     z.string().email('Invalid email'),
   ]),
