@@ -45,7 +45,7 @@ export default function SignUpForm() {
         <div>
           <label className="text-color-primary text-sm md:text-base ">
             Already have an account?&nbsp;
-            <a className="font-bold text-black" href="#">
+            <a className="font-bold text-black" href="/auth/signin">
               Sign in
             </a>
           </label>

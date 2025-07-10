@@ -1,6 +1,6 @@
 import React from 'react';
-import Example from '@/app/shop/components/CategoryFilter';
+import CategoryFilter from './components/CategoryFilter';
 
-export default function main() {
-  return <Example/>;
+export default function ShopPage() {
+  return <CategoryFilter/>;
 }
