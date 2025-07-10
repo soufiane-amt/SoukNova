@@ -26,7 +26,6 @@ export class AuthService {
   ): Promise<{ access_token: string }> {
     const user = await this.userService.checkIfExists(createUserDto.email);
     if (!user) {
-      console.log('pass', createUserDto.password);
       const user = await this.userService.createUser(createUserDto);
       const payload = { sub: user.id, email: user.email };
       return {

@@ -9,6 +9,6 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [UsersController],
   providers: [UsersService, PrismaService, JwtService],
   exports: [UsersService],
-  imports: [forwardRef(() => AuthModule)], // 👈 Important change here
+  imports: [forwardRef(() => AuthModule)],
 })
 export class UsersModule {}
