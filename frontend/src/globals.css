@@ -2,8 +2,8 @@
 
 @theme {
   --font-sans: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  ----breakpoint-medium-tablet: 921px; /* Define your custom breakpoint here */
-  ----breakpoint-small-tablet: 650px; /* Define your custom breakpoint here */
+  --breakpoint-medium-tablet: 921px; /* Correct: TWO hyphens */
+  --breakpoint-small-tablet: 650px; /* Correct: TWO hyphens */
   --color-primary: #6c7275;
   --color-neutral-bg: #f3f5f7;
 }
