@@ -20,10 +20,19 @@ import {
   MinusIcon,
   PlusIcon,
 } from '@heroicons/react/24/outline';
-import { Squares2X2Icon } from '../../../components/ui/squares/Squares2X2Icon';
-import { Squares3X3Icon } from '../../../components/ui/squares/Squares3X3Icon';
-import { Squares1X1IconVertical } from '../../../components/ui/squares/Squares1X1IconVertical';
-import { Squares1X1IconHorizontal } from '../../../components/ui/squares/Squares1X1IconHorizontal';
+import {
+  Squares2X2Icon,
+  Squares2X2IconButton,
+} from '../../../components/ui/squares/Squares2X2Icon';
+import {
+  Squares1X1IconVertical,
+  Squares1X1IconVerticalButton,
+} from '../../../components/ui/squares/Squares1X1IconVertical';
+import {
+  Squares1X1IconHorizontal,
+  Squares1X1IconHorizontalButton,
+} from '../../../components/ui/squares/Squares1X1IconHorizontal';
+import { Squares3X3IconButton } from '../../../components/ui/squares/Squares3X3Icon';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -83,6 +92,11 @@ function classNames(...classes: string[]) {
 
 export default function CategoryFilter() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [selectedShape, setSelectedShape] = useState(1);
+
+  const handleSelectShape = (index: number) => {
+    setSelectedShape(index);
+  };
 
   return (
     <div className="bg-white">
@@ -94,13 +108,13 @@ export default function CategoryFilter() {
             </h1>
 
             <div className="flex items-center justify-center">
-              <Menu as="div" className="relative inline-block text-left">
+              <Menu as="div" className="relative inline-block text-left mr-10">
                 <div>
-                  <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                  <MenuButton className="group inline-flex justify-center text-sm font-bold text-gray-700 hover:text-gray-900">
                     Sort by
                     <ChevronDownIcon
                       aria-hidden="true"
-                      className="-mr-1 ml-1 size-5 shrink-0 text-gray-400 group-hover:text-gray-500"
+                      className="-mr-1 ml-1 size-5 shrink-0  text-black"
                     />
                   </MenuButton>
                 </div>
@@ -128,35 +142,26 @@ export default function CategoryFilter() {
                   </div>
                 </MenuItems>
               </Menu>
-              <button
-                type="button"
-                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7 cursor-pointer"
-              >
-                <span className="sr-only">View grid</span>
-                <Squares3X3Icon  />
-              </button>
-              <button
-                type="button"
-                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7 cursor-pointer"
-              >
-                <span className="sr-only">View grid</span>
-                <Squares2X2Icon  />
-              </button>
-              <button
-                type="button"
-                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7 cursor-pointer"
-              >
-                <span className="sr-only">View grid</span>
-                <Squares1X1IconVertical />
-              </button>
-              <button
-                type="button"
-                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7 cursor-pointer"
-              >
-                <span className="sr-only">View grid</span>
-                <Squares1X1IconHorizontal />
-              </button>
-
+              <Squares3X3IconButton
+                index={0}
+                selectedShape={selectedShape}
+                handleClick={handleSelectShape}
+              />
+              <Squares1X1IconVerticalButton
+                index={2}
+                selectedShape={selectedShape}
+                handleClick={handleSelectShape}
+              />
+              <Squares2X2IconButton
+                index={1}
+                selectedShape={selectedShape}
+                handleClick={handleSelectShape}
+              />
+              <Squares1X1IconHorizontalButton
+                index={3}
+                selectedShape={selectedShape}
+                handleClick={handleSelectShape}
+              />
               <button
                 type="button"
                 onClick={() => setMobileFiltersOpen(true)}

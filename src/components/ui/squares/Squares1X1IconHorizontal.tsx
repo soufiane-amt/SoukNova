@@ -1,4 +1,6 @@
-export function Squares1X1IconHorizontal(props: any) {
+import { Button } from '@mui/material';
+
+export function Squares1X1IconHorizontal() {
   return (
     <svg
       width="18"
@@ -20,5 +22,35 @@ export function Squares1X1IconHorizontal(props: any) {
         fill="currentColor"
       />
     </svg>
+  );
+}
+
+interface Squares1X1IconHorizontalButtonProps {
+  index: number;
+  selectedShape: number;
+  handleClick: (index: number) => void;
+}
+
+export function Squares1X1IconHorizontalButton({
+  index,
+  selectedShape,
+  handleClick,
+}: Squares1X1IconHorizontalButtonProps) {
+  return (
+    <Button
+      variant="outlined"
+      sx={{
+        justifyContent: 'center',
+        width: 48,
+        height: 48,
+        color: index === selectedShape ? 'black' : 'var(--color-primary)',
+        backgroundColor: index === selectedShape ? '#F3F5F7' : '#FFFFFF',
+        borderColor: index === selectedShape ? '#e0e1e1' : '#ffffff',
+        borderRadius: 0,
+      }}
+      onClick={() => handleClick(index)}
+    >
+      <Squares1X1IconHorizontal />
+    </Button>
   );
 }
