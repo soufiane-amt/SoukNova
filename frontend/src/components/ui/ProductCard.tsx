@@ -53,9 +53,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <Typography className="!font-semibold  !text-sm">
             ${Number(currentPrice).toFixed(2)}
           </Typography>
-          <Typography className="text-color-primary line-through !text-sm">
-            ${Number(originalPrice).toFixed(2)}
-          </Typography>
+          {originalPrice && (
+            <Typography className="text-color-primary line-through !text-sm">
+              ${Number(originalPrice).toFixed(2)}
+            </Typography>
+          ) }
         </div>
       </div>
     </div>
