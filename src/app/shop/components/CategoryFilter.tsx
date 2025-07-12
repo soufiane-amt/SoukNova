@@ -1,10 +1,10 @@
 'use client';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 import { useState } from 'react';
 import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
@@ -13,26 +13,19 @@ import {
   MenuItem,
   MenuItems,
 } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
   ChevronDownIcon,
   FunnelIcon,
   MinusIcon,
   PlusIcon,
 } from '@heroicons/react/24/outline';
-import {
-  Squares2X2Icon,
-  Squares2X2IconButton,
-} from '../../../components/ui/squares/Squares2X2Icon';
-import {
-  Squares1X1IconVertical,
-  Squares1X1IconVerticalButton,
-} from '../../../components/ui/squares/Squares1X1IconVertical';
-import {
-  Squares1X1IconHorizontal,
-  Squares1X1IconHorizontalButton,
-} from '../../../components/ui/squares/Squares1X1IconHorizontal';
+import { Squares2X2IconButton } from '../../../components/ui/squares/Squares2X2Icon';
+import { Squares1X1IconVerticalButton } from '../../../components/ui/squares/Squares1X1IconVertical';
+import { Squares1X1IconHorizontalButton } from '../../../components/ui/squares/Squares1X1IconHorizontal';
 import { Squares3X3IconButton } from '../../../components/ui/squares/Squares3X3Icon';
+import { ProductCard } from '../../../components/ui/ProductCard';
+import { arrivals } from '../../../constants/arrivals';
+import { Grid } from '@mui/material';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -41,49 +34,52 @@ const sortOptions = [
   { name: 'Price: Low to High', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false },
 ];
-const subCategories = [
-  { name: 'Totes', href: '#' },
-  { name: 'Backpacks', href: '#' },
-  { name: 'Travel Bags', href: '#' },
-  { name: 'Hip Bags', href: '#' },
-  { name: 'Laptop Sleeves', href: '#' },
-];
 const filters = [
   {
-    id: 'color',
-    name: 'Color',
+    id: 'price',
+    name: 'PRICE',
     options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: true },
-      { value: 'brown', label: 'Brown', checked: false },
-      { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false },
+      {
+        value: { minPrice: 0, maxPrice: Infinity },
+        label: 'All Price',
+        checked: false,
+      },
+      {
+        value: { minPrice: 0, maxPrice: 99.99 },
+        label: '$0.00 - 99.99',
+        checked: false,
+      },
+      {
+        value: { minPrice: 100, maxPrice: 199.99 },
+        label: '$100.00 - 199.99',
+        checked: true,
+      },
+      {
+        value: { minPrice: 200, maxPrice: 299.99 },
+        label: '$200.00 - 299.99',
+        checked: false,
+      },
+      {
+        value: { minPrice: 300, maxPrice: 399.99 },
+        label: '$300.00 - 399.99',
+        checked: false,
+      },
+      {
+        value: { minPrice: 400, maxPrice: Infinity },
+        label: '$400.00+',
+        checked: false,
+      },
     ],
   },
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
-    ],
-  },
-  {
-    id: 'size',
-    name: 'Size',
-    options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
-    ],
-  },
+];
+const subCategories = [
+  { name: 'All Rooms', href: '#' },
+  { name: 'Living Room', href: '#' },
+  { name: 'Bedroom', href: '#' },
+  { name: 'Kitchen', href: '#' },
+  { name: 'Bathroom', href: '#' },
+  { name: 'Dinning', href: '#' },
+  { name: 'Outdoor', href: '#' },
 ];
 
 function classNames(...classes: string[]) {
@@ -93,19 +89,38 @@ function classNames(...classes: string[]) {
 export default function CategoryFilter() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedShape, setSelectedShape] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState(1);
+  const [selectedPriceIndex, setSelectedPriceIndex] = useState(0);
 
   const handleSelectShape = (index: number) => {
     setSelectedShape(index);
   };
+
+  const handleSelectCategory = () => {};
 
   return (
     <div className="bg-white">
       <div>
         <main className="mx-auto max-6xl p6-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pt-24 pb-6">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              New Arrivals
-            </h1>
+            <div className="flex items-center space-x-2 text-gray-800 text-lg font-semibold">
+              <svg
+                width="20"
+                height="18"
+                viewBox="0 0 20 18"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1 4H4M4 4C4 5.65685 5.34315 7 7 7C8.65685 7 10 5.65685 10 4C10 2.34315 8.65685 1 7 1C5.34315 1 4 2.34315 4 4ZM1 14H7M16 14H19M16 14C16 15.6569 14.6569 17 13 17C11.3431 17 10 15.6569 10 14C10 12.3431 11.3431 11 13 11C14.6569 11 16 12.3431 16 14ZM13 4H19"
+                  stroke="#141718"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  fill="white"
+                />
+              </svg>
+              <span>Filter</span>
+            </div>
 
             <div className="flex items-center justify-center">
               <Menu as="div" className="relative inline-block text-left mr-10">
@@ -179,29 +194,34 @@ export default function CategoryFilter() {
             </h2>
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-              {/* Filters */}
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
                 <ul
                   role="list"
-                  className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
+                  className="space-y-4 pb-6 text-sm font-medium text-gray-900"
                 >
-                  {subCategories.map((category) => (
+                  {subCategories.map((category, index) => (
                     <li key={category.name}>
-                      <a href={category.href}>{category.name}</a>
+                      <a
+                        className={`${inter.className} text-[#807E7E] text-sm ${
+                          selectedCategory == index
+                            ? 'border-b text-black font-bold'
+                            : ''
+                        }`}
+                        href={category.href}
+                        onClick={() => setSelectedCategory(index)}
+                      >
+                        {category.name}
+                      </a>
                     </li>
                   ))}
                 </ul>
 
                 {filters.map((section) => (
-                  <Disclosure
-                    key={section.id}
-                    as="div"
-                    className="border-b border-gray-200 py-6"
-                  >
+                  <Disclosure key={section.id} as="div" className="py-6">
                     <h3 className="-my-3 flow-root">
                       <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                        <span className="font-medium text-gray-900">
+                        <span className="font-bold text-gray-900">
                           {section.name}
                         </span>
                         <span className="ml-6 flex items-center">
@@ -219,16 +239,27 @@ export default function CategoryFilter() {
                     <DisclosurePanel className="pt-6">
                       <div className="space-y-4">
                         {section.options.map((option, optionIdx) => (
-                          <div key={option.value} className="flex gap-3">
+                          <div key={optionIdx} className="flex justify-between">
+                            <label
+                              htmlFor={`filter-${section.id}-${optionIdx}`}
+                              className={`${inter.className} text-[#807E7E] text-sm font-medium`}
+                            >
+                              {option.label}
+                            </label>
+
                             <div className="flex h-5 shrink-0 items-center">
                               <div className="group grid size-4 grid-cols-1">
                                 <input
-                                  defaultValue={option.value}
-                                  defaultChecked={option.checked}
+                                  defaultChecked={
+                                    selectedPriceIndex === optionIdx
+                                  }
                                   id={`filter-${section.id}-${optionIdx}`}
                                   name={`${section.id}[]`}
-                                  type="checkbox"
-                                  className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                                  type="radio"
+                                  className="p-2 col-start-1 row-start-1 appearance-none rounded-sm border border-primary bg-white checked:border-black checked:bg-black indeterminate:border-black indeterminate:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto "
+                                  onClick={() =>
+                                    setSelectedPriceIndex(optionIdx)
+                                  }
                                 />
                                 <svg
                                   fill="none"
@@ -252,12 +283,6 @@ export default function CategoryFilter() {
                                 </svg>
                               </div>
                             </div>
-                            <label
-                              htmlFor={`filter-${section.id}-${optionIdx}`}
-                              className="text-sm text-gray-600"
-                            >
-                              {option.label}
-                            </label>
                           </div>
                         ))}
                       </div>
@@ -266,8 +291,32 @@ export default function CategoryFilter() {
                 ))}
               </form>
 
-              {/* Product grid */}
-              <div className="lg:col-span-3">{/* Your content */}</div>
+              <div className="lg:col-span-3">
+                <Grid
+                  container
+                  spacing={2}
+                  sx={{ width: '100%' }}
+                  justifyContent={{ xs: 'center', md: 'space-between' }}
+                >
+                  {arrivals.map((item, index) => (
+                    <div
+                      data-aos="fade-up"
+                      data-aos-delay={index * 100}
+                      key={index}
+                    >
+                      <ProductCard
+                        productName={item.productName}
+                        currentPrice={item.currentPrice}
+                        originalPrice={item.originalPrice}
+                        isNew={item.isNew}
+                        discountPercentage={item.discountPercentage}
+                        rating={item.rating}
+                        image={item.image}
+                      />
+                    </div>
+                  ))}
+                </Grid>
+              </div>
             </div>
           </section>
         </main>
@@ -275,119 +324,3 @@ export default function CategoryFilter() {
     </div>
   );
 }
-
-// <Dialog
-//   open={mobileFiltersOpen}
-//   onClose={setMobileFiltersOpen}
-//   className="relative z-40 lg:hidden"
-// >
-//   <DialogBackdrop
-//     transition
-//     className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
-//   />
-
-//   <div className="fixed inset-0 z-40 flex">
-//     <DialogPanel
-//       transition
-//       className="relative ml-auto flex size-full max-w-xs transform flex-col overflow-y-auto bg-white pt-4 pb-6 shadow-xl transition duration-300 ease-in-out data-closed:translate-x-full"
-//     >
-//       <div className="flex items-center justify-between px-4">
-//         <h2 className="text-lg font-medium text-gray-900">Filters</h2>
-//         <button
-//           type="button"
-//           onClick={() => setMobileFiltersOpen(false)}
-//           className="relative -mr-2 flex size-10 items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
-//         >
-//           <span className="absolute -inset-0.5" />
-//           <span className="sr-only">Close menu</span>
-//           <XMarkIcon aria-hidden="true" className="size-6" />
-//         </button>
-//       </div>
-
-//       {/* Filters */}
-//       <form className="mt-4 border-t border-gray-200">
-//         <h3 className="sr-only">Categories</h3>
-//         <ul role="list" className="px-2 py-3 font-medium text-gray-900">
-//           {subCategories.map((category) => (
-//             <li key={category.name}>
-//               <a href={category.href} className="block px-2 py-3">
-//                 {category.name}
-//               </a>
-//             </li>
-//           ))}
-//         </ul>
-
-//         {filters.map((section) => (
-//           <Disclosure
-//             key={section.id}
-//             as="div"
-//             className="border-t border-gray-200 px-4 py-6"
-//           >
-//             <h3 className="-mx-2 -my-3 flow-root">
-//               <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
-//                 <span className="font-medium text-gray-900">
-//                   {section.name}
-//                 </span>
-//                 <span className="ml-6 flex items-center">
-//                   <PlusIcon
-//                     aria-hidden="true"
-//                     className="size-5 group-data-open:hidden"
-//                   />
-//                   <MinusIcon
-//                     aria-hidden="true"
-//                     className="size-5 group-not-data-open:hidden"
-//                   />
-//                 </span>
-//               </DisclosureButton>
-//             </h3>
-//             <DisclosurePanel className="pt-6">
-//               <div className="space-y-6">
-//                 {section.options.map((option, optionIdx) => (
-//                   <div key={option.value} className="flex gap-3">
-//                     <div className="flex h-5 shrink-0 items-center">
-//                       <div className="group grid size-4 grid-cols-1">
-//                         <input
-//                           defaultValue={option.value}
-//                           id={`filter-mobile-${section.id}-${optionIdx}`}
-//                           name={`${section.id}[]`}
-//                           type="checkbox"
-//                           className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-//                         />
-//                         <svg
-//                           fill="none"
-//                           viewBox="0 0 14 14"
-//                           className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
-//                         >
-//                           <path
-//                             d="M3 8L6 11L11 3.5"
-//                             strokeWidth={2}
-//                             strokeLinecap="round"
-//                             strokeLinejoin="round"
-//                             className="opacity-0 group-has-checked:opacity-100"
-//                           />
-//                           <path
-//                             d="M3 7H11"
-//                             strokeWidth={2}
-//                             strokeLinecap="round"
-//                             strokeLinejoin="round"
-//                             className="opacity-0 group-has-indeterminate:opacity-100"
-//                           />
-//                         </svg>
-//                       </div>
-//                     </div>
-//                     <label
-//                       htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-//                       className="min-w-0 flex-1 text-gray-500"
-//                     >
-//                       {option.label}
-//                     </label>
-//                   </div>
-//                 ))}
-//               </div>
-//             </DisclosurePanel>
-//           </Disclosure>
-//         ))}
-//       </form>
-//     </DialogPanel>
-//   </div>
-// </Dialog>
