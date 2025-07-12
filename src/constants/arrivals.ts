@@ -6,7 +6,7 @@ export const arrivals = [
     isNew: true,
     discountPercentage: 50,
     rating: 5,
-    image: '/images/home/arrivals/arival1.png',
+    image: '/images/home/arrivals/arrival1.png',
   },
   {
     productName: 'Beig table Lamp',
@@ -15,7 +15,7 @@ export const arrivals = [
     isNew: true,
     discountPercentage: 27,
     rating: 4.2,
-    image: '/images/home/arrivals/arival2.png',
+    image: '/images/home/arrivals/arrival2.png',
   },
   {
     productName: 'Table Lamp',
@@ -23,7 +23,7 @@ export const arrivals = [
     isNew: true,
     discountPercentage: 50,
     rating: 4.7,
-    image: '/images/home/arrivals/arival3.png',
+    image: '/images/home/arrivals/arrival3.png',
   },
   {
     productName: 'Toasted',
@@ -32,7 +32,7 @@ export const arrivals = [
     isNew: true,
     discountPercentage: 19,
     rating: 4.8,
-    image: '/images/home/arrivals/arival4.png',
+    image: '/images/home/arrivals/arrival4.png',
   },
   {
     productName: 'Bamboo Basket',
@@ -41,7 +41,7 @@ export const arrivals = [
     isNew: true,
     discountPercentage: 27,
     rating: 5,
-    image: '/images/home/arrivals/arival5.png',
+    image: '/images/home/arrivals/arrival5.png',
   },
 
   {
@@ -51,7 +51,7 @@ export const arrivals = [
     isNew: true,
     discountPercentage: 27,
     rating: 4.9,
-    image: '/images/home/arrivals/arival6.png',
+    image: '/images/home/arrivals/arrival6.png',
   },
   {
     productName: 'White Drawer unit',
@@ -59,7 +59,7 @@ export const arrivals = [
     isNew: true,
     discountPercentage: 27,
     rating: 4.9,
-    image: '/images/home/arrivals/arival7.png',
+    image: '/images/home/arrivals/arrival7.png',
   },
   {
     productName: 'Black Tray table',
@@ -67,7 +67,7 @@ export const arrivals = [
     isNew: true,
     discountPercentage: 27,
     rating: 5,
-    image: '/images/home/arrivals/arival8.png',
+    image: '/images/home/arrivals/arrival8.png',
   },
   {
     productName: 'Lamp',
@@ -75,7 +75,7 @@ export const arrivals = [
     isNew: true,
     discountPercentage: 27,
     rating: 5,
-    image: '/images/home/arrivals/arival9.png',
+    image: '/images/home/arrivals/arrival9.png',
   },
   {
     productName: 'Light Beige Pillow',
@@ -83,6 +83,6 @@ export const arrivals = [
     isNew: true,
     discountPercentage: 27,
     rating: 3.4,
-    image: '/images/home/arrivals/arival10.png',
+    image: '/images/home/arrivals/arrival10.png',
   },
 ];
