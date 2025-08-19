@@ -24,6 +24,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.4",
+    "react-material-ui-carousel": "^3.4.2",
     "react-stars": "^2.2.5",
     "react-type-animation": "^3.2.0",
     "react-typical": "^0.1.3",

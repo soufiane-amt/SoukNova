@@ -26,25 +26,3 @@ export const PromoCardSmall: React.FC<PromoCardProps> = ({ title, image }) => {
     </div>
   );
 };
-
-// <div className="flex flex-col h-full w-full">
-//   <div className="relative h-full w-full">
-//     <div className="bg-neutral-bg h-full w-full ">
-//       <Image
-//         src={image}
-//         alt="Description"
-//         width={500}
-//         height={300}
-//         className="md:w-full w-[300px]"
-//       />
-//     </div>
-//     <div className="absolute bottom-7 left-7 ">
-//       <h5 className="md:text-4xl text-2xl">{title}</h5>
-//       <div className="mt-3">
-//         <button className="md:text-lg text-md underline cursor-pointer">
-//           Shop now
-//         </button>
-//       </div>
-//     </div>
-//   </div>
-// </div>

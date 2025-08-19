@@ -5,6 +5,32 @@ import { Menu } from 'lucide-react';
 import { List, ListItem, ListItemText } from '@mui/material';
 import { useState } from 'react';
 import { NAV_ITEMS } from '../../../constants/navItems';
+import { poppins } from '@/layout';
+import { TypeAnimation } from 'react-type-animation';
+import { motion } from 'framer-motion';
+
+export const listItemVariants = {
+  hidden: { opacity: 0, x: -100 }, // Start off-screen to the left and invisible
+  visible: {
+    opacity: 1,
+    x: 0, // Animate to their final position (x=0)
+    transition: {
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  },
+};
+
+// Define the animation variants for the parent container
+export const listContainerVariants = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1, // This creates the staggered effect
+    },
+  },
+};
 
 interface DesktopNavProps {
   toggleDrawer: (state: boolean) => () => void;
@@ -30,28 +56,40 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
           </button>
         </div>
         <div>
-          <h1 className="text-2xl font-bold" aria-label="Brand name">
-            3legant.
-          </h1>
+          <TypeAnimation
+            sequence={['3legant.']}
+            speed={50}
+            className="font-bold text-xl"
+            wrapper="h1"
+          />
         </div>
       </div>
       <div className="hidden md:inline">
-        <List sx={{ display: 'flex' }}>
+        <List
+          sx={{ display: 'flex' }}
+          component={motion.ul} // Use motion.ul to apply framer-motion properties
+          variants={listContainerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           {NAV_ITEMS.map((item, index) => (
             <ListItem
-              component="button"
+              component={motion.li} // Use motion.li for the list items
               key={item}
-              className="group relative cursor-pointer overflow-hidden"
+              className={`group relative cursor-pointer overflow-hidden ${poppins.className}`}
               onClick={() => handleClick(index)}
+              variants={listItemVariants} // Apply the animation to each item
             >
               <ListItemText
                 primary={item}
-                className="relative z-10"
+                className={`relative z-10 ${poppins.className}`}
                 primaryTypographyProps={{
                   sx: {
                     color:
-                      index === selected ? 'var(--color-primary)' : 'black',
-                    fontSize: '18px',
+                      index === selected ? 'black' : 'var(--color-primary)',
+                    fontSize: '14px',
+                    fontFamily: 'Poppins, sans-serif',
+                    fontWeight: 500,
                   },
                 }}
               />
@@ -60,30 +98,38 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
           ))}
         </List>
       </div>
-      <div className="flex items-center">
+      <motion.div
+        className="flex items-center"
+        variants={listItemVariants}
+        initial="hidden"
+        animate="visible"
+      >
         <div className="hidden md:flex">
-          <button
+          <motion.button
             aria-label="Search"
             className="ml-4 transform transition-transform duration-200 hover:scale-110"
+            variants={listContainerVariants} // Apply the item animation
           >
             <Search className="w-6 h-6 text-gray-800" />
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             aria-label="User profile"
             className="ml-4 transform transition-transform duration-200 hover:scale-110"
+            variants={listContainerVariants} // Apply the item animation
           >
             <CircleUserRound className="w-6 h-6 text-gray-800" />
-          </button>
+          </motion.button>
         </div>
         <div className="ml-4 flex justify-end">
-          <button
+          <motion.button
             aria-label="Shopping bag"
             className="transform transition-transform duration-200 hover:scale-110"
+            variants={listContainerVariants} // Apply the item animation
           >
             <ShoppingBag className="w-6 h-6 text-gray-800" />
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
     </nav>
   );
 }
