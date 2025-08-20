@@ -20,8 +20,38 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2, // Stagger all children
+      staggerChildren: 0.2,
     },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: 'easeOut',
+    },
+  },
+};
+
+const slideInFromLeft = {
+  hidden: { opacity: 0, x: -50 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.8, ease: 'easeOut' },
+  },
+};
+
+const slideInFromRight = {
+  hidden: { opacity: 0, x: 50 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.8, ease: 'easeOut' },
   },
 };
 
@@ -51,16 +81,24 @@ const contacts: ContactData[] = [
 
 function ContactsInfo() {
   return (
-    <div className="mt-10 text-center">
-      <p className={`${poppins.className} mb-5 font-medium text-4xl`}>
+    <motion.div
+      className="mt-10 text-center"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.p
+        className={`${poppins.className} mb-5 font-medium text-4xl`}
+        variants={itemVariants}
+      >
         Contact Us
-      </p>
-
+      </motion.p>
       <div className="md:flex justify-between space-x-8">
         {contacts.map((contact, index) => (
-          <div
+          <motion.div
             key={index}
-            className="bg-[var(--color-neutral-bg)] flex flex-col  items-center text-center p-5 mb-5 flex-1"
+            className="bg-[var(--color-neutral-bg)] flex flex-col items-center text-center p-5 mb-5 flex-1"
+            variants={itemVariants}
           >
             <span>{contact.icon}</span>
             <Typography
@@ -73,17 +111,22 @@ function ContactsInfo() {
             <Typography variant="body1" sx={{ fontWeight: 600 }}>
               {contact.value}
             </Typography>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 function AboutUsCard() {
   return (
-    <div className="bg-[var(--color-neutral-bg)] md:flex">
-      <div className="md:w-1/2">
+    <motion.div
+      className="bg-[var(--color-neutral-bg)] md:flex"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      <motion.div className="md:w-1/2" variants={slideInFromLeft}>
         <Image
           src={promoHighlightImage}
           alt="Highlight promotion"
@@ -91,28 +134,26 @@ function AboutUsCard() {
           height={400}
           className="w-full h-[367px] md:h-[532px]"
         />
-      </div>
-      <div className="mt-10 p-5 md:w-1/2 md:p-15">
+      </motion.div>
+      <motion.div className="mt-10 p-5 md:w-1/2 md:p-15" variants={slideInFromRight}>
         <p
-          className={`${poppins.className} mb-5 font-medium text-lg md:text-4xl  mb-3`}
+          className={`${poppins.className} mb-5 font-medium text-lg md:text-4xl mb-3`}
         >
           About Us
         </p>
-
         <Typography variant="body2" sx={{ marginBottom: 3 }}>
-          3legant is a gift & decorations store based in HCMC, Vietnam. Est
-          since 2019. Our customer service is always prepared to support you
-          24/7
+          3legant is a gift & decorations store based in HCMC, Vietnam. Est since
+          2019. Our customer service is always prepared to support you 24/7
         </Typography>
         <CustomButton label="Shop now" />
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
 function MapLoction() {
   return (
-    <div className="relative w-2/5">
+    <motion.div className="relative w-2/5" variants={itemVariants}>
       <Image
         src={imageMap}
         alt="Company location"
@@ -154,13 +195,13 @@ function MapLoction() {
           strokeLinejoin="round"
         />
       </svg>
-    </div>
+    </motion.div>
   );
 }
 
 function MessageInput() {
   return (
-    <div className="my-5 w-3/5">
+    <motion.div className="my-5 w-3/5" variants={itemVariants}>
       <div>
         <div className="flex flex-col mb-8">
           <label className="font-bold text-[var(--color-primary)] text-xs mb-2">
@@ -197,7 +238,7 @@ function MessageInput() {
           Send Message
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -217,28 +258,29 @@ function ContactPage() {
             />
           </motion.div>
         </div>
-        <div className="mb-10 space-y-6 md:w-2/3">
-          <p className="text-[54px] font-medium leading-[58px] tracking-[-1px] max-sm:text-[28px] max-sm:leading-[34px]">
-            We believe in sustainable decor. We’re passionate about life at
-            home.
-          </p>
-          <p className="font-inter leading-[26px]">
-            Our features timeless furniture, with natural fabrics, curved lines,
-            plenty of mirrors and classic design, which can be incorporated into
-            any decor project. The pieces enchant for their sobriety, to last
-            for generations, faithful to the shapes of each period, with a touch
-            of the present
-          </p>
-        </div>
-        <AboutUsCard />
-        <ContactsInfo />
-        <div className="md:flex md:space-x-10">
-          <MessageInput />
-          <MapLoction />
-        </div>
-        <BenefitsDisplay />
+        <motion.div variants={containerVariants} initial="hidden" animate="visible">
+          <motion.div className="mb-10 space-y-6 md:w-2/3" variants={itemVariants}>
+            <p className="text-[54px] font-medium leading-[58px] tracking-[-1px] max-sm:text-[28px] max-sm:leading-[34px]">
+              We believe in sustainable decor. We’re passionate about life at
+              home.
+            </p>
+            <p className="font-inter leading-[26px]">
+              Our features timeless furniture, with natural fabrics, curved lines,
+              <br /> plenty of mirrors and classic design, which can be incorporated into
+              <br /> any decor project. The pieces enchant for their sobriety, to last
+              <br /> for generations, faithful to the shapes of each period, with a touch
+              <br /> of the present
+            </p>
+          </motion.div>
+          <AboutUsCard />
+          <ContactsInfo />
+          <div className="md:flex md:space-x-10">
+            <MessageInput />
+            <MapLoction />
+          </div>
+          <BenefitsDisplay />
+        </motion.div>
       </div>
-
       <SiteFooter />
     </main>
   );
