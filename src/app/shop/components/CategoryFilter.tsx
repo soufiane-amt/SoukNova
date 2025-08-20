@@ -13,10 +13,9 @@ import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/24/outline';
 import { Squares2X2IconButton } from '../../../components/ui/squares/Squares2X2Icon';
 import { Squares3X3IconButton } from '../../../components/ui/squares/Squares3X3Icon';
 import { ProductCard } from '../../../components/ui/ProductCard';
-import { arrivals } from '../../../constants/arrivals';
 import { Grid } from '@mui/material';
 import { FormControl, MenuItem, Select } from '@mui/material';
-import { Product } from '../../../../public/Product';
+import Link from 'next/link';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -337,15 +336,17 @@ export default function CategoryFilter({ products }: CategoryFilterProps) {
                     data-aos-delay={index * 100}
                     key={index}
                   >
-                    <ProductCard
-                      productName={item.title}
-                      currentPrice={item.Price}
-                      originalPrice={item.originalPrice}
-                      discountPercentage={item.discount}
-                      rating={item.Rate}
-                      image={item.primary_image}
-                      date={item.Date}
-                    />
+                    <Link href={`/product/${item.id}`}>
+                      <ProductCard
+                        productName={item.title}
+                        currentPrice={item.Price}
+                        originalPrice={item.originalPrice}
+                        discountPercentage={item.discount}
+                        rating={item.Rate}
+                        image={item.primary_image}
+                        date={item.Date}
+                      />
+                    </Link>
                   </div>
                 ))}
               </Grid>

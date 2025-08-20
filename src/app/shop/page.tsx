@@ -5,6 +5,7 @@ import ShopShow from './components/ShopShow';
 import { NewsLetterSub } from '@/home/components/NewsLetterSub';
 import { SiteFooter } from '../../components/layout/SiteFooter';
 import { useEffect, useState } from 'react';
+import CircularIndeterminate from '../../components/ui/CircularIndeterminate';
 
 const API_URL =
   'https://oowcjcmdcfitnnsqfohw.supabase.co/rest/v1/products?select=*';
@@ -47,7 +48,13 @@ export default function ShopPage() {
     fetchProducts();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <CircularIndeterminate />
+      </div>
+    );
+  }
   if (error) return <div>Error: {error}</div>;
 
   return (
