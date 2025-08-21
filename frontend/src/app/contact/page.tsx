@@ -93,7 +93,7 @@ function ContactsInfo() {
       >
         Contact Us
       </motion.p>
-      <div className="md:flex justify-between space-x-8">
+      <div className="md:flex justify-between md:space-x-8">
         {contacts.map((contact, index) => (
           <motion.div
             key={index}
@@ -153,7 +153,7 @@ function AboutUsCard() {
 
 function MapLoction() {
   return (
-    <motion.div className="relative w-2/5" variants={itemVariants}>
+    <motion.div className="relative md:w-2/5" variants={itemVariants}>
       <Image
         src={imageMap}
         alt="Company location"
@@ -201,7 +201,7 @@ function MapLoction() {
 
 function MessageInput() {
   return (
-    <motion.div className="my-5 w-3/5" variants={itemVariants}>
+    <motion.div className="my-5 md:w-3/5" variants={itemVariants}>
       <div>
         <div className="flex flex-col mb-8">
           <label className="font-bold text-[var(--color-primary)] text-xs mb-2">

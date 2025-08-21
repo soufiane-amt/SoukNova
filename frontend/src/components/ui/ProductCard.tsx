@@ -42,8 +42,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   productName = getFirstTwoWords(productName)
   const isNew = isProductNew(date)
-  console.log("isNew: ", isNew);
-  console.log("Product Date: ", date);
   return (
     <div className="w-[300px] flex-shrink-0 cursor-pointer mb-5" >
       <div className="relative  bg-[#f4f4f4] w-full h-[349px] flex items-center justify-center">
