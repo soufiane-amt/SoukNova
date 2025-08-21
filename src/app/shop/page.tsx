@@ -1,11 +1,13 @@
-"use client"
+'use client';
 
 import CategoryFilter from './components/CategoryFilter';
-import ShopShow from './components/ShopShow';
 import { NewsLetterSub } from '@/home/components/NewsLetterSub';
 import { SiteFooter } from '../../components/layout/SiteFooter';
 import { useEffect, useState } from 'react';
 import CircularIndeterminate from '../../components/ui/CircularIndeterminate';
+import SectionShow from '../../components/ui/SectionShow';
+
+const imageUrl = '/images/shop/shopPage.png';
 
 const API_URL =
   'https://oowcjcmdcfitnnsqfohw.supabase.co/rest/v1/products?select=*';
@@ -60,7 +62,11 @@ export default function ShopPage() {
   return (
     <div>
       <div className="mx-10 md:mx-20">
-        <ShopShow />
+        <SectionShow
+          imageUrl={imageUrl}
+          head="Shop"
+          desc="Let’s design the place you always imagined."
+        />
         <CategoryFilter products={products} />
       </div>
 
