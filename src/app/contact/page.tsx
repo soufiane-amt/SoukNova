@@ -2,7 +2,6 @@
 
 import { Typography } from '@mui/material';
 import Traversal from '../../components/ui/Traversal';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
 import CustomButton from '../../components/ui/CustomButton';
 import { poppins } from '@/layout';
@@ -12,48 +11,11 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import BenefitsDisplay from '@/home/components/BenefitsDisplay';
 import { SiteFooter } from '../../components/layout/SiteFooter';
+import { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const imageMap = '/images/contact/map.png';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-};
-
-const slideInFromLeft = {
-  hidden: { opacity: 0, x: -50 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.8, ease: 'easeOut' },
-  },
-};
-
-const slideInFromRight = {
-  hidden: { opacity: 0, x: 50 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.8, ease: 'easeOut' },
-  },
-};
 
 interface ContactData {
   title: string;
@@ -81,24 +43,20 @@ const contacts: ContactData[] = [
 
 function ContactsInfo() {
   return (
-    <motion.div
-      className="mt-10 text-center"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <motion.p
+    <div className="mt-10 text-center" data-aos="fade-up" data-aos-delay="200">
+      <p
         className={`${poppins.className} mb-5 font-medium text-4xl`}
-        variants={itemVariants}
+        data-aos="fade-up"
       >
         Contact Us
-      </motion.p>
+      </p>
       <div className="md:flex justify-between md:space-x-8">
         {contacts.map((contact, index) => (
-          <motion.div
+          <div
             key={index}
             className="bg-[var(--color-neutral-bg)] flex flex-col items-center text-center p-5 mb-5 flex-1"
-            variants={itemVariants}
+            data-aos="fade-up"
+            data-aos-delay={`${200 * (index + 1)}`}
           >
             <span>{contact.icon}</span>
             <Typography
@@ -111,22 +69,17 @@ function ContactsInfo() {
             <Typography variant="body1" sx={{ fontWeight: 600 }}>
               {contact.value}
             </Typography>
-          </motion.div>
+          </div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function AboutUsCard() {
   return (
-    <motion.div
-      className="bg-[var(--color-neutral-bg)] md:flex"
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
-      <motion.div className="md:w-1/2" variants={slideInFromLeft}>
+    <div className="bg-[var(--color-neutral-bg)] md:flex" data-aos="fade-up">
+      <div className="md:w-1/2" data-aos="fade-right">
         <Image
           src={promoHighlightImage}
           alt="Highlight promotion"
@@ -134,8 +87,8 @@ function AboutUsCard() {
           height={400}
           className="w-full h-[367px] md:h-[532px]"
         />
-      </motion.div>
-      <motion.div className="mt-10 p-5 md:w-1/2 md:p-15" variants={slideInFromRight}>
+      </div>
+      <div className="mt-10 p-5 md:w-1/2 md:p-15" data-aos="fade-left">
         <p
           className={`${poppins.className} mb-5 font-medium text-lg md:text-4xl mb-3`}
         >
@@ -146,14 +99,14 @@ function AboutUsCard() {
           2019. Our customer service is always prepared to support you 24/7
         </Typography>
         <CustomButton label="Shop now" />
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
 function MapLoction() {
   return (
-    <motion.div className="relative md:w-2/5" variants={itemVariants}>
+    <div className="relative md:w-2/5" data-aos="fade-left" data-aos-delay="200">
       <Image
         src={imageMap}
         alt="Company location"
@@ -195,13 +148,13 @@ function MapLoction() {
           strokeLinejoin="round"
         />
       </svg>
-    </motion.div>
+    </div>
   );
 }
 
 function MessageInput() {
   return (
-    <motion.div className="my-5 md:w-3/5" variants={itemVariants}>
+    <div className="my-5 md:w-3/5" data-aos="fade-right" data-aos-delay="200">
       <div>
         <div className="flex flex-col mb-8">
           <label className="font-bold text-[var(--color-primary)] text-xs mb-2">
@@ -238,28 +191,30 @@ function MessageInput() {
           Send Message
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function ContactPage() {
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+  }, []);
+
   return (
     <main>
       <div className="mx-10 md:mx-15 lg:mx-30">
         <div>
-          <motion.div
-            className="flex mt-4 space-x-2"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
+          <div className="flex mt-4 space-x-2" data-aos="fade-down" data-aos-delay="200">
             <Traversal
               items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]}
             />
-          </motion.div>
+          </div>
         </div>
-        <motion.div variants={containerVariants} initial="hidden" animate="visible">
-          <motion.div className="mb-10 space-y-6 md:w-2/3" variants={itemVariants}>
+        <div data-aos="fade-up">
+          <div className="mb-10 space-y-6 md:w-2/3" data-aos="fade-up" data-aos-delay="200">
             <p className="text-[54px] font-medium leading-[58px] tracking-[-1px] max-sm:text-[28px] max-sm:leading-[34px]">
               We believe in sustainable decor. We’re passionate about life at
               home.
@@ -271,7 +226,7 @@ function ContactPage() {
               <br /> for generations, faithful to the shapes of each period, with a touch
               <br /> of the present
             </p>
-          </motion.div>
+          </div>
           <AboutUsCard />
           <ContactsInfo />
           <div className="md:flex md:space-x-10">
@@ -279,7 +234,7 @@ function ContactPage() {
             <MapLoction />
           </div>
           <BenefitsDisplay />
-        </motion.div>
+        </div>
       </div>
       <SiteFooter />
     </main>
