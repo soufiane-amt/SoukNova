@@ -119,7 +119,7 @@ function ProfilePictureEditor({ imageUrl }: ProfilePictureEditorProps) {
 
 function AccountNavigator() {
   return (
-    <div className="flex flex-col justify-center md:justify-start  bg-[#F3F5F7] py-10 rounded-lg md:w-1/5 md:py-10 h-[468px] min-w-[262px] max-w-[262px] ">
+    <div className="flex flex-col justify-center md:justify-start  bg-[#F3F5F7] py-10 rounded-lg md:w-1/5 md:py-10 h-[468px] min-w-[262px] ">
       <div className="flex flex-col justify-center mb-5">
         <ProfilePictureEditor imageUrl={undefined} />
         <p className="text-center font-semibold text-lg my-3">Soufiane</p>
