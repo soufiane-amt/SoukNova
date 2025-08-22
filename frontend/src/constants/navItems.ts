@@ -1,1 +1,1 @@
-export const NAV_ITEMS = ['Home', 'Shop', 'About', 'Contact'];
+export const NAV_ITEMS = ['Home', 'Shop', 'Blog', 'Contact'];

@@ -42,7 +42,7 @@ function ArticleCard({ id, title, image, date, href }: ArticleCardProps) {
               component="span"
               className=" !font-inter !text-xs text-gray-400"
             >
-              {date.slice(0, date.length - 5)}
+              {date.slice(0, -5)}
             </Typography>
           </div>
         </div>

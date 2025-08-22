@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Carousel from 'react-material-ui-carousel';
 import { Typography } from '@mui/material';
 import { useParams, useSearchParams } from 'next/navigation';
-import { motion } from 'framer-motion';
 
 import Image from 'next/image';
 import RatingStars from '../../../components/ui/RatingStars';
@@ -16,54 +15,8 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import CircularIndeterminate from '../../../components/ui/CircularIndeterminate';
 import Traversal from '../../../components/ui/Traversal';
-
-// Centralized animation variants for cleaner code
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2, // Stagger all children
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: 'easeOut',
-    },
-  },
-};
-
-const popIn = {
-  hidden: { scale: 0.8, opacity: 0 },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      type: 'spring',
-      damping: 12,
-      stiffness: 100,
-    },
-  },
-};
-
-const imagePop = {
-  hidden: { scale: 0.9, opacity: 0 },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-};
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 interface ThumbnailListProps {
   images: string[];
@@ -77,14 +30,9 @@ const ThumbnailList: React.FC<ThumbnailListProps> = ({
   onSelectImage,
 }) => {
   return (
-    <motion.div
-      className="flex justify-center mt-4 space-x-2"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
+    <div className="flex justify-center mt-4 space-x-2" data-aos="fade-up">
       {images.map((image, index) => (
-        <motion.div
+        <div
           key={index}
           className={`cursor-pointer border-2 p-1 rounded-md ${
             activeImage === image.trim()
@@ -92,7 +40,8 @@ const ThumbnailList: React.FC<ThumbnailListProps> = ({
               : 'border-transparent'
           }`}
           onClick={() => onSelectImage(image.trim())}
-          variants={popIn}
+          data-aos="zoom-in"
+          data-aos-delay={`${index * 100}`}
         >
           <Image
             src={image.trim()}
@@ -101,9 +50,9 @@ const ThumbnailList: React.FC<ThumbnailListProps> = ({
             height={70}
             className="rounded-md"
           />
-        </motion.div>
+        </div>
       ))}
-    </motion.div>
+    </div>
   );
 };
 
@@ -183,6 +132,11 @@ export default function ProductPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+
     if (!id) return;
 
     const fetchProduct = async () => {
@@ -243,11 +197,10 @@ interface ProductImageProps {
 
 const ProductImage: React.FC<ProductImageProps> = ({ image, isNew }) => {
   return (
-    <motion.div
+    <div
       className="relative bg-[#f4f4f4] h-[649px] flex items-center justify-center"
-      variants={imagePop}
-      initial="hidden"
-      animate="visible"
+      data-aos="fade-right"
+      data-aos-delay="200"
     >
       <Image
         src={image}
@@ -264,7 +217,7 @@ const ProductImage: React.FC<ProductImageProps> = ({ image, isNew }) => {
           </Typography>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -296,12 +249,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
   };
 
   return (
-    <motion.div
-      key={productData.id} // Re-run animations on product change
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
+    <div>
       <Traversal
         items={[
           { label: 'Home', href: '/' },
@@ -310,9 +258,9 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
         ]}
       />
       <div className="lg:flex w-full">
-        <motion.div
+        <div
           className="mb-10 lg:mr-15 lg:w-[500px]"
-          variants={itemVariants}
+          data-aos="fade-right"
         >
           <Carousel navButtonsAlwaysInvisible={true}>
             {activeImage && (
@@ -327,19 +275,19 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             activeImage={activeImage}
             onSelectImage={handleSelectImage}
           />
-        </motion.div>
-        <div className="lg:w-[508px]">
-          <motion.div variants={itemVariants} className="flex flex-col gap-2">
-            <motion.div
+        </div>
+        <div className="lg:w-[508px]" data-aos="fade-left" data-aos-delay="200">
+          <div className="flex flex-col gap-2">
+            <div
               className="flex items-start space-x-2 w-"
-              variants={itemVariants}
+              data-aos="fade-up"
             >
               <RatingStars isStatic={true} defaultValue={productData?.Rate} />
               <Typography sx={{ fontSize: '0.675rem' }}>
                 <span>{productData?.reviews?.length ?? 0}</span> Reviews
               </Typography>
-            </motion.div>
-            <motion.div variants={itemVariants}>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="100">
               <p
                 className={`text-[40px] font-medium`}
                 style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
@@ -349,17 +297,13 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
               <p className="max-h-[78px] w-full overflow-hidden text-ellipsis text-wrap font-inter leading-[26px] text-[var(--color-primary)] text-sm">
                 {productData.about_item}
               </p>
-            </motion.div>
-          </motion.div>
-          <motion.div variants={itemVariants}>
+            </div>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="200">
             <div className="flex gap-4 py-8">
               <Typography className="!font-semibold !text-2xl !overflow-hidden !whitespace-nowrap !text-ellipsis">
-                $
-                {Number(
-                  getDiscountedPrice(productData.Price, productData.discount),
-                ).toFixed(2)}
+                ${Number(getDiscountedPrice(productData.Price, productData.discount)).toFixed(2)}
               </Typography>
-
               {productData.Price && (
                 <Typography
                   className="line-through !text-2xl"
@@ -389,9 +333,9 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
                 <div className="w-10 h-10 bg-green-500 rounded-full border border-blue-500"></div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div className="flex space-x-8 mt-5" variants={itemVariants}>
+          <div className="flex space-x-8 mt-5" data-aos="fade-up" data-aos-delay="300">
             <div className="bg-[#F5F5F5] flex-1 flex justify-around items-center font-bold rounded-lg">
               <button className="cursor-pointer" onClick={decreaseQuantity}>
                 -
@@ -401,7 +345,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
                 +
               </button>
             </div>
-            <button className="w-full rounded-lg bg-white border flex items-center justify-center space-x-2 flex-2 py-3 cursor-pointer">
+            <button className="w-full rounded-lg bg-white border flex items-center justify-center space-x-2 flex-2 py-3 cursor-pointer" data-aos="zoom-in" data-aos-delay="400">
               <svg
                 width="16"
                 height="12"
@@ -418,30 +362,32 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
               </svg>
               <p className="font-medium">Wishlist</p>
             </button>
-          </motion.div>
-          <motion.div
+          </div>
+          <div
             className="w-full mt-5 border-b border-gray-300 pb-5"
-            variants={itemVariants}
+            data-aos="fade-up"
+            data-aos-delay="400"
           >
-            <motion.button
+            <button
               onClick={increaseQuantity}
               className="w-full bg-black text-white rounded-lg py-4 cursor-pointer font-semibold"
-              variants={popIn}
+              data-aos="zoom-in" data-aos-delay="500"
             >
               Add To Cart
-            </motion.button>
-          </motion.div>
-          <motion.div
+            </button>
+          </div>
+          <div
             className="flex items-center gap-[58px] my-15"
-            variants={itemVariants}
+            data-aos="fade-up"
+            data-aos-delay="500"
           >
             <p className="w-[65px] text-[var(--color-primary)]">CATEGORY</p>
             <p>
               {Array.isArray(productData.categoriesText)
-                ? productData.categoriesText.map((c) => `{${c}}`).join(', ')
+                ? productData.categoriesText.map((c: any) => `{${c}}`).join(', ')
                 : productData.categoriesText || ''}
             </p>
-          </motion.div>
+          </div>
         </div>
       </div>
       <div>
@@ -466,14 +412,14 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
         >
           Customer Reviews
         </Typography>
-        <div className="flex space-x-4 mt-5">
+        <div className="flex space-x-4 mt-5" data-aos="fade-up">
           <RatingStars isStatic={true} defaultValue={productData.Rate} />
           <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
             <span>{productData?.reviews?.length ?? 0}</span> Reviews
           </Typography>
         </div>
       </div>
-      <div className="border flex justify-between items-center px-5 py-2 rounded-lg border-gray-400 mt-6">
+      <div className="border flex justify-between items-center px-5 py-2 rounded-lg border-gray-400 mt-6" data-aos="fade-up">
         <input
           type="text"
           placeholder="Share your review"
@@ -514,22 +460,18 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
         </Typography>
         <ReviewsSort />
       </div>
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      <div>
         {productData.reviews.map((item: any, index: number) => (
-          <motion.div key={index} variants={itemVariants}>
+          <div key={index} data-aos="fade-up" data-aos-delay={`${index * 100}`}>
             <Review
               name={item.name}
               image={item.avatar}
               rate={item.rate}
               comment={item.comments}
             />
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };

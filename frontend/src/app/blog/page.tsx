@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import SectionShow from '../../components/ui/SectionShow';
 import BlogCatalog from './components/BlogCatalog';
 import CircularIndeterminate from '../../components/ui/CircularIndeterminate';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const imageUrl = '/images/blog/ourBlogPage.png';
 
@@ -15,7 +17,7 @@ const API_KEY =
 const headers = {
   apikey: API_KEY,
   Authorization: `Bearer ${API_KEY}`,
-  Accept: 'application/json', // Supabase will return JSON by default, but it's good practice to specify
+  Accept: 'application/json',
   'Accept-Profile': 'public',
 };
 
@@ -25,6 +27,11 @@ function BlogPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+
     const fetchArticals = async () => {
       try {
         const response = await fetch(API_URL, {
@@ -48,7 +55,6 @@ function BlogPage() {
     fetchArticals();
   }, []);
 
-
   if (loading) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
@@ -58,15 +64,16 @@ function BlogPage() {
   }
   if (error) return <div>Error: {error}</div>;
 
-
   return (
     <div className="mx-10 md:mx-20">
-      <SectionShow
-        imageUrl={imageUrl}
-        head="Blog"
-        desc="Home ideas and design inspiration"
-      />
-      <BlogCatalog articles={articles}/>
+      <div data-aos="fade-up">
+        <SectionShow
+          imageUrl={imageUrl}
+          head="Blog"
+          desc="Home ideas and design inspiration"
+        />
+      </div>
+      <BlogCatalog articles={articles} />
     </div>
   );
 }

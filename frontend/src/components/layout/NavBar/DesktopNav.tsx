@@ -59,7 +59,7 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
           <TypeAnimation
             sequence={['3legant.']}
             speed={50}
-            className="font-bold text-xl"
+            className={`font-medium text-xl ${poppins.className}`}
             wrapper="h1"
           />
         </div>
