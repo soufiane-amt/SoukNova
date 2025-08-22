@@ -1,9 +1,14 @@
 import { inter, poppins } from '@/layout';
 import { Typography } from '@mui/material';
+import { Inter } from 'next/font/google';
 
 function AccountDetailsForm() {
   return (
-    <div className="my-5 md:w-3/5 md:w-4/5 w-full px-[72px] max-lg:px-[32px] max-md:px-0 max-md:pt-10" data-aos="fade-right" data-aos-delay="200">
+    <div
+      className="my-5 md:w-3/5 md:w-4/5 w-full px-[72px] max-lg:px-[32px] max-md:px-0 max-md:pt-10"
+      data-aos="fade-right"
+      data-aos-delay="200"
+    >
       <div>
         <div className="mb-5 mt-10">
           <p className={`${inter.className} font-semibold text-xl`}>
@@ -42,9 +47,7 @@ function AccountDetailsForm() {
 
       <div>
         <div className="mb-5 mt-10">
-          <p className={`${inter.className} font-semibold text-xl`}>
-            Password
-          </p>
+          <p className={`${inter.className} font-semibold text-xl`}>Password</p>
         </div>
 
         <div className="flex flex-col mb-8">
@@ -52,6 +55,7 @@ function AccountDetailsForm() {
             OLD PASSWORD
           </label>
           <input
+            type="password"
             placeholder="Old password"
             className={`text-md border py-2 px-4 rounded-md border border-[#CBCBCB] ${poppins.className}`}
           />
@@ -61,6 +65,7 @@ function AccountDetailsForm() {
             NEW PASSWORD
           </label>
           <input
+            type="password"
             placeholder="New Password"
             className="text-md border py-2 px-4 rounded-md border border-[#CBCBCB]"
           />
@@ -71,8 +76,8 @@ function AccountDetailsForm() {
           </label>
           <input
             placeholder="Repeat new Password"
-            type="email"
-            className="text-md border py-2 px-4 rounded-md border border-[#CBCBCB]"
+            type="password"
+            className={`text-md border py-2 px-4 rounded-md border border-[#CBCBCB] ${inter.className}`}
           />
         </div>
       </div>
