@@ -15,10 +15,10 @@ function AddressField({
   address,
 }: AddressFieldProps) {
   return (
-    <div className="md:flex-1 border border-[var(--color-primary)]  rounded-lg p-4">
+    <div className="md:flex-1 border border-[var(--color-primary)] rounded-lg p-4">
       <div className="mb-2 flex justify-between">
         <p className={`font-semibold ${inter.className}`}>{fieldName}</p>
-        <div className='flex items-center'>
+        <div className='flex items-center cursor-pointer'>
           <BorderColorOutlinedIcon  sx={{fontSize: 17, color: "var(--color-primary)"}} />
           <p className='ml-1    text-[var(--color-primary)] font-semibold text-[16px]'>Edit</p>
         </div>
