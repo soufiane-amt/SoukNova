@@ -1,12 +1,12 @@
-import AddressSection from './components/AddressSection';
+import OrderHistory from './components/OrderHistory';
 import SettingsWrap from '../../components/layout/Settings/SettingsWrap';
 
-function AddressPage() {
+function OrderPage() {
   return (
     <SettingsWrap>
-      <AddressSection />
+      <OrderHistory />
     </SettingsWrap>
   );
 }
 
-export default AddressPage;
+export default OrderPage;
