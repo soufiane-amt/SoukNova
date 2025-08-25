@@ -3,16 +3,16 @@ import WishItem from './WishItem';
 
 function WishList() {
   return (
-    <div className='w-full md:ml-10 md:mt-0 mt-5'>
+    <div className="w-full md:ml-25 md:mt-0 mt-5">
       <div className="mb-5 mt-10">
-        <p className={`${inter.className} font-semibold text-xl`}>Your Wishlist</p>
+        <p className={`${inter.className} font-semibold text-xl`}>
+          Your Wishlist
+        </p>
       </div>
       <div>
-        {/* <div className='md:grid md:grid-cols-3 md:grid-cols-3 gap-3 mx-8 text-sm'>
-        <p>Product</p>
-        <p className='hidden md:flex'>Price</p>
-        <p className='hidden md:flex'>Action</p>
-      </div> */}
+        <div className="text-sm text-[var(--color-primary)] border-b border-gray-300 pb-2">
+          <p>Products</p>
+        </div>
         <WishItem
           productName="uxcell Shredded"
           productImage="https://m.media-amazon.com/images/I/51i6LeHlc9L._SS522_.jpg"
