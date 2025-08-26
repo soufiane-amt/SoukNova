@@ -1,6 +1,5 @@
 import { inter } from '@/layout';
 import Image from 'next/image';
-import { AiOutlineClose } from 'react-icons/ai';
 
 interface WishItemProps {
   productName: string;
@@ -29,16 +28,16 @@ function WishItem({ productName, productImage, price }: WishItemProps) {
           <div
             className={`text-sm flex flex-col md:flex-row justify-between ${inter.className}`}
           >
-            <div className='md:flex  md:flex-col md:space-y-5'>
+            <div className="md:flex  md:flex-col md:space-y-5">
               <p className="font-semibold">{productName}</p>
               <p className="text-[var(--color-primary)] text-xs md:m-0">
                 color: green
               </p>
-              <p className='md:hidden' >${price}</p>
+              <p className="md:hidden">${price}</p>
             </div>
           </div>
         </div>
-        <div className='hidden md:block'>
+        <div className="hidden md:block">
           <p>${price}</p>
         </div>
         <div className="mt-5 md:mt-0">

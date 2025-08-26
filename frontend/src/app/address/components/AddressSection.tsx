@@ -3,7 +3,7 @@ import AddressField from './AddressField';
 
 function AddressSection() {
   return (
-    <div className="w-full ">
+    <div className="w-full md:ml-25">
       <div className="mb-5 mt-10">
         <p className={`${inter.className} font-semibold text-xl`}>Address</p>
       </div>
