@@ -1,15 +1,15 @@
 function CouponInput() {
   return (
-    <div>
+    <div className="mb-12 md:w-1/3 md:mt-20">
       <div>
-        <div className="font-medium text-xl">
+        <div className="font-semibold text-xl">
           <p>Have a coupon?</p>
         </div>
         <div className="text-[var(--color-primary)] py-4 text-[17px]">
           <p>Add your code for an instant cart discount</p>
         </div>
       </div>
-      <div className="flex items-center border overflow-hidden w-full max-w-md">
+      <div className="flex items-center border overflow-hidden w-full">
         <div className="flex-shrink-0 px-3 text-gray-500">
           <svg
             stroke="currentColor"
@@ -25,7 +25,6 @@ function CouponInput() {
           </svg>
         </div>
 
-        {/* Input */}
         <input
           type="text"
           className="flex-grow py-3 px-2 text-[16px] outline-none"

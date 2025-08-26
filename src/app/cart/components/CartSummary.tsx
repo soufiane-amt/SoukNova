@@ -2,7 +2,7 @@ import { inter } from '@/layout';
 
 function CartSummary() {
   return (
-    <div className={`${inter.className} border rounded-lg p-5`}>
+    <div className={`border rounded-lg p-5 flex-1`}>
       <div className='mb-3'>
         <p className="font-semibold text-xl">Cart summary</p>
       </div>
