@@ -14,8 +14,8 @@ function CheckoutPage() {
           <p className="font-medium text-6xl">Checkout</p>
         </div>
         <CartNavigator />
-        <div className="flex flex-col gap-8 md:flex-row md:justify-between">
-          <div className="flex-1 flex flex-col gap-y-8">
+        <div className="flex flex-col gap-15 md:flex-row md:justify-between">
+          <div className="flex-2 flex flex-col gap-y-8">
             <ContactInfo />
             <ShippingAddress />
             <PaymentMethod />
