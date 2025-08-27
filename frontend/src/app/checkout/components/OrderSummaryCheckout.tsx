@@ -1,16 +1,17 @@
 import CartItem from '@/cart/components/CartItem';
 import { inter } from '@/layout';
+import CheckoutCartItem from './CheckoutCartItem';
 
 function OrderSummaryCheckout() {
   return (
     <div className="p-5 border rounded">
       <div className="mb-5 ">
-        <p className={`${inter.className} font-medium text-3xl`}>
+        <p className={`${inter.className} text-[28px]`}>
           Order summary
         </p>
       </div>
       <div className='mb-5 h-100'>
-        <CartItem
+        <CheckoutCartItem
           productName="uxcell Shredded"
           productImage="https://m.media-amazon.com/images/I/51i6LeHlc9L._SS522_.jpg"
           price={39.49}
