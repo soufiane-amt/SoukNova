@@ -10,7 +10,7 @@ function OrderComplete() {
         </div>
 
         <CartNavigator />
-        <div className="mx-8 md:m-20">
+        <div className="mx-8 md:mx-20">
           <div className="md:flex md:justify-center">
             <Order />
           </div>
