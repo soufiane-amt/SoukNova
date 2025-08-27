@@ -1,4 +1,3 @@
-import CartItem from '@/cart/components/CartItem';
 import { inter } from '@/layout';
 import CheckoutCartItem from './CheckoutCartItem';
 
