@@ -1,3 +1,4 @@
+import { poppins } from '@/layout';
 import CustomButton from '../../../components/ui/CustomButton';
 import { Typography } from '@mui/material';
 import Image from 'next/image';
@@ -31,21 +32,17 @@ export function PromoHighlightSection() {
           >
             SALE UP TO 35% OFF
           </Typography>
-          <Typography
-            variant="h4"
-            component="div"
-            gutterBottom
-            color="main.primary"
-            sx={{ fontWeight: 'bold' }}
-          >
+          <p className={`font-medium ${poppins.className} text-4xl`}>
             HUNDREDS of New lower prices!
-          </Typography>
+          </p>
           <Typography
             variant="body1"
             sx={{
               mt: 2,
               color: 'text.secondary',
               lineHeight: 1.6,
+              fontFamily: 'Inter',
+              fontWeight: 'bold',
             }}
           >
             It’s more affordable than ever to give every room in your home a

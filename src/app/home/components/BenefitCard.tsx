@@ -8,6 +8,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { SvgIconTypeMap } from '@mui/material';
+import { inter } from '@/layout';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type IconComponentType = OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
@@ -63,9 +64,9 @@ const BenefitCard = ({ iconName, title, description }: BenefitCardProps) => {
         >
           {title}
         </Typography>
-        <Typography variant="body2" color="var(--color-primary)">
+        <p  className={`${inter.className} text-[var(--color-primary)]`}>
           {description}
-        </Typography>
+        </p>
       </CardContent>
     </Card>
   );

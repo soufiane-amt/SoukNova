@@ -1,5 +1,6 @@
 import { inter } from '@/layout';
 import WishItem from './WishItem';
+import EmptySectionMessage from '../../../components/ui/EmptySection';
 
 function WishList() {
   return (
@@ -9,7 +10,7 @@ function WishList() {
           Your Wishlist
         </p>
       </div>
-      <div>
+      {/* <div>
         <div className="text-sm text-[var(--color-primary)] border-b border-gray-300 pb-2">
           <p>Products</p>
         </div>
@@ -28,6 +29,9 @@ function WishList() {
           productImage="https://m.media-amazon.com/images/I/51i6LeHlc9L._SS522_.jpg"
           price={39.49}
         />
+      </div> */}
+      <div className="mt-30">
+        <EmptySectionMessage message="No Products In Wishlist" />
       </div>
     </div>
   );

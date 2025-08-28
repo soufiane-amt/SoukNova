@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
 import RatingStars from './RatingStars';
 import Image from 'next/image';
+import { poppins } from '@/layout';
 
 
 function getFirstTwoWords(title :string) {
@@ -69,7 +70,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <div className="mt-3">
         <RatingStars isStatic={true} defaultValue={rating} />
         <div className="mb-1">
-          <Typography className="!font-bold">{productName}</Typography>
+          <p className={`font-medium ${poppins.className}`}>{productName}</p>
         </div>
         <div className="flex gap-4">
           <Typography className="!font-semibold  !text-sm !overflow-hidden !text-ellipsis">
