@@ -5,17 +5,21 @@ import { PromoCardSmall } from './PromoCardSmall';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { PROMO_IMAGES } from '../../../constants/promoImages';
+import { poppins } from '@/layout';
 
 export const PromoSection = () => {
   useEffect(() => {
-    AOS.init({ duration: 1000 });
+    AOS.init({ duration: 1000, once: true });
   }, []);
 
   return (
-    <section aria-labelledby="promotions" className='my-12'>
+    <section
+      aria-labelledby="promotions"
+      className={`my-12 ${poppins.className}`}
+    >
       <div className="md:flex md:items-center md:justify-between mb-8">
         <div className="md:w-1/2" data-aos="fade-right">
-          <h1 className="font-semibold md:text-[72px] text-[40px] md:leading-[80px] leading-[45px]">
+          <h1 className="font-medium md:text-[72px] text-[40px] md:leading-[80px] leading-[45px]">
             Simply Unique<span className="text-red-400">/</span> Simply Better{' '}
             <span className="text-red-400">.</span>
           </h1>
@@ -26,8 +30,8 @@ export const PromoSection = () => {
           data-aos-delay="200"
         >
           <p className="text-color-primary">
-            <span className="text-black">3legant</span> is a gift & decorations
-            store based in HCMC, Vietnam. Est since 2019.
+            <span className="text-black font-medium">3legant</span> is a gift &
+            decorations store based in HCMC, Vietnam. Est since 2019.
           </p>
         </div>
       </div>

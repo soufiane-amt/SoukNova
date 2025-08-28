@@ -3,17 +3,16 @@
 import React from 'react';
 import { Typography } from '@mui/material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import { poppins } from '@/layout';
 
 export function NewsLetterSub() {
   return (
     <section
       className="w-full h-[360px] bg-[url('/images/home/newsLetterBack.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center px-6 "
-      data-aos="fade-up"
-      data-aos-delay="200"
     >
-      <div className="flex flex-col items-center text-center md:w-1/4 sm:w-1/3">
+      <div className={`flex flex-col items-center text-center md:w-1/4 sm:w-1/3 ${poppins.className}`}>
         <div className="mb-8">
-          <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+          <Typography variant="h4" sx={{ fontWeight: '500' }}>
             Join Our Newsletter
           </Typography>
           <Typography

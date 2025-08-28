@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import { Facebook, Instagram, Youtube } from 'lucide-react';
 import { NAV_ITEMS } from '../../constants/navItems';
+import { inter, poppins } from '@/layout';
 
 const socialLinks = [
   { icon: <Instagram />, url: 'https://instagram.com/', label: 'Instagram' },
@@ -41,8 +42,6 @@ export function SiteFooter() {
   return (
     <footer
       className="bg-[#232627] text-white p-15 w-full"
-      data-aos="fade-up"
-      data-aos-delay="200"
     >
       <div className="flex flex-col md:flex-row items-center justify-center md:justify-between">
         <div className="flex  flex-col md:flex-row items-center justify-center">
@@ -56,7 +55,7 @@ export function SiteFooter() {
             <a href="#">Gift & Decoration Store</a>
           </div>
         </div>
-        <nav className="md:inline text-[#E8ECEF] ">
+        <nav className={`md:inline text-[#E8ECEF] ${inter.className}`}>
           <List
             sx={{
               display: 'flex',
@@ -101,7 +100,7 @@ export function SiteFooter() {
         </nav>
       </div>
 
-      <div className="pt-5 md:pt-0 md:flex md:flex-row-reverse md:justify-between md:items-center w-full border-t-[0.5px] border-t-border-dark-gray">
+      <div className={`${poppins.className} pt-5 md:pt-0 md:flex md:flex-row-reverse md:justify-between md:items-center w-full border-t-[0.5px] border-t-border-dark-gray`}>
         <SocialIcons />
         <div className="md:flex md:flex-row-reverse md:items-center md:grid-cols-4 md:gap-5">
           <Stack

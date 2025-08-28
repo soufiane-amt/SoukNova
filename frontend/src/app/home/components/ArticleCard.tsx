@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
 import Image from 'next/image';
 import CustomButton from '../../../components/ui/CustomButton';
+import { poppins } from '@/layout';
 
 interface ArticleCardProps {
   title: string;
@@ -13,9 +14,7 @@ export function ArticleCard({ title, image }: ArticleCardProps) {
       <div>
         <Image src={image} height={325} width={357} alt={title} />
       </div>
-      <Typography sx={{ fontFamily: 'Poppins, sans-serif', paddingTop: '15px', fontWeight: 'bold' }}>
-        {title}
-      </Typography>
+      <p className={`${poppins.className} pt-5 font-medium`}>{title}</p>
       <CustomButton label="Read More" />
     </div>
   );

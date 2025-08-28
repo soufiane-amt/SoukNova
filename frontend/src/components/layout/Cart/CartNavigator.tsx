@@ -48,7 +48,7 @@ function CartNavigator() {
     setSelected(selected);
   };
   return (
-    <div className="flex justify-between overflow-x-hidden pb-12">
+    <div className="flex justify-between overflow-x-hidden pb-12 md:mx-50">
       <CartNavigatorElement
         stepOrder={1}
         selected={selected}
