@@ -19,12 +19,17 @@ interface BlogProps {
 
 export default function BlogCatalog({ articles }: BlogProps) {
   useEffect(() => {
-    // Initialize AOS with a duration and "once: true" so animations only run once per element
     AOS.init({
       duration: 800,
       once: true,
     });
   }, []);
+  const [showCount, setShowCount] = useState(16);
+
+  const handleShowMore = () => {
+    const newShowCount = Math.min(showCount + 16, articles.length);
+    setShowCount(newShowCount);
+  };
 
   return (
     <div>
@@ -33,7 +38,10 @@ export default function BlogCatalog({ articles }: BlogProps) {
         <div className="flex items-center justify-center">
           <Menu as="div" className="relative inline-block text-left mr-10">
             <div>
-              <MenuButton className="group inline-flex justify-center text-sm font-bold text-gray-700 hover:text-gray-900" data-aos="fade-left">
+              <MenuButton
+                className="group inline-flex justify-center text-sm font-bold text-gray-700 hover:text-gray-900"
+                data-aos="fade-left"
+              >
                 Sort by
                 <ChevronDownIcon
                   aria-hidden="true"
@@ -49,10 +57,8 @@ export default function BlogCatalog({ articles }: BlogProps) {
         <h2 id="blogs-heading" className="sr-only">
           Blogs
         </h2>
-        <div
-          className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4"
-        >
-          {articles.map((article, index) => (
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {articles.slice(0, showCount).map((article, index) => (
             <div
               key={article.id}
               data-aos="fade-up"
@@ -67,6 +73,16 @@ export default function BlogCatalog({ articles }: BlogProps) {
             </div>
           ))}
         </div>
+        {showCount < articles.length && (
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={handleShowMore}
+              className="cursor-pointer px-8 py-2 text-sm md:text-base font-medium text-black bg-white border rounded-full"
+            >
+              Show More
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );
