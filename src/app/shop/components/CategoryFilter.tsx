@@ -135,9 +135,14 @@ export default function CategoryFilter({ products }: CategoryFilterProps) {
   const [selectedShape, setSelectedShape] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(1);
   const [selectedPriceIndex, setSelectedPriceIndex] = useState(0);
+  const [showCount, setShowCount] = useState(9);
 
   const handleSelectShape = (index: number) => {
     setSelectedShape(index);
+  };
+  const handleShowMore = () => {
+    const newShowCount = Math.min(showCount + 9, products.length);
+    setShowCount(newShowCount);
   };
 
   return (
@@ -330,7 +335,7 @@ export default function CategoryFilter({ products }: CategoryFilterProps) {
                 sx={{ width: '100%' }}
                 justifyContent={{ xs: 'center', md: 'space-between' }}
               >
-                {products.map((item, index) => (
+                {products.slice(0, showCount).map((item, index) => (
                   <div
                     data-aos="fade-up"
                     data-aos-delay={index * 100}
@@ -350,6 +355,16 @@ export default function CategoryFilter({ products }: CategoryFilterProps) {
                   </div>
                 ))}
               </Grid>
+              {showCount < products.length && (
+                <div className="flex justify-center mt-8">
+                  <button
+                    onClick={handleShowMore}
+                    className="cursor-pointer px-8 py-2 text-sm md:text-base font-medium text-black bg-white border rounded-full"
+                  >
+                    Show More
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </section>

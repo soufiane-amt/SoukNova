@@ -41,10 +41,10 @@ export const PromoSection = () => {
         </div>
         <div className="flex-1 flex flex-col gap-4">
           <div className="flex-1" data-aos="fade-up" data-aos-delay="100">
-            <PromoCardSmall title="Kitchen" image={PROMO_IMAGES.kitchen} />
+            <PromoCardSmall title="Bedroom" image={PROMO_IMAGES.kitchen} />
           </div>
           <div className="flex-1" data-aos="fade-up" data-aos-delay="200">
-            <PromoCardSmall title="Bedroom" image={PROMO_IMAGES.bedroom} />
+            <PromoCardSmall title="Kitchen" image={PROMO_IMAGES.bedroom} />
           </div>
         </div>
       </div>
