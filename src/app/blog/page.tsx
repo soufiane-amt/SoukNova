@@ -6,6 +6,7 @@ import BlogCatalog from './components/BlogCatalog';
 import CircularIndeterminate from '../../components/ui/CircularIndeterminate';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import Loader from '../../components/ui/loader/Loader';
 
 const imageUrl = '/images/blog/ourBlogPage.png';
 
@@ -56,11 +57,7 @@ function BlogPage() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <CircularIndeterminate />
-      </div>
-    );
+    return <Loader />;
   }
   if (error) return <div>Error: {error}</div>;
 

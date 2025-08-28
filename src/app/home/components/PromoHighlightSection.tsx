@@ -49,7 +49,7 @@ export function PromoHighlightSection() {
             stylish makeover
           </Typography>
           <div className="mt-8">
-            <CustomButton label="Shop Now" />
+            <CustomButton label="Shop Now" href="/shop" />
           </div>
         </div>
       </div>

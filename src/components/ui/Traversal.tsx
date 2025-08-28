@@ -1,3 +1,4 @@
+import { inter } from "@/layout";
 import { motion } from "framer-motion";
 
 interface BreadcrumbItem {
@@ -26,7 +27,7 @@ const itemVariants = {
 const Traversal = ({ items }: TraversalProps) => {
   return (
     <motion.div
-      className="flex min-h-5 items-center gap-4 font-inter text-sm font-medium text-[#605F5F] max-sm:text-xs py-4"
+      className={`flex min-h-5 items-center gap-4 font-inter text-sm font-medium text-[#605F5F] max-sm:text-xs py-4 ${inter.className}`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"

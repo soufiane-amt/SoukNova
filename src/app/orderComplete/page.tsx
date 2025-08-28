@@ -1,7 +1,15 @@
+'use client'
+
 import CartNavigator from '../../components/layout/Cart/CartNavigator';
 import Order from './components/Order';
+import { useLoader } from '../../components/ui/loader/useLoader';
+import Loader from '../../components/ui/loader/Loader';
 
 function OrderComplete() {
+  const loading = useLoader(1500);
+
+  if (loading) return <Loader />;
+
   return (
     <main>
       <div className="mx-8 md:mx-16 lg:mx-32 my-12">

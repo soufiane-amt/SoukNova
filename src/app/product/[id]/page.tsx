@@ -17,6 +17,7 @@ import CircularIndeterminate from '../../../components/ui/CircularIndeterminate'
 import Traversal from '../../../components/ui/Traversal';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import Loader from '../../../components/ui/loader/Loader';
 
 interface ThumbnailListProps {
   images: string[];
@@ -172,13 +173,8 @@ export default function ProductPage() {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <CircularIndeterminate />
-      </div>
-    );
+    return <Loader />;
   }
-
   if (error) {
     return <div>{error}</div>;
   }
@@ -258,10 +254,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
         ]}
       />
       <div className="lg:flex w-full">
-        <div
-          className="mb-10 lg:mr-15 lg:w-[500px]"
-          data-aos="fade-right"
-        >
+        <div className="mb-10 lg:mr-15 lg:w-[500px]" data-aos="fade-right">
           <Carousel navButtonsAlwaysInvisible={true}>
             {activeImage && (
               <ProductImage
@@ -278,10 +271,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
         </div>
         <div className="lg:w-[508px]" data-aos="fade-left" data-aos-delay="200">
           <div className="flex flex-col gap-2">
-            <div
-              className="flex items-start space-x-2 w-"
-              data-aos="fade-up"
-            >
+            <div className="flex items-start space-x-2 w-" data-aos="fade-up">
               <RatingStars isStatic={true} defaultValue={productData?.Rate} />
               <Typography sx={{ fontSize: '0.675rem' }}>
                 <span>{productData?.reviews?.length ?? 0}</span> Reviews
@@ -302,7 +292,10 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
           <div data-aos="fade-up" data-aos-delay="200">
             <div className="flex gap-4 py-8">
               <Typography className="!font-semibold !text-2xl !overflow-hidden !whitespace-nowrap !text-ellipsis">
-                ${Number(getDiscountedPrice(productData.Price, productData.discount)).toFixed(2)}
+                $
+                {Number(
+                  getDiscountedPrice(productData.Price, productData.discount),
+                ).toFixed(2)}
               </Typography>
               {productData.Price && (
                 <Typography
@@ -335,7 +328,11 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             </div>
           </div>
 
-          <div className="flex space-x-8 mt-5" data-aos="fade-up" data-aos-delay="300">
+          <div
+            className="flex space-x-8 mt-5"
+            data-aos="fade-up"
+            data-aos-delay="300"
+          >
             <div className="bg-[#F5F5F5] flex-1 flex justify-around items-center font-bold rounded-lg">
               <button className="cursor-pointer" onClick={decreaseQuantity}>
                 -
@@ -345,7 +342,11 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
                 +
               </button>
             </div>
-            <button className="w-full rounded-lg bg-white border flex items-center justify-center space-x-2 flex-2 py-3 cursor-pointer" data-aos="zoom-in" data-aos-delay="400">
+            <button
+              className="w-full rounded-lg bg-white border flex items-center justify-center space-x-2 flex-2 py-3 cursor-pointer"
+              data-aos="zoom-in"
+              data-aos-delay="400"
+            >
               <svg
                 width="16"
                 height="12"
@@ -371,7 +372,8 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             <button
               onClick={increaseQuantity}
               className="w-full bg-black text-white rounded-lg py-4 cursor-pointer font-semibold"
-              data-aos="zoom-in" data-aos-delay="500"
+              data-aos="zoom-in"
+              data-aos-delay="500"
             >
               Add To Cart
             </button>
@@ -384,7 +386,9 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             <p className="w-[65px] text-[var(--color-primary)]">CATEGORY</p>
             <p>
               {Array.isArray(productData.categoriesText)
-                ? productData.categoriesText.map((c: any) => `{${c}}`).join(', ')
+                ? productData.categoriesText
+                    .map((c: any) => `{${c}}`)
+                    .join(', ')
                 : productData.categoriesText || ''}
             </p>
           </div>
@@ -419,7 +423,10 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
           </Typography>
         </div>
       </div>
-      <div className="border flex justify-between items-center px-5 py-2 rounded-lg border-gray-400 mt-6" data-aos="fade-up">
+      <div
+        className="border flex justify-between items-center px-5 py-2 rounded-lg border-gray-400 mt-6"
+        data-aos="fade-up"
+      >
         <input
           type="text"
           placeholder="Share your review"
