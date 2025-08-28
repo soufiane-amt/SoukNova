@@ -14,6 +14,7 @@ import { ArticleCard } from '@/home/components/ArticleCard';
 import CustomButton from '../../../components/ui/CustomButton';
 import { SiteFooter } from '../../../components/layout/SiteFooter';
 import { ARTICLES } from '../../../constants/articalList';
+import Loader from '../../../components/ui/loader/Loader';
 
 const SUPABASE_URL = 'https://oowcjcmdcfitnnsqfohw.supabase.co/rest/v1/';
 const API_KEY =
@@ -87,13 +88,8 @@ function articalPage() {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <CircularIndeterminate />
-      </div>
-    );
+    return <Loader/>;
   }
-
   if (error) {
     return <div>{error}</div>;
   }
@@ -144,19 +140,17 @@ function articalPage() {
           </div>
 
           {/* First paragraph */}
-          <p
-            data-aos="fade-up"
-            className={`${poppins.className} my-5`}
-          >
+          <p data-aos="fade-up" className={`${poppins.className} my-5`}>
             {articalData.article_paragraphs[0]}
           </p>
 
           {/* Two-column images */}
-          <div
-            data-aos="fade-up"
-            className="md:flex my-10 w-full gap-4"
-          >
-            <div data-aos="fade-right" data-aos-delay="200" className="relative w-full md:w-1/2 h-[647px] max-sm:h-[320px] md:mb-0 mb-4">
+          <div data-aos="fade-up" className="md:flex my-10 w-full gap-4">
+            <div
+              data-aos="fade-right"
+              data-aos-delay="200"
+              className="relative w-full md:w-1/2 h-[647px] max-sm:h-[320px] md:mb-0 mb-4"
+            >
               <Image
                 src={articalData.images[1]}
                 alt={articalData.title}
@@ -164,7 +158,11 @@ function articalPage() {
                 className="object-cover rounded-lg"
               />
             </div>
-            <div data-aos="fade-left" data-aos-delay="200" className="relative w-full md:w-1/2 h-[647px] max-sm:h-[320px]">
+            <div
+              data-aos="fade-left"
+              data-aos-delay="200"
+              className="relative w-full md:w-1/2 h-[647px] max-sm:h-[320px]"
+            >
               <Image
                 src={articalData.images[2]}
                 alt={articalData.title}
@@ -190,7 +188,11 @@ function articalPage() {
             data-aos="fade-up"
             className="flex flex-col items-start md:flex-row my-10 w-full h-[647px] overflow-hidden max-sm:h-[320px] gap-4"
           >
-            <div data-aos="zoom-in" data-aos-delay="200" className="relative md:w-2/3 w-full h-full rounded-lg overflow-hidden">
+            <div
+              data-aos="zoom-in"
+              data-aos-delay="200"
+              className="relative md:w-2/3 w-full h-full rounded-lg overflow-hidden"
+            >
               <Image
                 src={articalData.images[3]}
                 alt={articalData.title}
@@ -198,7 +200,11 @@ function articalPage() {
                 className="object-cover"
               />
             </div>
-            <div data-aos="fade-right" data-aos-delay="200" className="md:w-1/3 w-full flex items-center">
+            <div
+              data-aos="fade-right"
+              data-aos-delay="200"
+              className="md:w-1/3 w-full flex items-center"
+            >
               <p className={`${poppins.className}`}>
                 {articalData.article_paragraphs[3]}
               </p>
@@ -238,7 +244,11 @@ function articalPage() {
                 data-aos="fade-up"
                 data-aos-delay={index * 100} // Stagger effect
               >
-                <ArticleCard title={item.title} image={item.image} date={item.date} />
+                <ArticleCard
+                  title={item.title}
+                  image={item.image}
+                  date={item.date}
+                />
               </div>
             ))}
           </div>

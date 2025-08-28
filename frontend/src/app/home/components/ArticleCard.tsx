@@ -10,12 +10,12 @@ interface ArticleCardProps {
 
 export function ArticleCard({ title, image }: ArticleCardProps) {
   return (
-    <div className='mb-7'>
+    <div className='mb-7 cursor-pointer'>
       <div>
         <Image src={image} height={325} width={357} alt={title} />
       </div>
       <p className={`${poppins.className} pt-5 font-medium`}>{title}</p>
-      <CustomButton label="Read More" />
+      <CustomButton label="Read More"  href='/blog' />
     </div>
   );
 }

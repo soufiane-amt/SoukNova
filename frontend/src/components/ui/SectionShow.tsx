@@ -30,7 +30,7 @@ export default function SectionShow({imageUrl, head, desc} : SectionShowProps) {
         <div className="flex  justify-center text-center">
           <div>
             <h1 className={`text-4xl md:text-6xl font-medium mb-5 ${poppins.className}`}>{`${head} Page`}</h1>
-            <Typography>{desc}</Typography>
+            <p>{desc}</p>
           </div>
         </div>
       </div>

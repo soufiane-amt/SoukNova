@@ -1,10 +1,11 @@
 'use client';
 
-import { Typography } from '@mui/material';
+import { useLoader } from '../../components/ui/loader/useLoader';
+import Loader from '../../components/ui/loader/Loader';
 import Traversal from '../../components/ui/Traversal';
 import Image from 'next/image';
 import CustomButton from '../../components/ui/CustomButton';
-import { poppins } from '@/layout';
+import { inter, poppins } from '@/layout';
 const promoHighlightImage = '/images/home/fourniture.png';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
@@ -43,7 +44,7 @@ const contacts: ContactData[] = [
 
 function ContactsInfo() {
   return (
-    <div className="mt-10 text-center" data-aos="fade-up" data-aos-delay="200">
+    <div className="my-15 text-center" data-aos="fade-up" data-aos-delay="200">
       <p
         className={`${poppins.className} mb-5 font-medium text-4xl`}
         data-aos="fade-up"
@@ -54,21 +55,15 @@ function ContactsInfo() {
         {contacts.map((contact, index) => (
           <div
             key={index}
-            className="bg-[var(--color-neutral-bg)] flex flex-col items-center text-center p-5 mb-5 flex-1"
+            className={`bg-[var(--color-neutral-bg)] flex flex-col items-center text-center p-5 mb-5 flex-1 ${inter.className}`}
             data-aos="fade-up"
             data-aos-delay={`${200 * (index + 1)}`}
           >
             <span>{contact.icon}</span>
-            <Typography
-              variant="body2"
-              className="font-bold text-[var(--color-primary)]"
-              sx={{ fontWeight: 600, fontSize: 15, marginBlock: 1 }}
-            >
+            <p className="font-bold text-[var(--color-primary)] font-medium text-md my-1">
               {contact.title}
-            </Typography>
-            <Typography variant="body1" sx={{ fontWeight: 600 }}>
-              {contact.value}
-            </Typography>
+            </p>
+            <p className="font-medium">{contact.value}</p>
           </div>
         ))}
       </div>
@@ -78,14 +73,17 @@ function ContactsInfo() {
 
 function AboutUsCard() {
   return (
-    <div className="bg-[var(--color-neutral-bg)] md:flex" data-aos="fade-up">
-      <div className="md:w-1/2" data-aos="fade-right">
+    <div
+      className="bg-[var(--color-neutral-bg)] md:flex md:h-[413px]"
+      data-aos="fade-up"
+    >
+      <div className="md:w-1/2 h-full" data-aos="fade-right">
         <Image
           src={promoHighlightImage}
           alt="Highlight promotion"
           width={600}
           height={400}
-          className="w-full h-[367px] md:h-[532px]"
+          className="w-full h-[367px] md:h-full"
         />
       </div>
       <div className="mt-10 p-5 md:w-1/2 md:p-15" data-aos="fade-left">
@@ -94,11 +92,12 @@ function AboutUsCard() {
         >
           About Us
         </p>
-        <Typography variant="body2" sx={{ marginBottom: 3 }}>
-          3legant is a gift & decorations store based in HCMC, Vietnam. Est since
-          2019. Our customer service is always prepared to support you 24/7
-        </Typography>
-        <CustomButton label="Shop now" />
+        <p className="mb-3 text-[14px]">
+          3legant is a gift & decorations store based in HCMC, Vietnam. Est
+          since 2019. Our customer service is always prepared to support you
+          24/7
+        </p>
+        <CustomButton label="Shop now" href="/shop" />
       </div>
     </div>
   );
@@ -106,7 +105,11 @@ function AboutUsCard() {
 
 function MapLoction() {
   return (
-    <div className="relative md:w-2/5" data-aos="fade-left" data-aos-delay="200">
+    <div
+      className="relative md:w-2/5"
+      data-aos="fade-left"
+      data-aos-delay="200"
+    >
       <Image
         src={imageMap}
         alt="Company location"
@@ -203,27 +206,42 @@ function ContactPage() {
     });
   }, []);
 
+
   return (
     <main>
       <div className="mx-10 md:mx-15 lg:mx-30">
         <div>
-          <div className="flex mt-4 space-x-2" data-aos="fade-down" data-aos-delay="200">
+          <div
+            className="flex mt-4 space-x-2"
+            data-aos="fade-down"
+            data-aos-delay="200"
+          >
             <Traversal
               items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]}
             />
           </div>
         </div>
         <div data-aos="fade-up">
-          <div className="mb-10 space-y-6 md:w-2/3" data-aos="fade-up" data-aos-delay="200">
-            <p className="text-[54px] font-medium leading-[58px] tracking-[-1px] max-sm:text-[28px] max-sm:leading-[34px]">
+          <div
+            className="mb-10 space-y-6 md:w-2/3"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            <p
+              className={`text-[54px] font-medium leading-[58px] tracking-[-1px] max-sm:text-[28px] max-sm:leading-[34px] ${poppins.className}`}
+            >
               We believe in sustainable decor. We’re passionate about life at
               home.
             </p>
-            <p className="font-inter leading-[26px]">
-              Our features timeless furniture, with natural fabrics, curved lines,
-              <br /> plenty of mirrors and classic design, which can be incorporated into
-              <br /> any decor project. The pieces enchant for their sobriety, to last
-              <br /> for generations, faithful to the shapes of each period, with a touch
+            <p className={`leading-[26px] ${inter.className}`}>
+              Our features timeless furniture, with natural fabrics, curved
+              lines,
+              <br /> plenty of mirrors and classic design, which can be
+              incorporated into
+              <br /> any decor project. The pieces enchant for their sobriety,
+              to last
+              <br /> for generations, faithful to the shapes of each period,
+              with a touch
               <br /> of the present
             </p>
           </div>

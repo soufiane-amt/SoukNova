@@ -89,7 +89,7 @@ function BasicDropdownFilter() {
         labelId="category-select-label"
         value={selectedCategory}
         onChange={handleCategoryChange}
-        sx={{ height: 45, borderRadius: 2 }}
+        sx={{ height: 45, borderRadius: 2, fontWeight: 'bold' }}
       >
         {subCategories.map((el) => (
           <MenuItem key={el.name} value={el.name}>
@@ -115,7 +115,7 @@ function BasicDropdownPrice() {
         labelId="price-select-label"
         value={selectedPrice}
         onChange={handlePriceChange}
-        sx={{ height: 45, borderRadius: 2 }}
+        sx={{ height: 45, borderRadius: 2, fontWeight: 'bold' }}
       >
         {priceFilter.options.map((el, index) => (
           <MenuItem key={index} value={el.label}>

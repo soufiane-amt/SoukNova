@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { fetchFromSupabase } from '../../../lib/supbaseApi';
 import CircularIndeterminate from '../../../components/ui/CircularIndeterminate';
 import Link from 'next/link';
+import Loader from '../../../components/ui/loader/Loader';
 
 export default function NewArrivalSection() {
   const [products, setProducts] = useState([]);
@@ -17,7 +18,7 @@ export default function NewArrivalSection() {
       try {
         const data = await fetchFromSupabase<any[]>('products', `select=*`);
         console.log('data ==> ', data);
-        setProducts(data.slice(0,7));
+        setProducts(data.slice(0, 7));
       } catch (e) {
         setError(e.message);
       } finally {
@@ -29,11 +30,7 @@ export default function NewArrivalSection() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <CircularIndeterminate />
-      </div>
-    );
+    return <Loader />;
   }
   if (error) return <div>Error: {error}</div>;
 
@@ -46,7 +43,7 @@ export default function NewArrivalSection() {
           </h1>
         </div>
         <div className="flex justify-end mt-8">
-          <CustomButton label="More products" />
+          <CustomButton label="More products" href="/shop" />
         </div>
       </div>
       <div className="flex overflow-x-auto overflow-y-hidden space-x-6 py-10 custom-scrollbar">

@@ -1,3 +1,5 @@
+'use client'
+
 import { inter } from '@/layout';
 import ContactInfo from './components/ContactInfo';
 import PaymentMethod from './components/PaymentMethod';
@@ -5,8 +7,14 @@ import ShippingAddress from './components/ShippingAddress';
 import OrderSummary from './components/OrderSummaryCheckout';
 import CartNavigator from '../../components/layout/Cart/CartNavigator';
 import { SiteFooter } from '../../components/layout/SiteFooter';
+import Loader from '../../components/ui/loader/Loader';
+import { useLoader } from '../../components/ui/loader/useLoader';
 
 function CheckoutPage() {
+  const loading = useLoader(1500);
+
+  if (loading) return <Loader />;
+
   return (
     <main className={`${inter.className} `}>
       <div className="mx-8 md:mx-16 lg:mx-32 my-12 flex flex-col gap-y-8">
@@ -33,7 +41,7 @@ function CheckoutPage() {
           </div>
         </div>
       </div>
-      <SiteFooter/>
+      <SiteFooter />
     </main>
   );
 }
