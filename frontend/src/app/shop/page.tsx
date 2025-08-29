@@ -17,10 +17,23 @@ export default function ShopPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [selectedCategory, setSelectedCategory] = useState('All Rooms');
+  const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await fetchFromSupabase<any[]>('products', `select=*`);
+        let query = 'select=*';
+        if (selectedCategory !== 'All Rooms') {
+          query += `&categoriesText=ilike.%25${encodeURIComponent(
+            selectedCategory,
+          )}%25`;
+        }
+        if (priceRange !== null) {
+          query += `&Price=gte.${priceRange[0]}`;
+          query += `&Price=lte.${priceRange[1]}`;
+        }
+        const data = await fetchFromSupabase<any[]>('products', query);
 
         setProducts(data);
       } catch (e) {
@@ -31,7 +44,7 @@ export default function ShopPage() {
     };
 
     fetchProducts();
-  }, []);
+  }, [priceRange, selectedCategory]);
 
   if (loading) {
     return <Loader />;
@@ -46,7 +59,13 @@ export default function ShopPage() {
           head="Shop"
           desc="Let’s design the place you always imagined."
         />
-        <CategoryFilter products={products} />
+        <CategoryFilter
+          products={products}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          setPriceRange={setPriceRange}
+          priceRange={priceRange}
+        />
       </div>
 
       <NewsLetterSub />

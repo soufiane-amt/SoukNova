@@ -31,32 +31,26 @@ const priceFilter = {
     {
       value: { minPrice: 0, maxPrice: Infinity },
       label: 'All Price',
-      checked: false,
     },
     {
       value: { minPrice: 0, maxPrice: 99.99 },
       label: '$0.00 - 99.99',
-      checked: false,
     },
     {
       value: { minPrice: 100, maxPrice: 199.99 },
       label: '$100.00 - 199.99',
-      checked: true,
     },
     {
       value: { minPrice: 200, maxPrice: 299.99 },
       label: '$200.00 - 299.99',
-      checked: false,
     },
     {
       value: { minPrice: 300, maxPrice: 399.99 },
       label: '$300.00 - 399.99',
-      checked: false,
     },
     {
       value: { minPrice: 400, maxPrice: Infinity },
       label: '$400.00+',
-      checked: false,
     },
   ],
 };
@@ -70,15 +64,45 @@ const subCategories = [
   { name: 'Dinning', href: '#' },
   { name: 'Outdoor', href: '#' },
 ];
+
+function CheckComp() {
+  return (
+    <svg
+      fill="none"
+      viewBox="0 0 14 14"
+      className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
+    >
+      <path
+        d="M3 8L6 11L11 3.5"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="opacity-0 group-has-checked:opacity-100"
+      />
+      <path
+        d="M3 7H11"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="opacity-0 group-has-indeterminate:opacity-100"
+      />
+    </svg>
+  );
+}
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-function BasicDropdownFilter() {
-  const [selectedCategory, setSelectedCategory] = React.useState(
-    subCategories[0].name,
-  );
+interface BasicDropdownFilterProps {
+  selectedCategory: string;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+}
 
+function BasicDropdownFilter({
+  selectedCategory,
+  setSelectedCategory,
+}: BasicDropdownFilterProps) {
+  console.log ("selectedCategory : ", selectedCategory)
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
   };
@@ -100,25 +124,38 @@ function BasicDropdownFilter() {
     </FormControl>
   );
 }
-function BasicDropdownPrice() {
-  const [selectedPrice, setSelectedPrice] = React.useState(
-    priceFilter.options[0].label,
-  );
 
-  const handlePriceChange = (event) => {
-    setSelectedPrice(event.target.value);
+interface BasicDropdownPriceProps {
+  priceRange: priceType;
+  setPriceRange: React.Dispatch<React.SetStateAction<priceType>>;
+}
+function BasicDropdownPrice({
+  priceRange,
+  setPriceRange,
+}: BasicDropdownPriceProps) {
+  const handlePriceChange = (event: any) => {
+    const [min, max] = event.target.value.split(',').map(Number);
+
+    if (isNaN(min) || isNaN(max)) {
+      setPriceRange(null);
+    } else {
+      setPriceRange([min, max]);
+    }
   };
 
   return (
     <FormControl fullWidth>
       <Select
         labelId="price-select-label"
-        value={selectedPrice}
+        value={priceRange ? priceRange.join(',') : '0,Infinity'} // default = All Price
         onChange={handlePriceChange}
         sx={{ height: 45, borderRadius: 2, fontWeight: 'bold' }}
       >
         {priceFilter.options.map((el, index) => (
-          <MenuItem key={index} value={el.label}>
+          <MenuItem
+            key={index}
+            value={`${el.value.minPrice},${el.value.maxPrice}`}
+          >
             {el.label}
           </MenuItem>
         ))}
@@ -127,14 +164,25 @@ function BasicDropdownPrice() {
   );
 }
 
+type priceType = [number, number] | null;
+
 interface CategoryFilterProps {
   products: [];
+  selectedCategory: string;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+  priceRange: priceType;
+  setPriceRange: React.Dispatch<React.SetStateAction<priceType>>;
 }
 
-export default function CategoryFilter({ products }: CategoryFilterProps) {
+export default function CategoryFilter({
+  products,
+  setSelectedCategory,
+  selectedCategory,
+  setPriceRange,
+  priceRange,
+}: CategoryFilterProps) {
   const [selectedShape, setSelectedShape] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState(1);
-  const [selectedPriceIndex, setSelectedPriceIndex] = useState(0);
+  // const [selectedPriceIndex, setSelectedPriceIndex] = useState(0);
   const [showCount, setShowCount] = useState(9);
 
   const handleSelectShape = (index: number) => {
@@ -151,8 +199,14 @@ export default function CategoryFilter({ products }: CategoryFilterProps) {
         <div className="flex items-baseline justify-between  pt-24 pb-6">
           {selectedShape === 1 ? (
             <div className="flex justify-between gap-4 w-1/3">
-              <BasicDropdownFilter />
-              <BasicDropdownPrice />
+              <BasicDropdownFilter
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+              />
+              <BasicDropdownPrice
+                priceRange={priceRange}
+                setPriceRange={setPriceRange}
+              />
             </div>
           ) : (
             <div className="flex items-center space-x-2 ">
@@ -242,16 +296,16 @@ export default function CategoryFilter({ products }: CategoryFilterProps) {
                   role="list"
                   className="space-y-4 pb-6 text-sm font-medium text-gray-900"
                 >
-                  {subCategories.map((category, index) => (
+                  {subCategories.map((category) => (
                     <li key={category.name}>
                       <a
                         className={`text-[#807E7E] text-sm ${
-                          selectedCategory == index
+                          selectedCategory == category.name
                             ? 'border-b text-black font-bold'
                             : ''
                         }`}
                         href={category.href}
-                        onClick={() => setSelectedCategory(index)}
+                        onClick={() => setSelectedCategory(category.name)}
                       >
                         {category.name}
                       </a>
@@ -282,37 +336,18 @@ export default function CategoryFilter({ products }: CategoryFilterProps) {
                             <div className="flex h-5 shrink-0 items-center">
                               <div className="group grid size-4 grid-cols-1">
                                 <input
-                                  defaultChecked={
-                                    selectedPriceIndex === optionIdx
-                                  }
-                                  id={`filter-${priceFilter.id}-${optionIdx}`}
+                                  id={`-${optionIdx}`}
                                   name={`${priceFilter.id}[]`}
                                   type="radio"
-                                  className="p-2 col-start-1 row-start-1 appearance-none rounded-sm border border-primary bg-white checked:border-black checked:bg-black indeterminate:border-black indeterminate:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto "
+                                  className="p-2 col-start-1 row-start-1 appearance-none rounded-sm border border-primary bg-white checked:border-black checked:bg-black indeterminate:border-black "
                                   onClick={() =>
-                                    setSelectedPriceIndex(optionIdx)
+                                    setPriceRange([
+                                      option.value.minPrice,
+                                      option.value.maxPrice,
+                                    ])
                                   }
                                 />
-                                <svg
-                                  fill="none"
-                                  viewBox="0 0 14 14"
-                                  className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
-                                >
-                                  <path
-                                    d="M3 8L6 11L11 3.5"
-                                    strokeWidth={2}
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="opacity-0 group-has-checked:opacity-100"
-                                  />
-                                  <path
-                                    d="M3 7H11"
-                                    strokeWidth={2}
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="opacity-0 group-has-indeterminate:opacity-100"
-                                  />
-                                </svg>
+                                <CheckComp />
                               </div>
                             </div>
                           </div>
