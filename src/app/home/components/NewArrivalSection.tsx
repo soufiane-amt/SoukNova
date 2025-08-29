@@ -4,7 +4,6 @@ import CustomButton from '../../../components/ui/CustomButton';
 import { ProductCard } from '../../../components/ui/ProductCard';
 import { useEffect, useState } from 'react';
 import { fetchFromSupabase } from '../../../lib/supbaseApi';
-import CircularIndeterminate from '../../../components/ui/CircularIndeterminate';
 import Link from 'next/link';
 import Loader from '../../../components/ui/loader/Loader';
 
@@ -17,7 +16,6 @@ export default function NewArrivalSection() {
     const fetchProducts = async () => {
       try {
         const data = await fetchFromSupabase<any[]>('products', `select=*`);
-        console.log('data ==> ', data);
         setProducts(data.slice(0, 7));
       } catch (e) {
         setError(e.message);
