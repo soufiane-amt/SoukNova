@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { inter } from '@/layout';
 import CartNavigator from '../../components/layout/Cart/CartNavigator';
@@ -32,10 +32,6 @@ function CartPage() {
         <div className="hidden xl:flex w-full">
           <CouponInput />
         </div>
-
-        {/* <div>
-      <EmptySectionMessage message="No Products In Cart" />
-    </div> */}
       </div>
       <SiteFooter />
     </main>

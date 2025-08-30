@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 import SectionShow from '../../components/ui/SectionShow';
 import BlogCatalog from './components/BlogCatalog';
-import CircularIndeterminate from '../../components/ui/CircularIndeterminate';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Loader from '../../components/ui/loader/Loader';
+import { SiteFooter } from '../../components/layout/SiteFooter';
 
 const imageUrl = '/images/blog/ourBlogPage.png';
 
@@ -62,16 +62,19 @@ function BlogPage() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="mx-10 md:mx-20">
-      <div data-aos="fade-up">
-        <SectionShow
-          imageUrl={imageUrl}
-          head="Blog"
-          desc="Home ideas and design inspiration"
-        />
+    <main>
+      <div className="mx-10 md:mx-20">
+        <div data-aos="fade-up">
+          <SectionShow
+            imageUrl={imageUrl}
+            head="Blog"
+            desc="Home ideas and design inspiration"
+          />
+        </div>
+        <BlogCatalog articles={articles} />
       </div>
-      <BlogCatalog articles={articles} />
-    </div>
+      <SiteFooter/>
+    </main>
   );
 }
 

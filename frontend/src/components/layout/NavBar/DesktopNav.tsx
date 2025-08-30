@@ -12,6 +12,7 @@ import Link from 'next/link';
 import OrderSummaryCheckout from '@/checkout/components/OrderSummaryCheckout';
 import CheckoutCartItem from '@/checkout/components/CheckoutCartItem';
 import EmptySectionMessage from '../../ui/EmptySection';
+import { usePathname } from 'next/navigation';
 
 export const listItemVariants = {
   hidden: { opacity: 0, x: -100 },
@@ -95,11 +96,8 @@ interface DesktopNavProps {
 }
 
 export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
-  const [selected, setSelected] = useState<number>(0);
   const [isOpen, setOpen] = useState(false);
-  const handleClick = (index: number) => {
-    setSelected(index);
-  };
+  const pathname = usePathname();
 
   const toggleCartSideBar = () => {
     setOpen(!isOpen);
@@ -127,39 +125,27 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
         </div>
       </div>
       <div className="hidden md:inline">
-        <List
-          sx={{ display: 'flex' }}
-          component={motion.ul}
-          variants={listContainerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {NAV_ITEMS.map((item, index) => (
-            <Link href={`/${item.toLowerCase()}`} key={item}>
-              <ListItem
-                component={motion.li}
-                key={item}
-                className={`group relative cursor-pointer overflow-hidden ${poppins.className}`}
-                onClick={() => handleClick(index)}
-                variants={listItemVariants}
-              >
-                <ListItemText
-                  primary={item}
-                  className={`relative z-10 ${poppins.className}`}
-                  primaryTypographyProps={{
-                    sx: {
-                      color:
-                        index === selected ? 'black' : 'var(--color-primary)',
-                      fontSize: '14px',
-                      fontFamily: 'Poppins, sans-serif',
-                      fontWeight: 500,
-                    },
-                  }}
-                />
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-800 transition-all duration-300 group-hover:w-full"></span>
-              </ListItem>
-            </Link>
-          ))}
+        <List sx={{ display: "flex" }}>
+          {NAV_ITEMS.map((item) => {
+            const path = `/${item.toLowerCase()}`;
+            return (
+              <Link href={path} key={item}>
+                <ListItem className="group relative cursor-pointer overflow-hidden">
+                  <ListItemText
+                    primary={item}
+                    primaryTypographyProps={{
+                      sx: {
+                        color: pathname === path ? "black" : "var(--color-primary)",
+                        fontSize: "14px",
+                        fontFamily: "Poppins, sans-serif",
+                        fontWeight: 500,
+                      },
+                    }}
+                  />
+                </ListItem>
+              </Link>
+            );
+          })}
         </List>
       </div>
       <motion.div
