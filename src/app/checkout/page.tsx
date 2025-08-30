@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { inter } from '@/layout';
 import ContactInfo from './components/ContactInfo';
@@ -30,7 +30,7 @@ function CheckoutPage() {
             <div className="md:hidden">
               <OrderSummary />
             </div>
-            <div className="mt-5 md:mt-0">
+            <div className="mt-5 md:mt-0" data-aos="fade-up">
               <button className="w-full bg-black text-white rounded-lg py-2 cursor-pointer md:px-5 font-semibold">
                 Place Order
               </button>

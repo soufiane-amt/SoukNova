@@ -4,7 +4,6 @@ import CategoryFilter from './components/CategoryFilter';
 import { NewsLetterSub } from '@/home/components/NewsLetterSub';
 import { SiteFooter } from '../../components/layout/SiteFooter';
 import { useEffect, useState } from 'react';
-import CircularIndeterminate from '../../components/ui/CircularIndeterminate';
 import SectionShow from '../../components/ui/SectionShow';
 import { fetchFromSupabase } from '../../lib/supbaseApi';
 import { inter } from '@/layout';
@@ -19,9 +18,11 @@ export default function ShopPage() {
 
   const [selectedCategory, setSelectedCategory] = useState('All Rooms');
   const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true)
       try {
         let query = 'select=*';
         if (selectedCategory !== 'All Rooms') {
@@ -32,6 +33,9 @@ export default function ShopPage() {
         if (priceRange !== null) {
           query += `&Price=gte.${priceRange[0]}`;
           query += `&Price=lte.${priceRange[1]}`;
+        }
+        if (selectedOrder !== null) {
+          query += `&order=${selectedOrder}`;
         }
         const data = await fetchFromSupabase<any[]>('products', query);
 
@@ -44,7 +48,7 @@ export default function ShopPage() {
     };
 
     fetchProducts();
-  }, [priceRange, selectedCategory]);
+  }, [priceRange, selectedCategory, selectedOrder]);
 
   if (loading) {
     return <Loader />;
@@ -65,6 +69,7 @@ export default function ShopPage() {
           setSelectedCategory={setSelectedCategory}
           setPriceRange={setPriceRange}
           priceRange={priceRange}
+          setSelectedOrder={setSelectedOrder}
         />
       </div>
 

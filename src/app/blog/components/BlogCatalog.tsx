@@ -8,10 +8,10 @@ import { Squares2X2IconButton } from '../../../components/ui/squares/Squares2X2I
 import { Grid } from '@mui/material';
 import ArticalCard from './ArticalCard';
 import Link from 'next/link';
-// Removed: import { motion } from 'framer-motion';
 import ArticleCard from './ArticalCard';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { poppins } from '@/layout';
 
 interface BlogProps {
   articles: any[];
@@ -34,23 +34,10 @@ export default function BlogCatalog({ articles }: BlogProps) {
   return (
     <div>
       <div className="flex items-baseline justify-between pt-24 pb-6">
-        <div></div>
-        <div className="flex items-center justify-center">
-          <Menu as="div" className="relative inline-block text-left mr-10">
-            <div>
-              <MenuButton
-                className="group inline-flex justify-center text-sm font-bold text-gray-700 hover:text-gray-900"
-                data-aos="fade-left"
-              >
-                Sort by
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="-mr-1 ml-1 size-5 shrink-0 text-black"
-                />
-              </MenuButton>
-            </div>
-          </Menu>
+        <div>
+          <p className={`font-semibold border-b ${poppins.className}`}>All Blogs</p>
         </div>
+        <div></div>
       </div>
 
       <section aria-labelledby="blogs-heading" className="pt-6 pb-24">

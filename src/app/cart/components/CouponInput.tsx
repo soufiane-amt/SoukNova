@@ -1,7 +1,20 @@
+'use client';
+import { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+// import { inter } from '@/layout'; // Assuming 'inter' is from your layout and already imported globally
+
 function CouponInput() {
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+  }, []);
+
   return (
-    <div className="mb-12 md:w-1/3 md:mt-20">
-      <div>
+    <div className="mb-12 md:w-1/3 md:mt-20" data-aos="fade-up">
+      <div data-aos="fade-up" data-aos-delay="100">
         <div className="font-semibold text-xl">
           <p>Have a coupon?</p>
         </div>
@@ -9,7 +22,11 @@ function CouponInput() {
           <p>Add your code for an instant cart discount</p>
         </div>
       </div>
-      <div className="flex items-center border overflow-hidden w-full">
+      <div
+        className="flex items-center border overflow-hidden w-full"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
         <div className="flex-shrink-0 px-3 text-gray-500">
           <svg
             stroke="currentColor"

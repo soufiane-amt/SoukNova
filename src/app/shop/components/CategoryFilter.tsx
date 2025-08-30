@@ -18,11 +18,11 @@ import { FormControl, MenuItem, Select } from '@mui/material';
 import Link from 'next/link';
 
 const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
+  { label: 'Rate_desc', value: 'Rate.desc' },
+  { label: 'Price_asc', value: 'Price.asc' },
+  { label: 'Price_desc', value: 'Price.desc' },
+  { label: 'Date_asc', value: 'Date.asc' },
+  { label: 'Date_desc', value: 'Date.desc' },
 ];
 const priceFilter = {
   id: 'price',
@@ -102,7 +102,7 @@ function BasicDropdownFilter({
   selectedCategory,
   setSelectedCategory,
 }: BasicDropdownFilterProps) {
-  console.log ("selectedCategory : ", selectedCategory)
+  console.log('selectedCategory : ', selectedCategory);
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
   };
@@ -172,6 +172,7 @@ interface CategoryFilterProps {
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
   priceRange: priceType;
   setPriceRange: React.Dispatch<React.SetStateAction<priceType>>;
+  setSelectedOrder: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function CategoryFilter({
@@ -180,9 +181,9 @@ export default function CategoryFilter({
   selectedCategory,
   setPriceRange,
   priceRange,
+  setSelectedOrder,
 }: CategoryFilterProps) {
   const [selectedShape, setSelectedShape] = useState(0);
-  // const [selectedPriceIndex, setSelectedPriceIndex] = useState(0);
   const [showCount, setShowCount] = useState(9);
 
   const handleSelectShape = (index: number) => {
@@ -196,9 +197,9 @@ export default function CategoryFilter({
   return (
     <div>
       <main className="mx-auto max-6xl p6-4 sm:px-6 lg:px-8">
-        <div className="flex items-baseline justify-between  pt-24 pb-6">
+        <div className="md:flex w-full items-baseline justify-between  pt-24 pb-6">
           {selectedShape === 1 ? (
-            <div className="flex justify-between gap-4 w-1/3">
+            <div className="flex flex-col md:flex-row w-full md:justify-between gap-4 md:w-1/3 gap-5 mb-5 md:mb-0">
               <BasicDropdownFilter
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
@@ -246,41 +247,29 @@ export default function CategoryFilter({
               >
                 <div className="py-1">
                   {sortOptions.map((option) => (
-                    <MenuItem key={option.name}>
-                      <a
-                        href={option.href}
-                        className={classNames(
-                          option.current
-                            ? 'font-medium text-gray-900'
-                            : 'text-gray-500',
-                          'block px-4 py-2 text-sm data-focus:bg-gray-100 data-focus:outline-hidden',
-                        )}
-                      >
-                        {option.name}
-                      </a>
+                    <MenuItem key={option.label}>
+                      <button onClick={() => setSelectedOrder(option.value)}>
+                        {option.label}
+                      </button>
                     </MenuItem>
                   ))}
                 </div>
               </MenuItems>
             </Menu>
-            <Squares3X3IconButton
-              index={0}
-              selectedShape={selectedShape}
-              handleClick={handleSelectShape}
-            />
-            <Squares2X2IconButton
-              index={1}
-              selectedShape={selectedShape}
-              handleClick={handleSelectShape}
-            />
-            <button
-              type="button"
-              onClick={() => setMobileFiltersOpen(true)}
-              className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
-            >
-              <span className="sr-only">Filters</span>
-              <FunnelIcon aria-hidden="true" className="size-5" />
-            </button>
+            <div className='hidden lg:flex'>
+              <Squares3X3IconButton
+                index={0}
+                selectedShape={selectedShape}
+                handleClick={handleSelectShape}
+              />
+            </div>
+            <div>
+              <Squares2X2IconButton
+                index={1}
+                selectedShape={selectedShape}
+                handleClick={handleSelectShape}
+              />
+            </div>
           </div>
         </div>
 
