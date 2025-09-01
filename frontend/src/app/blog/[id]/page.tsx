@@ -3,43 +3,15 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import CircularIndeterminate from '../../../components/ui/CircularIndeterminate';
 import Traversal from '../../../components/ui/Traversal';
 import { poppins } from '@/layout';
-import { Typography } from '@mui/material';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 import Image from 'next/image';
 import { ArticleCard } from '@/home/components/ArticleCard';
 import CustomButton from '../../../components/ui/CustomButton';
 import { SiteFooter } from '../../../components/layout/SiteFooter';
 import { ARTICLES } from '../../../constants/articalList';
 import Loader from '../../../components/ui/loader/Loader';
-
-const SUPABASE_URL = 'https://oowcjcmdcfitnnsqfohw.supabase.co/rest/v1/';
-const API_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vd2NqY21kY2ZpdG5uc3Fmb2h3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA4MTI3MTksImV4cCI6MjA0NjM4ODcxOX0.bx4a1dNx8g-BZX2KWceWBuRlPwAqgxhZ80i7L4K8M7Y';
-
-interface ArticlMetaDataProps {
-  author: string;
-  date: string;
-}
-
-function ArticlMetaData({ author, date }: ArticlMetaDataProps) {
-  const articleDate = date.slice(0, -5);
-  return (
-    <div className="flex mt-5">
-      <div data-aos="fade-right" className="flex mr-5">
-        <AccountCircleOutlinedIcon sx={{ color: 'var(--color-primary)' }} />
-        <Typography color="var(--color-primary)">{author}</Typography>
-      </div>
-      <div data-aos="fade-right" data-aos-delay="200" className="flex">
-        <DateRangeOutlinedIcon sx={{ color: 'var(--color-primary)' }} />
-        <Typography color="var(--color-primary)">{articleDate}</Typography>
-      </div>
-    </div>
-  );
-}
+import ArticlMetaData from '../components/ArticlMetaData';
 
 function articalPage() {
   const { id } = useParams();
@@ -57,16 +29,7 @@ function articalPage() {
 
     const fetchArtical = async () => {
       try {
-        const response = await fetch(
-          `${SUPABASE_URL}/new%20articles?select=*&id=eq.${id}`,
-          {
-            headers: {
-              apikey: API_KEY,
-              Authorization: `Bearer ${API_KEY}`,
-              Accept: 'application/json',
-            },
-          },
-        );
+        const response = await fetch(`/api/articles/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch product data.');
         }
@@ -88,7 +51,7 @@ function articalPage() {
   }, [id]);
 
   if (loading) {
-    return <Loader/>;
+    return <Loader />;
   }
   if (error) {
     return <div>{error}</div>;
@@ -97,7 +60,6 @@ function articalPage() {
   return (
     <main>
       <div className="mx-[160px] max-lg:mx-20 max-md:mx-10 max-sm:mx-8 mb-20 mt-4 max-xl:mx-20">
-        {/* Breadcrumbs animation */}
         <div data-aos="fade-down" data-aos-delay="200">
           <Traversal
             items={[
@@ -108,7 +70,6 @@ function articalPage() {
           />
         </div>
 
-        {/* Title, author, and date metadata */}
         <div data-aos="fade-up" data-aos-delay="400">
           <div className="my-5">
             <p className="text-xs font-semibold">ARTICLE</p>
@@ -123,9 +84,7 @@ function articalPage() {
           <ArticlMetaData author={articalData.author} date={articalData.date} />
         </div>
 
-        {/* Article content */}
         <div className="my-10">
-          {/* Main image */}
           <div
             data-aos="fade-in"
             className="h-[647px] w-full overflow-hidden max-sm:h-[320px]"
@@ -139,12 +98,10 @@ function articalPage() {
             />
           </div>
 
-          {/* First paragraph */}
           <p data-aos="fade-up" className={`${poppins.className} my-5`}>
             {articalData.article_paragraphs[0]}
           </p>
 
-          {/* Two-column images */}
           <div data-aos="fade-up" className="md:flex my-10 w-full gap-4">
             <div
               data-aos="fade-right"
@@ -172,7 +129,6 @@ function articalPage() {
             </div>
           </div>
 
-          {/* Paragraphs */}
           {articalData.article_paragraphs.slice(1, 3).map((para, index) => (
             <p
               data-aos="fade-up"
@@ -183,7 +139,6 @@ function articalPage() {
             </p>
           ))}
 
-          {/* Two-column image + text */}
           <div
             data-aos="fade-up"
             className="flex flex-col items-start md:flex-row my-10 w-full h-[647px] overflow-hidden max-sm:h-[320px] gap-4"
@@ -211,7 +166,6 @@ function articalPage() {
             </div>
           </div>
 
-          {/* Remaining paragraphs */}
           {articalData.article_paragraphs.slice(4, 10).map((para, index) => (
             <p
               data-aos="fade-up"
@@ -223,7 +177,6 @@ function articalPage() {
           ))}
         </div>
 
-        {/* "You might also like" */}
         <div data-aos="fade-up" className="mt-20">
           <div className="flex justify-between w-full mb-5">
             <p
@@ -234,7 +187,7 @@ function articalPage() {
               You might also like
             </p>
             <div data-aos="fade-left" data-aos-delay="200">
-              <CustomButton label="More articles" />
+              <CustomButton label="More articles" href="/blog" />
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-start gap-x-5">

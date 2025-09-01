@@ -1,20 +1,15 @@
 'use client';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Menu, MenuzButton } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { Squares3X3IconButton } from '../../../components/ui/squares/Squares3X3Icon';
-import { Squares2X2IconButton } from '../../../components/ui/squares/Squares2X2Icon';
-import { Grid } from '@mui/material';
-import ArticalCard from './ArticalCard';
-import Link from 'next/link';
 import ArticleCard from './ArticalCard';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { poppins } from '@/layout';
+import { Article } from '../../../types/types';
+import ShowMoreButton from '../../../components/ui/ShowMoreButton';
 
 interface BlogProps {
-  articles: any[];
+  articles: Article[];
 }
 
 export default function BlogCatalog({ articles }: BlogProps) {
@@ -30,14 +25,19 @@ export default function BlogCatalog({ articles }: BlogProps) {
     const newShowCount = Math.min(showCount + 16, articles.length);
     setShowCount(newShowCount);
   };
+  const visibleArticles = React.useMemo(
+    () => articles.slice(0, showCount),
+    [articles, showCount],
+  );
 
   return (
     <div>
       <div className="flex items-baseline justify-between pt-24 pb-6">
         <div>
-          <p className={`font-semibold border-b ${poppins.className}`}>All Blogs</p>
+          <p className={`font-semibold border-b ${poppins.className}`}>
+            All Blogs
+          </p>
         </div>
-        <div></div>
       </div>
 
       <section aria-labelledby="blogs-heading" className="pt-6 pb-24">
@@ -45,7 +45,7 @@ export default function BlogCatalog({ articles }: BlogProps) {
           Blogs
         </h2>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {articles.slice(0, showCount).map((article, index) => (
+          {visibleArticles.map((article, index) => (
             <div
               key={article.id}
               data-aos="fade-up"
@@ -61,14 +61,7 @@ export default function BlogCatalog({ articles }: BlogProps) {
           ))}
         </div>
         {showCount < articles.length && (
-          <div className="flex justify-center mt-8">
-            <button
-              onClick={handleShowMore}
-              className="cursor-pointer px-8 py-2 text-sm md:text-base font-medium text-black bg-white border rounded-full"
-            >
-              Show More
-            </button>
-          </div>
+          <ShowMoreButton handleShowMore={handleShowMore} />
         )}
       </section>
     </div>

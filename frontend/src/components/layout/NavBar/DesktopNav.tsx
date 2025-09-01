@@ -5,14 +5,12 @@ import { Menu } from 'lucide-react';
 import { List, ListItem, ListItemText } from '@mui/material';
 import { useState } from 'react';
 import { NAV_ITEMS } from '../../../constants/navItems';
-import { inter, poppins } from '@/layout';
+import { poppins } from '@/layout';
 import { TypeAnimation } from 'react-type-animation';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
-import OrderSummaryCheckout from '@/checkout/components/OrderSummaryCheckout';
-import CheckoutCartItem from '@/checkout/components/CheckoutCartItem';
-import EmptySectionMessage from '../../ui/EmptySection';
 import { usePathname } from 'next/navigation';
+import SideCart from './SideCart';
 
 export const listItemVariants = {
   hidden: { opacity: 0, x: -100 },
@@ -36,61 +34,6 @@ export const listContainerVariants = {
   },
 };
 
-interface SideCompProps {
-  isOpen: boolean;
-  handleToggle: () => void;
-}
-function SideComp({ isOpen, handleToggle }: SideCompProps) {
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ x: '100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '100%' }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className={`fixed z-[100] top-0 right-0 h-screen md:w-[413px] w-[90%] bg-white shadow-lg z-50 p-4 ${poppins.className}`}
-        >
-          <div className="mb-5 ">
-            <p className={`${poppins.className} text-[28px] font-medium`}>
-              Cart
-            </p>
-          </div>
-          <div className="flex flex-col justify-between h-[calc(100%-55px)]">
-            <div className="mb-5 mb-auto">
-              {/* <CheckoutCartItem
-                productName="uxcell Shredded"
-                productImage="https://m.media-amazon.com/images/I/51i6LeHlc9L._SS522_.jpg"
-                price={39.49}
-              /> */}
-              <div className="py-15 px-5">
-                <EmptySectionMessage message="No Products In Cart" />
-              </div>
-            </div>
-            <div className="">
-              <div className="text-md flex justify-between py-4 border-b border-gray-200">
-                <label>Subtotal</label>
-                <p className="font-medium">$37.49</p>
-              </div>
-              <div className="text-xl flex justify-between py-4 font-medium">
-                <label>Total</label>
-                <p className="font-semibold">$37.49</p>
-              </div>
-              <div className="flex flex-col items-center my-5">
-                <button className="w-full bg-black text-white rounded-lg py-3 cursor-pointer font-medium">
-                  Checkout
-                </button>
-                <button className="cursor-pointer text-sm font-semibold border-b w-20 mt-4">
-                  View Cart
-                </button>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
 interface DesktopNavProps {
   toggleDrawer: (state: boolean) => () => void;
 }
@@ -125,7 +68,7 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
         </div>
       </div>
       <div className="hidden md:inline">
-        <List sx={{ display: "flex" }}>
+        <List sx={{ display: 'flex' }}>
           {NAV_ITEMS.map((item) => {
             const path = `/${item.toLowerCase()}`;
             return (
@@ -135,9 +78,10 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
                     primary={item}
                     primaryTypographyProps={{
                       sx: {
-                        color: pathname === path ? "black" : "var(--color-primary)",
-                        fontSize: "14px",
-                        fontFamily: "Poppins, sans-serif",
+                        color:
+                          pathname === path ? 'black' : 'var(--color-primary)',
+                        fontSize: '14px',
+                        fontFamily: 'Poppins, sans-serif',
                         fontWeight: 500,
                       },
                     }}
@@ -162,7 +106,7 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
           >
             <Search className="w-6 h-6 text-gray-800" />
           </motion.button>
-          <Link href="/account" className='flex justify-center'>
+          <Link href="/account" className="flex justify-center">
             <motion.button
               aria-label="User profile"
               className="ml-4 transform transition-transform duration-200 hover:scale-110"
@@ -183,7 +127,7 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
           </motion.button>
         </div>
       </motion.div>
-      <SideComp isOpen={isOpen} handleToggle={toggleCartSideBar} />
+      <SideCart isOpen={isOpen} />
       {isOpen && (
         <div
           className="fixed inset-0 bg-[#00000052] z-10"
