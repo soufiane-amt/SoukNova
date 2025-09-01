@@ -8,11 +8,9 @@ interface ArticleCardProps {
   title: string;
   image: string;
   date: string;
-  // Optional: Add a link to make the card clickable.
-  href?: string;
 }
 
-function ArticleCard({ id, title, image, date, href }: ArticleCardProps) {
+function ArticleCard({ id, title, image, date }: ArticleCardProps) {
   return (
     <Link
       href={`/blog/${id}`}
