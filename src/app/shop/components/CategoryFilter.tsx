@@ -16,6 +16,7 @@ import { ProductCard } from '../../../components/ui/ProductCard';
 import { Grid } from '@mui/material';
 import { FormControl, MenuItem, Select } from '@mui/material';
 import Link from 'next/link';
+import ShowMoreButton from '../../../components/ui/ShowMoreButton';
 
 const sortOptions = [
   { label: 'Rate_desc', value: 'Rate.desc' },
@@ -256,7 +257,7 @@ export default function CategoryFilter({
                 </div>
               </MenuItems>
             </Menu>
-            <div className='hidden lg:flex'>
+            <div className="hidden lg:flex">
               <Squares3X3IconButton
                 index={0}
                 selectedShape={selectedShape}
@@ -380,14 +381,7 @@ export default function CategoryFilter({
                 ))}
               </Grid>
               {showCount < products.length && (
-                <div className="flex justify-center mt-8">
-                  <button
-                    onClick={handleShowMore}
-                    className="cursor-pointer px-8 py-2 text-sm md:text-base font-medium text-black bg-white border rounded-full"
-                  >
-                    Show More
-                  </button>
-                </div>
+                <ShowMoreButton handleShowMore={handleShowMore} />
               )}
             </div>
           </div>

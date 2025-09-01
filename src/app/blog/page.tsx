@@ -10,18 +10,6 @@ import { SiteFooter } from '../../components/layout/SiteFooter';
 
 const imageUrl = '/images/blog/ourBlogPage.png';
 
-const API_URL =
-  'https://oowcjcmdcfitnnsqfohw.supabase.co/rest/v1/new%20articles?select=*';
-const API_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vd2NqY21kY2ZpdG5uc3Fmb2h3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA4MTI3MTksImV4cCI6MjA0NjM4ODcxOX0.bx4a1dNx8g-BZX2KWceWBuRlPwAqgxhZ80i7L4K8M7Y';
-
-const headers = {
-  apikey: API_KEY,
-  Authorization: `Bearer ${API_KEY}`,
-  Accept: 'application/json',
-  'Accept-Profile': 'public',
-};
-
 function BlogPage() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,10 +23,7 @@ function BlogPage() {
 
     const fetchArticals = async () => {
       try {
-        const response = await fetch(API_URL, {
-          method: 'GET',
-          headers: headers,
-        });
+        const response = await fetch('/api/articles');
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -73,7 +58,7 @@ function BlogPage() {
         </div>
         <BlogCatalog articles={articles} />
       </div>
-      <SiteFooter/>
+      <SiteFooter />
     </main>
   );
 }
