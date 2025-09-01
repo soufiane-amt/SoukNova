@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Menu, MenuButton } from '@headlessui/react';
+import { Menu, MenuzButton } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { Squares3X3IconButton } from '../../../components/ui/squares/Squares3X3Icon';
 import { Squares2X2IconButton } from '../../../components/ui/squares/Squares2X2Icon';
