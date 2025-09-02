@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import SettingsWrap from '../../components/layout/Settings/SettingsWrap';
+import SettingsNavigator from '../../components/layout/Settings/SettingsWrap';
 import WishList from './components/WishList';
 import { useLoader } from '../../components/ui/loader/useLoader';
 import Loader from '../../components/ui/loader/Loader';
@@ -11,9 +11,9 @@ function WishPage() {
   if (loading) return <Loader />;
 
   return (
-    <SettingsWrap>
+    <SettingsNavigator>
       <WishList />
-    </SettingsWrap>
+    </SettingsNavigator>
   );
 }
 

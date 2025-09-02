@@ -4,6 +4,9 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { inter, poppins } from '@/layout';
 
+
+const inputClass = "text-md border py-2 px-4 rounded-md border-[#CBCBCB]";
+
 function ContactInfo() {
   useEffect(() => {
     AOS.init({
@@ -26,7 +29,7 @@ function ContactInfo() {
           </label>
           <input
             placeholder="First name"
-            className={`text-md border py-2 px-4 rounded-md border border-[#CBCBCB] ${poppins.className}`}
+            className={`${poppins.className} ${inputClass}`}
           />
         </div>
         <div className="flex-1 flex flex-col mb-8" data-aos="fade-up" data-aos-delay="300">
@@ -35,7 +38,7 @@ function ContactInfo() {
           </label>
           <input
             placeholder="Last name"
-            className="text-md border py-2 px-4 rounded-md border border-[#CBCBCB]"
+            className={`${poppins.className} ${inputClass}`}
           />
         </div>
       </div>
@@ -46,7 +49,7 @@ function ContactInfo() {
         <input
           placeholder="Phone number"
           type="text"
-          className="text-md border py-2 px-4 rounded-md border border-[#CBCBCB]"
+          className={`${poppins.className} ${inputClass}`}
         />
       </div>
       <div className="flex flex-col mb-8" data-aos="fade-up" data-aos-delay="500">
@@ -56,7 +59,7 @@ function ContactInfo() {
         <input
           placeholder="Email"
           type="email"
-          className="text-md border py-2 px-4 rounded-md border border-[#CBCBCB]"
+          className={`${poppins.className} ${inputClass}`}
         />
       </div>
     </div>

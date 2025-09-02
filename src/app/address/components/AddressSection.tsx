@@ -35,14 +35,6 @@ function AddressSection() {
             address="345 Long Island, NewYork, United States"
           />
         </div>
-        <div data-aos="fade-up" data-aos-delay="400">
-          <AddressField
-            fieldName="Billing Address"
-            fullName="Sofia Havertz"
-            phoneNumber="(+1) 234 567 890"
-            address="345 Long Island, NewYork, United States"
-          />
-        </div>
       </div>
     </div>
   );

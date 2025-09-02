@@ -3,8 +3,13 @@ import { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { inter } from '@/layout';
-import OrderInfo from './OrderInfo';
-import EmptySectionMessage from '../../../components/ui/EmptySection';
+import OrderInfo, { OrderInfoProps } from './OrderInfo';
+
+const orders: OrderInfoProps[] = [
+  { id: 3456, date: 'October 17, 2023', status: 'DELIVERED', price: 1234.0 },
+  { id: 3457, date: 'November 3, 2023', status: 'PROGRESS', price: 890.5 },
+  { id: 3458, date: 'December 5, 2023', status: 'DELIVERED', price: 456.75 },
+];
 
 function OrderHistory() {
   useEffect(() => {
@@ -22,38 +27,20 @@ function OrderHistory() {
         </p>
       </div>
       <div>
-        <div data-aos="fade-left" data-aos-delay="200">
-          <OrderInfo
-            id={3456}
-            date="October 17, 2023"
-            status="DELIVERD"
-            price={1234.0}
-          />
-        </div>
-        <div data-aos="fade-left" data-aos-delay="300">
-          <OrderInfo
-            id={3456}
-            date="October 17, 2023"
-            status="DELIVERD"
-            price={1234.0}
-          />
-        </div>
-        <div data-aos="fade-left" data-aos-delay="400">
-          <OrderInfo
-            id={3456}
-            date="October 17, 2023"
-            status="DELIVERD"
-            price={1234.0}
-          />
-        </div>
-        <div data-aos="fade-left" data-aos-delay="500">
-          <OrderInfo
-            id={3456}
-            date="October 17, 2023"
-            status="DELIVERD"
-            price={1234.0}
-          />
-        </div>
+        {orders.map((order, idx) => (
+          <div
+            key={order.id}
+            data-aos="fade-left"
+            data-aos-delay={200 + idx * 100}
+          >
+            <OrderInfo
+              id={order.id}
+              date={order.date}
+              status={order.status}
+              price={order.price}
+            />
+          </div>
+        ))}
       </div>
       {/* <div className="mt-30">
         <EmptySectionMessage message="No Products In Order History" />

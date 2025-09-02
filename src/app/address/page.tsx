@@ -1,8 +1,8 @@
-'use client'
+'use client';
 import { useLoader } from '../../components/ui/loader/useLoader';
 import AddressSection from './components/AddressSection';
-import SettingsWrap from '../../components/layout/Settings/SettingsWrap';
 import Loader from '../../components/ui/loader/Loader';
+import SettingsNavigator from '../../components/layout/Settings/SettingsWrap';
 
 function AddressPage() {
   const loading = useLoader(1500);
@@ -10,9 +10,9 @@ function AddressPage() {
   if (loading) return <Loader />;
 
   return (
-    <SettingsWrap>
+    <SettingsNavigator>
       <AddressSection />
-    </SettingsWrap>
+    </SettingsNavigator>
   );
 }
 

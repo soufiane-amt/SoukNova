@@ -9,13 +9,13 @@ interface CartItemProps {
   price: number;
 }
 export function CartItem({ productImage, productName, price }: CartItemProps) {
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   const increaseQuantity = () => {
     setQuantity((prev) => prev + 1);
   };
   const decreaseQuantity = () => {
-    if (quantity > 0) setQuantity((prev) => prev - 1);
+    if (quantity > 1) setQuantity((prev) => prev - 1);
   };
 
   return (
@@ -44,7 +44,7 @@ export function CartItem({ productImage, productName, price }: CartItemProps) {
               </p>
             </div>
             <div className="hidden md:block">
-              <button className="flex space-x-2 px-1! rounded-full hover:bg-gray-200 text-xl text-gray-500 px-4 text-end font-bold">
+              <button className="flex space-x-2 rounded-full hover:bg-gray-200 text-xl text-gray-500 px-4 text-end font-bold">
                 <p className="text-sm">&#x2715;</p>
                 <p className="text-sm">Remove</p>
               </button>
@@ -61,18 +61,18 @@ export function CartItem({ productImage, productName, price }: CartItemProps) {
           </div>
         </div>
         <div className="hidden md:flex flex justify-around items-center font-bold rounded border h-8 w-20 border border-gray-500">
-          <button className="cursor-pointer" onClick={decreaseQuantity}>
+          <button aria-label="Decrease quantity" className="cursor-pointer" onClick={decreaseQuantity}>
             -
           </button>
           <span className="text-xs">{quantity}</span>
-          <button className="cursor-pointer" onClick={increaseQuantity}>
+          <button aria-label="Increase quantity"  className="cursor-pointer" onClick={increaseQuantity}>
             +
           </button>
         </div>
 
         <div className="flex flex-col justify-start">
           <p className=" text-[15px] md:text-[18px]">${price}</p>
-          <button className="block md:hidden px-1! rounded-full hover:bg-gray-200 text-xl text-gray-500 px-4 text-end font-bold">
+          <button className="block md:hidden rounded-full hover:bg-gray-200 text-xl text-gray-500 px-4 text-end font-bold">
             <span>&#x2715;</span>
           </button>
           <div></div>

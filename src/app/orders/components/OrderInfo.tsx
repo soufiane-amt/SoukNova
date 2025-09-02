@@ -1,8 +1,11 @@
-import { inter } from "@/layout";
+import { inter } from '@/layout';
 
-type StatusType = 'DELIVERD' | 'PROGRESS';
+export type StatusType = 'DELIVERED' | 'PROGRESS';
 
-interface OrderInfoProps {
+const baseText = `leading-loose ${inter.className}`;
+const labelText = `${baseText} text-[var(--color-primary)]`;
+
+export interface OrderInfoProps {
   id: number;
   date: string;
   status: StatusType;
@@ -12,17 +15,23 @@ interface OrderInfoProps {
 function OrderInfo({ id, date, status, price }: OrderInfoProps) {
   return (
     <div className="flex md:flex-col justify-between text-sm border-b border-gray-300 py-3">
-      <div className="md:grid md:grid-cols-4 md:grid-cols-4 gap-4 ">
-        <p className={`leading-loose text-[var(--color-primary)] ${inter.className}`}>Number Id</p>
-        <p className={`leading-loose text-[var(--color-primary)] ${inter.className}`}>Dates</p>
-        <p className={`leading-loose text-[var(--color-primary)] ${inter.className}`}>Status</p>
-        <p className={`leading-loose text-[var(--color-primary)] ${inter.className}`}>Price</p>
+      <div className="md:grid md:grid-cols-4 gap-4 ">
+        <p className={labelText}>Number Id</p>
+        <p className={labelText}>Dates</p>
+        <p className={labelText}>Status</p>
+        <p className={labelText}>Price</p>
       </div>
-      <div className="md:grid md:grid-cols-4 md:grid-cols-4 gap-4 ">
-        <p className={`leading-loose ${inter.className}`}>#{id}</p>
-        <p className={`leading-loose ${inter.className}`}>{date}</p>
-        <p className={`leading-loose ${inter.className}`}>{status}</p>
-        <p className={`leading-loose ${inter.className}`}>${price}</p>
+      <div className="md:grid md:grid-cols-4 gap-4 ">
+        <p className={baseText}>#{id}</p>
+        <p className={baseText}>{date}</p>
+        <p
+          className={`${baseText} ${
+            status === 'DELIVERED' ? 'text-green-600' : 'text-yellow-500'
+          }`}
+        >
+          {status}
+        </p>
+        <p className={baseText}>${price}</p>
       </div>
     </div>
   );

@@ -8,7 +8,11 @@ interface CheckoutCartItemProps {
   productName: string;
   price: number;
 }
-export function CheckoutCartItem({ productImage, productName, price }: CheckoutCartItemProps) {
+export function CheckoutCartItem({
+  productImage,
+  productName,
+  price,
+}: CheckoutCartItemProps) {
   const [quantity, setQuantity] = useState(0);
 
   const increaseQuantity = () => {
@@ -39,16 +43,16 @@ export function CheckoutCartItem({ productImage, productName, price }: CheckoutC
               <p className="font-semibold">{productName}</p>
             </div>
             <div>
-              <p className="text-[var(--color-primary)] text-xs md:m-0">
+              <p className="text-[var(--color-primary)] text-xs">
                 color: green
               </p>
             </div>
-            <div className="flex justify-around items-center font-bold rounded border h-7 w-20 border border-gray-500">
-              <button className="cursor-pointer" onClick={decreaseQuantity}>
+            <div className="flex justify-around items-center font-bold rounded border h-7 w-20 border-gray-500">
+              <button aria-label="Decrease quantity" className="cursor-pointer" onClick={decreaseQuantity}>
                 -
               </button>
               <span className="text-xs">{quantity}</span>
-              <button className="cursor-pointer" onClick={increaseQuantity}>
+              <button aria-label="Increase quantity" className="cursor-pointer" onClick={increaseQuantity}>
                 +
               </button>
             </div>
@@ -56,7 +60,9 @@ export function CheckoutCartItem({ productImage, productName, price }: CheckoutC
         </div>
 
         <div className="flex flex-col justify-start font-medium">
-          <p className=" text-[12px] md:text-[14px] ">${price}</p>
+          <p className="text-[12px] md:text-[14px]">
+            ${(quantity * price).toFixed(2)}
+          </p>
         </div>
       </div>
     </div>

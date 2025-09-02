@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
 import { useLoader } from '../../components/ui/loader/useLoader';
 import OrderHistory from './components/OrderHistory';
-import SettingsWrap from '../../components/layout/Settings/SettingsWrap';
+import SettingsNavigator from '../../components/layout/Settings/SettingsWrap';
 import Loader from '../../components/ui/loader/Loader';
 
 function OrderPage() {
@@ -11,9 +11,9 @@ function OrderPage() {
   if (loading) return <Loader />;
 
   return (
-    <SettingsWrap>
+    <SettingsNavigator>
       <OrderHistory />
-    </SettingsWrap>
+    </SettingsNavigator>
   );
 }
 

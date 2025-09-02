@@ -29,7 +29,7 @@ function OrderSummaryCheckout() {
       </div>
       <div className='flex justify-between gap-4' data-aos="fade-up" data-aos-delay="300">
         <input className='border w-full rounded-lg border-gray-500 px-5' type="text" placeholder="JenkateMW" />
-        <button className="w-full bg-black text-white rounded-lg py-2 cursor-pointer md:px-5 max-w-25 py-3 font-medium">
+        <button className="w-full bg-black text-white rounded-lg cursor-pointer md:px-5 max-w-25 py-3 font-medium">
           Apply
         </button>
       </div>
