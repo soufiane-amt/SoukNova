@@ -27,8 +27,7 @@ function PaymentMethod() {
             <input
               className="m-4 h-[18px] w-[18px] text-start"
               type="radio"
-              name="shipping"
-              value="free"
+              name="card"
             />
             Pay by Card Credit
           </label>
@@ -41,8 +40,7 @@ function PaymentMethod() {
             <input
               className="m-4 h-[18px] w-[18px] text-start"
               type="radio"
-              name="shipping"
-              value="free"
+              name="paypal"
             />
             Paypal
           </label>
@@ -55,7 +53,7 @@ function PaymentMethod() {
         <input
           placeholder="1234 1234 1234 1234"
           type="text"
-          className="text-md border py-2 px-4 rounded-md border border-[#CBCBCB]"
+          className="text-md py-2 px-4 rounded-md border border-[#CBCBCB]"
         />
       </div>
 
@@ -67,7 +65,7 @@ function PaymentMethod() {
           <input
             placeholder="MM/YY"
             type="text"
-            className="text-md border py-2 px-4 rounded-md border border-[#CBCBCB]"
+            className="text-md py-2 px-4 rounded-md border border-[#CBCBCB]"
           />
         </div>
         <div className="flex-1 flex flex-col mb-8" data-aos="fade-up" data-aos-delay="600">
@@ -77,7 +75,7 @@ function PaymentMethod() {
           <input
             placeholder="CVC Code"
             type="text"
-            className="text-md border py-2 px-4 rounded-md border border-[#CBCBCB]"
+            className="text-md py-2 px-4 rounded-md border border-[#CBCBCB]"
           />
         </div>
       </div>

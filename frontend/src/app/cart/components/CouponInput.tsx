@@ -2,7 +2,6 @@
 import { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-// import { inter } from '@/layout'; // Assuming 'inter' is from your layout and already imported globally
 
 function CouponInput() {
   useEffect(() => {

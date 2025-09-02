@@ -4,6 +4,7 @@ import CartItem from './CartItem';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
+
 function CartItemsTable() {
   useEffect(() => {
     AOS.init({

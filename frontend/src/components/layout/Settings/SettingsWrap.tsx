@@ -2,7 +2,7 @@ import AccountNavigator from '@/account/components/AccountNavigator';
 import { poppins } from '@/layout';
 import { SiteFooter } from '../SiteFooter';
 
-function SettingsWrap({ children }) {
+function SettingsNavigator({ children }) {
   return (
     <main className="flex flex-col min-h-screen">
       <div className="mx-[160px] max-xl:mx-20 max-lg:mx-20 max-md:mx-10 max-sm:mx-8 py-20 flex-1">
@@ -23,4 +23,4 @@ function SettingsWrap({ children }) {
   );
 }
 
-export default SettingsWrap;
+export default SettingsNavigator;

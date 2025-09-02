@@ -12,17 +12,18 @@ function WishItem({ productName, productImage, price }: WishItemProps) {
     <div className="mt-5 border-b border-gray-300 py-5">
       <div className="md:flex md:justify-between md:items-center">
         <div className="flex ">
-          <button className="p-2 md:py-0 rounded-full hover:bg-gray-200 text-xl text-black-shade-4 px-4">
-            <span>&#x2715;</span>
+          <button
+            className="p-2 md:py-0 rounded-full hover:bg-gray-200 text-xl text-black-shade-4 px-4"
+            aria-label={`Remove ${productName} from wishlist`}
+          >
+            &#x2715;
           </button>
-          <div className="bg-[#f4f4f4] mr-3 h-[60px] min-w-[60px]">
+          <div className="bg-[#f4f4f4] mr-3 h-[60px] min-w-[60px] relative">
             <Image
               src={productImage}
-              width={50}
-              height={50}
               alt="Wish product"
-              style={{ mixBlendMode: 'multiply' }}
-              className="w-full h-full"
+              fill
+              className="object-cover"
             />
           </div>
           <div

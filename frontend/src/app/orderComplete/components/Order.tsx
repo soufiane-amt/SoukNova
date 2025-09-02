@@ -3,33 +3,7 @@ import { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { inter, poppins } from '@/layout';
-import Image from 'next/image';
-
-interface OrderedItemProps {
-  productName: string;
-  imageUrl: string;
-  count: number;
-}
-
-function OrderedItem({ productName, imageUrl, count }: OrderedItemProps) {
-  return (
-    <div className="relative w-[85px]" data-aos="zoom-in" data-aos-delay="200">
-      <div className="h-[90px] w-[85px] bg-[#f4f4f4]">
-        <Image
-          style={{ mixBlendMode: 'multiply' }}
-          height={100}
-          width={100}
-          src={imageUrl}
-          alt={productName}
-          className="w-full h-full"
-        />
-      </div>
-      <span className="absolute top-[-10] right-[-10] bg-black rounded-full w-8 h-8 text-white flex justify-center items-center text-sm">
-        {count}
-      </span>
-    </div>
-  );
-}
+import OrderedItem from './OrderedItem';
 
 function Order() {
   useEffect(() => {
