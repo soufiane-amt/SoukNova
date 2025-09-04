@@ -5,7 +5,7 @@ import ContactInfo from './components/ContactInfo';
 import PaymentMethod from './components/PaymentMethod';
 import ShippingAddress from './components/ShippingAddress';
 import OrderSummary from './components/OrderSummaryCheckout';
-import CartNavigator from '../../components/layout/Cart/CartNavigator';
+import CartNavigator from '../../components/ui/Cart/CartNavigator';
 import { SiteFooter } from '../../components/layout/SiteFooter';
 import Loader from '../../components/ui/loader/Loader';
 import { useLoader } from '../../components/ui/loader/useLoader';

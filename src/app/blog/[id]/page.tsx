@@ -7,7 +7,7 @@ import Traversal from '../../../components/ui/Traversal';
 import { poppins } from '@/layout';
 import Image from 'next/image';
 import { ArticleCard } from '@/home/components/ArticleCard';
-import CustomButton from '../../../components/ui/CustomButton';
+import CustomButton from '../../../components/buttons/CustomButton';
 import { SiteFooter } from '../../../components/layout/SiteFooter';
 import { ARTICLES } from '../../../constants/articalList';
 import Loader from '../../../components/ui/loader/Loader';

@@ -1,7 +1,7 @@
 'use client';
 
 import { inter } from '@/layout';
-import CartNavigator from '../../components/layout/Cart/CartNavigator';
+import CartNavigator from '../../components/ui/Cart/CartNavigator';
 import { SiteFooter } from '../../components/layout/SiteFooter';
 import CartItemsTable from './components/CartItemsTable';
 import CartSummary from './components/CartSummary';

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import EmptySectionMessage from '../../ui/EmptySection';
+import EmptySectionMessage from '../../feedback/EmptySection';
 import { poppins } from '@/layout';
 
 interface SideCartProps {

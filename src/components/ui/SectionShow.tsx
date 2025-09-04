@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import Image from 'next/image';
 import Traversal from './Traversal';
 import { poppins } from '@/layout';

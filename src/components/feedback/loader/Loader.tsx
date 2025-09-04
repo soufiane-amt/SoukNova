@@ -1,5 +1,4 @@
 
-import CircularIndeterminate from "../CircularIndeterminate";
 
 export default function Loader() {
   return (

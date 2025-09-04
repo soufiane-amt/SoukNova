@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import CustomButton from '../../../components/ui/CustomButton';
+import CustomButton from '../../../components/buttons/CustomButton';
 import { poppins } from '@/layout';
 
 const promoHighlightImage = '/images/home/fourniture.png';

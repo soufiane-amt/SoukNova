@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import FavoriteBorderSharpIcon from '@mui/icons-material/FavoriteBorderSharp';
 import { SearchIcon, ShoppingBag, X } from 'lucide-react';
-import { SocialIcons } from './SocialIcons';
+import { SocialIcons } from '../../icons/SocialIcons';
 import { NAV_ITEMS } from '../../../constants/navItems';
 
 interface DrawerItemProps {

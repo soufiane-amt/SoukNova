@@ -4,3 +4,5 @@ export interface Article {
   images: string[];
   date: string;
 }
+
+export type priceType = [number, number];

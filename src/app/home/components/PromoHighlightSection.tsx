@@ -1,5 +1,5 @@
 import { poppins } from '@/layout';
-import CustomButton from '../../../components/ui/CustomButton';
+import CustomButton from '../../../components/buttons/CustomButton';
 import { Typography } from '@mui/material';
 import Image from 'next/image';
 

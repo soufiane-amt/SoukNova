@@ -1,7 +1,5 @@
 import { Typography } from '@mui/material';
-import RatingStars from './RatingStars';
 import Image from 'next/image';
-import { poppins } from '@/layout';
 
 
 function getFirstTwoWords(title :string) {

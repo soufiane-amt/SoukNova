@@ -1,5 +1,4 @@
-import { Button, Typography } from '@mui/material';
-import RatingStars from './RatingStars';
+import { Typography } from '@mui/material';
 import Image from 'next/image';
 
 interface ProductCardInfoProps {

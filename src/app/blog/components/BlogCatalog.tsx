@@ -6,7 +6,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { poppins } from '@/layout';
 import { Article } from '../../../types/types';
-import ShowMoreButton from '../../../components/ui/ShowMoreButton';
+import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
 
 interface BlogProps {
   articles: Article[];
