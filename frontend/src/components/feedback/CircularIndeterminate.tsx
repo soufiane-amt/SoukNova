@@ -1,15 +1,15 @@
 import * as React from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
+const dotClass = "w-[10px] h-[10px] bg-black rounded-full"
 function PoppingDots() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="flex space-x-2">
-        <div className="w-[10px] h-[10px] bg-black rounded-full animate-bounce1"></div>
-        <div className="w-[10px] h-[10px] bg-black rounded-full animate-bounce2"></div>
-        <div className="w-[10px] h-[10px] bg-black rounded-full animate-bounce3"></div>
-        <div className="w-[10px] h-[10px] bg-black rounded-full animate-bounce4"></div>
+        <div className={`${dotClass} animate-bounce1`}></div>
+        <div className={`${dotClass} animate-bounce2`}></div>
+        <div className={`${dotClass} animate-bounce3`}></div>
+        <div className={`${dotClass} animate-bounce4`}></div>
       </div>
       <style>{`
         @keyframes bounce {

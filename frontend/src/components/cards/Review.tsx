@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import RatingStars from './RatingStars';
+import RatingStars from '../ui/RatingStars';
 import Image from 'next/image';
 
 interface ReviewProps {

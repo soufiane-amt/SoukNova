@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import CartNavigator from '../../components/layout/Cart/CartNavigator';
+import CartNavigator from '../../components/ui/Cart/CartNavigator';
 import Order from './components/Order';
 import { useLoader } from '../../components/ui/loader/useLoader';
 import Loader from '../../components/ui/loader/Loader';

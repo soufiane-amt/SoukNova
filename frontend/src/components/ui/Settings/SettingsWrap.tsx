@@ -1,6 +1,5 @@
 import AccountNavigator from '@/account/components/AccountNavigator';
 import { poppins } from '@/layout';
-import { SiteFooter } from '../SiteFooter';
 
 function SettingsNavigator({ children }) {
   return (

@@ -1,4 +1,4 @@
-import CustomButton from '../../../components/ui/CustomButton';
+import CustomButton from '../../../components/buttons/CustomButton';
 import Image from 'next/image';
 
 interface PromoCardProps {
@@ -21,7 +21,7 @@ export const PromoCardLarge: React.FC<PromoCardProps> = ({ title, image }) => {
         </div>
         <div className="absolute top-7 left-7">
           <h5 className="md:text-4xl text-2xl bold">{title}</h5>
-          <CustomButton label="Shop now" href='/shop'/>
+          <CustomButton label="Shop now" href="/shop" />
         </div>
       </div>
     </div>

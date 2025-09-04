@@ -1,6 +1,6 @@
 'use client';
 import { poppins } from '@/layout';
-import CustomButton from '../../../components/ui/CustomButton';
+import CustomButton from '../../../components/buttons/CustomButton';
 import { ProductCard } from '../../../components/ui/ProductCard';
 import { useEffect, useState } from 'react';
 import { fetchFromSupabase } from '../../../lib/supbaseApi';

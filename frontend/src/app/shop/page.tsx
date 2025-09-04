@@ -1,6 +1,5 @@
 'use client';
 
-import CategoryFilter from './components/CategoryFilter';
 import { NewsLetterSub } from '@/home/components/NewsLetterSub';
 import { SiteFooter } from '../../components/layout/SiteFooter';
 import { useEffect, useState } from 'react';
@@ -8,6 +7,7 @@ import SectionShow from '../../components/ui/SectionShow';
 import { fetchFromSupabase } from '../../lib/supbaseApi';
 import { inter } from '@/layout';
 import Loader from '../../components/ui/loader/Loader';
+import ShopFilter from './components/ShopFilter';
 
 const imageUrl = '/images/shop/shopPage.png';
 
@@ -17,12 +17,12 @@ export default function ShopPage() {
   const [error, setError] = useState(null);
 
   const [selectedCategory, setSelectedCategory] = useState('All Rooms');
-  const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, Infinity]);
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
         let query = 'select=*';
         if (selectedCategory !== 'All Rooms') {
@@ -63,7 +63,7 @@ export default function ShopPage() {
           head="Shop"
           desc="Let’s design the place you always imagined."
         />
-        <CategoryFilter
+        <ShopFilter
           products={products}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}

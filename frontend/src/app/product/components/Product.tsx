@@ -63,7 +63,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
         </div>
         <div className="lg:w-[508px]" data-aos="fade-left" data-aos-delay="200">
           <div className="flex flex-col gap-2">
-            <div className="flex items-start space-x-2 w-" data-aos="fade-up">
+            <div className="flex items-start space-x-2" data-aos="fade-up">
               <RatingStars isStatic={true} defaultValue={productData?.Rate} />
               <Typography sx={{ fontSize: '0.675rem' }}>
                 <span>{productData?.reviews?.length ?? 0}</span> Reviews
@@ -261,7 +261,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
       </div>
       <div>
         {productData.reviews.map((item: any, index: number) => (
-          <div key={index} data-aos="fade-up" data-aos-delay={`${index * 100}`}>
+          <div key={item.id} data-aos="fade-up" data-aos-delay={`${index * 100}`}>
             <Review
               name={item.name}
               image={item.avatar}
