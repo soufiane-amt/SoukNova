@@ -20,7 +20,6 @@ export class AuthController {
         maxAge: 1000 * 60 * 60 * 24,
         sameSite: 'lax',
       });
-
       return { message: 'Login successful' };
     } catch (e) {
       if (e instanceof ConflictException) {
