@@ -7,8 +7,8 @@ import ShippingAddress from './components/ShippingAddress';
 import OrderSummary from './components/OrderSummaryCheckout';
 import CartNavigator from '../../components/ui/Cart/CartNavigator';
 import { SiteFooter } from '../../components/layout/SiteFooter';
-import Loader from '../../components/ui/loader/Loader';
-import { useLoader } from '../../components/ui/loader/useLoader';
+import { useLoader } from '../../hooks/useLoader';
+import Loader from '../../components/feedback/loader/Loader';
 
 function CheckoutPage() {
   const loading = useLoader(1500);

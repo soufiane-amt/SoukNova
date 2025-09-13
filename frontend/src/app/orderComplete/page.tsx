@@ -1,14 +1,14 @@
 'use client';
 
+import Loader from '../../components/feedback/loader/Loader';
 import CartNavigator from '../../components/ui/Cart/CartNavigator';
+import { useLoader } from '../../hooks/useLoader';
 import Order from './components/Order';
-import { useLoader } from '../../components/ui/loader/useLoader';
-import Loader from '../../components/ui/loader/Loader';
 
 function OrderComplete() {
   const loading = useLoader(1500);
 
-  if (loading) return <Loader />;
+  if (loading) return <Loader/>;
 
   return (
     <main>

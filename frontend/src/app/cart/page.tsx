@@ -6,8 +6,8 @@ import { SiteFooter } from '../../components/layout/SiteFooter';
 import CartItemsTable from './components/CartItemsTable';
 import CartSummary from './components/CartSummary';
 import CouponInput from './components/CouponInput';
-import { useLoader } from '../../components/ui/loader/useLoader';
-import Loader from '../../components/ui/loader/Loader';
+import { useLoader } from '../../hooks/useLoader';
+import Loader from '../../components/feedback/loader/Loader';
 
 function CartPage() {
   const loading = useLoader(1500);

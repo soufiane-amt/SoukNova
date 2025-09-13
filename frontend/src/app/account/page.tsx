@@ -1,9 +1,9 @@
 'use client';
 
+import Loader from '../../components/feedback/loader/Loader';
+import SettingsNavigator from '../../components/ui/Settings/SettingsWrap';
+import { useLoader } from '../../hooks/useLoader';
 import AccountDetailsForm from './components/AccountDetailsForm';
-import { useLoader } from '../../components/ui/loader/useLoader';
-import Loader from '../../components/ui/loader/Loader';
-import SettingsNavigator from '../../components/layout/Settings/SettingsWrap';
 
 function MyAccountPage() {
   const loading = useLoader(1500);

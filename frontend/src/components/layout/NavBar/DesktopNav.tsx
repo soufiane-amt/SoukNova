@@ -1,5 +1,6 @@
 'use client';
-import { ShoppingBag, CircleUserRound, Search, X } from 'lucide-react';
+
+import { ShoppingBag, CircleUserRound, Search} from 'lucide-react';
 
 import { Menu } from 'lucide-react';
 import { List, ListItem, ListItemText } from '@mui/material';

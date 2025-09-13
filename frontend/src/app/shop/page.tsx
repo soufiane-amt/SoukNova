@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import SectionShow from '../../components/ui/SectionShow';
 import { fetchFromSupabase } from '../../lib/supbaseApi';
 import { inter } from '@/layout';
-import Loader from '../../components/ui/loader/Loader';
 import ShopFilter from './components/ShopFilter';
+import Loader from '../../components/feedback/loader/Loader';
 
 const imageUrl = '/images/shop/shopPage.png';
 
@@ -51,7 +51,7 @@ export default function ShopPage() {
   }, [priceRange, selectedCategory, selectedOrder]);
 
   if (loading) {
-    return <Loader />;
+    return <Loader/>;
   }
   if (error) return <div>Error: {error}</div>;
 
