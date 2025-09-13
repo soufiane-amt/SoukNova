@@ -15,10 +15,35 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
   firstName String
   lastName  String
   password  String
-  createdAt DateTime @default(now())
+  image     String?
+  createdAt DateTime   @default(now())
+  wishlist  Wishlist[]
+  cartItems CartItem[]
+}
+
+model Wishlist {
+  id        Int    @id @default(autoincrement())
+  userId    Int
+  productId String
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, productId], name: "userId_productId")
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId String
+  quantity  Int      @default(1)
+  addedAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, productId])
 }
