@@ -1,11 +1,11 @@
 'use client';
 import { poppins } from '@/layout';
 import CustomButton from '../../../components/buttons/CustomButton';
-import { ProductCard } from '../../../components/ui/ProductCard';
 import { useEffect, useState } from 'react';
 import { fetchFromSupabase } from '../../../lib/supbaseApi';
 import Link from 'next/link';
-import Loader from '../../../components/ui/loader/Loader';
+import { ProductCard } from '../../../components/cards/ProductCard/ProductCard';
+import Loader from '../../../components/feedback/loader/Loader';
 
 export default function NewArrivalSection() {
   const [products, setProducts] = useState([]);

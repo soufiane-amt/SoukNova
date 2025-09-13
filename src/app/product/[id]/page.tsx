@@ -1,10 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import Product from '../components/Product';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import Loader from '../../../components/ui/loader/Loader';
+import Loader from '../../../components/feedback/loader/Loader';
+import Product from '../components/Product';
 
 export default function ProductPage() {
   const { id } = useParams();

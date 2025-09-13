@@ -1,8 +1,8 @@
 import { Grid } from '@mui/material';
 import Link from 'next/link';
 import { useState } from 'react';
-import { ProductCard } from '../../../components/ui/ProductCard';
 import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
+import { ProductCard } from '../../../components/cards/ProductCard/ProductCard';
 
 interface ProductGridProps {
   products: any[];

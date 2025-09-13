@@ -1,8 +1,9 @@
 'use client';
-import { useLoader } from '../../components/ui/loader/useLoader';
-import AddressSection from './components/AddressSection';
-import Loader from '../../components/ui/loader/Loader';
-import SettingsNavigator from '../../components/layout/Settings/SettingsWrap';
+
+import Loader from "../../components/feedback/loader/Loader";
+import SettingsNavigator from "../../components/ui/Settings/SettingsWrap";
+import { useLoader } from "../../hooks/useLoader";
+import AddressSection from "./components/AddressSection";
 
 function AddressPage() {
   const loading = useLoader(1500);

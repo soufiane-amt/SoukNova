@@ -1,13 +1,8 @@
 import { useEffect, useState } from 'react';
 import Traversal from '../../../components/ui/Traversal';
 import Carousel from 'react-material-ui-carousel';
-import ReviewsSort from './ReviewsSort';
-import { Review } from '../../../components/ui/Review';
 import { Typography } from '@mui/material';
-import RatingStars from '../../../components/ui/RatingStars';
 import CountdownTimer from '../../../components/ui/CountDownTimer';
-import ThumbnailList from './ThumbnailList';
-import ProductImage from './ProductImage';
 import { getDiscountedPrice, getFirstTwoWords, isProductNew } from '../../../utils/helpers';
 import EastIcon from '@mui/icons-material/East';
 

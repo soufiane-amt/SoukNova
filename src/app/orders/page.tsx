@@ -1,9 +1,9 @@
 'use client';
 
-import { useLoader } from '../../components/ui/loader/useLoader';
+import Loader from '../../components/feedback/loader/Loader';
+import SettingsNavigator from '../../components/ui/Settings/SettingsWrap';
+import { useLoader } from '../../hooks/useLoader';
 import OrderHistory from './components/OrderHistory';
-import SettingsNavigator from '../../components/layout/Settings/SettingsWrap';
-import Loader from '../../components/ui/loader/Loader';
 
 function OrderPage() {
   const loading = useLoader(1500);

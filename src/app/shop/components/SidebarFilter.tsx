@@ -1,7 +1,7 @@
 import { Disclosure, DisclosureButton } from '@headlessui/react';
 import { priceType } from '../../../types/types';
-import CheckedElement from '../../../components/ui/CheckedElement';
 import { priceFilter } from './BasicDropdownPrice';
+import CheckedElement from '../../../components/inputs/CheckedElement';
 
 const subCategories = [
   { name: 'All Rooms' },
@@ -75,7 +75,7 @@ function SidebarFilter({
                       <input
                         id={`-${optionIdx}`}
                         name={`${priceFilter.id}[]`}
-                        checked={
+                        defaultChecked={
                           priceRange[0] === option.value.minPrice &&
                           priceRange[1] === option.value.maxPrice
                         }

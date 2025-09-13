@@ -5,8 +5,8 @@ import SectionShow from '../../components/ui/SectionShow';
 import BlogCatalog from './components/BlogCatalog';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import Loader from '../../components/ui/loader/Loader';
 import { SiteFooter } from '../../components/layout/SiteFooter';
+import Loader from '../../components/feedback/loader/Loader';
 
 const imageUrl = '/images/blog/ourBlogPage.png';
 
@@ -42,7 +42,7 @@ function BlogPage() {
   }, []);
 
   if (loading) {
-    return <Loader />;
+    return <Loader/>;
   }
   if (error) return <div>Error: {error}</div>;
 

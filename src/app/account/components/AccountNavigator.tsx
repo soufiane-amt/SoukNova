@@ -5,7 +5,7 @@ import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const defaultUserImage = '/images/myAccount/default-user.png';
 
@@ -96,35 +96,114 @@ const Dropdown = () => {
   );
 };
 
-interface ProfilePictureEditorProps {
+type ProfilePictureEditorProps = {
   imageUrl?: string;
-}
+  onImageSelect?: (file: File) => void; // callback for parent to handle file
+};
 
-function ProfilePictureEditor({ imageUrl }: ProfilePictureEditorProps) {
+function ProfilePictureEditor({
+  imageUrl,
+  onImageSelect,
+}: ProfilePictureEditorProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && onImageSelect) {
+      onImageSelect(file); // send the file to parent component
+    }
+  };
+
   return (
-    <div className="relative w-20 h-20 cursor-pointer mx-auto">
+    <div
+      className="relative w-20 h-20 cursor-pointer mx-auto"
+      onClick={handleClick}
+    >
       <Image
-        height={50}
-        width={50}
+        height={80}
+        width={80}
         alt="Profile Picture"
         src={imageUrl || defaultUserImage}
-        className="w-full h-full"
+        className="w-full h-full rounded-full object-cover"
       />
       <button
+        type="button"
         className="absolute bottom-0 right-0 bg-black rounded-full px-[4.5px] border-2 border-white hover:bg-gray-800 transition"
         aria-label="Edit profile picture"
+        onClick={handleClick}
       >
         <CameraAltOutlinedIcon className="text-white" sx={{ fontSize: 14 }} />
       </button>
+
+      <input
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        className="hidden"
+      />
     </div>
   );
 }
 
 function AccountNavigator() {
+  const [profileImage, setProfileImage] = useState<string | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const res = await fetch('/api/user/profile');
+        if (!res.ok) throw new Error('Failed to fetch profile');
+
+        const data = await res.json();
+
+        const imageUrl = data.imageUrl
+          ? `http://localhost:3001${data.imageUrl}`
+          : defaultUserImage;
+        setProfileImage(imageUrl);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchProfile();
+  }, []);
+
+  const handleImageSelect = async (file: File) => {
+    const objectUrl = URL.createObjectURL(file);
+    setProfileImage(objectUrl);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/user/upload-profile-picture', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error('Failed to upload');
+
+      const data = await res.json();
+      console.log('Uploaded file path:', data.url);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center md:justify-start  bg-[#F3F5F7] py-10 rounded-lg md:w-1/5 md:py-10 h-[468px] min-w-[262px] ">
       <div className="flex flex-col justify-center mb-5">
-        <ProfilePictureEditor imageUrl={undefined} />
+        <ProfilePictureEditor
+          imageUrl={profileImage}
+          onImageSelect={handleImageSelect}
+        />
         <p className="text-center font-semibold text-lg my-3">Soufiane</p>
       </div>
       <Dropdown />

@@ -1,9 +1,9 @@
 'use client';
 
-import SettingsNavigator from '../../components/layout/Settings/SettingsWrap';
+import Loader from '../../components/feedback/loader/Loader';
+import SettingsNavigator from '../../components/ui/Settings/SettingsWrap';
+import { useLoader } from '../../hooks/useLoader';
 import WishList from './components/WishList';
-import { useLoader } from '../../components/ui/loader/useLoader';
-import Loader from '../../components/ui/loader/Loader';
 
 function WishPage() {
   const loading = useLoader(1500);
