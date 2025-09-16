@@ -3,8 +3,17 @@ import Traversal from '../../../components/ui/Traversal';
 import Carousel from 'react-material-ui-carousel';
 import { Typography } from '@mui/material';
 import CountdownTimer from '../../../components/ui/CountDownTimer';
-import { getDiscountedPrice, getFirstTwoWords, isProductNew } from '../../../utils/helpers';
+import {
+  getDiscountedPrice,
+  getFirstTwoWords,
+  isProductNew,
+} from '../../../utils/helpers';
 import EastIcon from '@mui/icons-material/East';
+import ProductImage from './ProductImage';
+import ThumbnailList from './ThumbnailList';
+import RatingStars from '../../../components/inputs/RatingStars';
+import ReviewsSort from './ReviewsSort';
+import { Review } from '../../../components/cards/Review';
 
 interface ProductProps {
   productData: any;
@@ -17,6 +26,26 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
   );
 
   useEffect(() => {
+    const fetchPoductCartQuantity = async () => {
+      console.log('useEffect triggered with:', productData?.id);
+
+      if (!productData?.id) return;
+
+      const response = await fetch(`/api/cart/${productData.id}`, {
+        method: 'GET',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch product data.');
+      }
+
+      const data = await response.json();
+      setQuantity(data.quantity);
+    };
+
+    fetchPoductCartQuantity();
+  }, [productData.id]);
+
+  useEffect(() => {
     setActiveImage(productData?.images?.[0]?.trim() || '');
   }, [productData]);
 
@@ -26,9 +55,56 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
 
   const increaseQuantity = () => {
     setQuantity((prev) => prev + 1);
+    
   };
   const decreaseQuantity = () => {
     if (quantity > 0) setQuantity((prev) => prev - 1);
+  };
+
+  const addProductToWishlist = async (productId: string) => {
+    try {
+      const res = await fetch(`/api/wishlist/${productId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to add product to wishlist');
+      }
+
+      const data = await res.json();
+      console.log('Wishlist updated:', data);
+      return data;
+    } catch (err) {
+      console.error(err);
+      alert('Error adding product to wishlist');
+    }
+  };
+
+  const addProductToCart = async (productId: string) => {
+    try {
+      const res = await fetch(`/api/cart/${productId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to add product to cart');
+      }
+
+      const data = await res.json();
+      increaseQuantity();
+
+      console.log('Cart updated:', data);
+      return data;
+    } catch (err) {
+      console.error(err);
+      alert('Error adding product to cart');
+    }
   };
 
   return (
@@ -133,6 +209,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
               className="w-full rounded-lg bg-white border flex items-center justify-center space-x-2 flex-2 py-3 cursor-pointer"
               data-aos="zoom-in"
               data-aos-delay="400"
+              onClick={() => addProductToWishlist(productData.id)}
             >
               <svg
                 width="16"
@@ -157,7 +234,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             data-aos-delay="400"
           >
             <button
-              onClick={increaseQuantity}
+              onClick={() => addProductToCart(productData.id)}
               className="w-full bg-black text-white rounded-lg py-4 cursor-pointer font-semibold"
               data-aos="zoom-in"
               data-aos-delay="500"
@@ -256,7 +333,11 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
       </div>
       <div>
         {productData.reviews.map((item: any, index: number) => (
-          <div key={item.id} data-aos="fade-up" data-aos-delay={`${index * 100}`}>
+          <div
+            key={item.id}
+            data-aos="fade-up"
+            data-aos-delay={`${index * 100}`}
+          >
             <Review
               name={item.name}
               image={item.avatar}

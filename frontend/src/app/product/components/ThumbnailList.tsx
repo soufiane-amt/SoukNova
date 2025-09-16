@@ -18,7 +18,7 @@ const ThumbnailList: React.FC<ThumbnailListProps> = ({
 
         return (
           <div
-            key={img}
+            key={img + index}
             className={`cursor-pointer border-2 p-1 rounded-md ${
               activeImage === img
                 ? 'border-blue-500'

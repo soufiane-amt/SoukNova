@@ -1,0 +1,139 @@
+import { NextResponse } from 'next/server';
+import cookie from 'cookie';
+
+export const POST = async (
+  req: Request,
+  context: { params: { productId: string } },
+) => {
+  try {
+    const { productId } = await context.params;
+
+    if (!productId) {
+      return NextResponse.json(
+        { error: 'Product ID is required' },
+        { status: 400 },
+      );
+    }
+
+    const cookies = cookie.parse(req.headers.get('cookie') || '');
+    const token = cookies.jwt;
+
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': req.headers.get('Content-Type') || 'application/json',
+    };
+
+    const res = await fetch(`http://localhost:3001/cart/${productId}`, {
+      method: 'POST',
+      headers,
+    });
+
+    if (!res.ok) {
+      return NextResponse.json(
+        { error: 'Failed to add to cart' },
+        { status: res.status },
+      );
+    }
+
+    const data = await res.json();
+    return NextResponse.json(data);
+  } catch (err: any) {
+    console.error('❌ Proxy error:', err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+};
+
+export const PATCH = async (
+  req: Request,
+  context: { params: { productId: string } },
+) => {
+  try {
+    const { productId } = context.params;
+
+    if (!productId) {
+      return NextResponse.json(
+        { error: 'Product ID is required' },
+        { status: 400 },
+      );
+    }
+
+    const body = await req.json();
+    const { quantity } = body;
+
+    if (typeof quantity !== 'number' || quantity <= 0) {
+      return NextResponse.json(
+        { error: 'Valid quantity is required' },
+        { status: 400 },
+      );
+    }
+
+    const cookies = cookie.parse(req.headers.get('cookie') || '');
+    const token = cookies.jwt;
+
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+
+    const res = await fetch(`http://localhost:3001/cart/${productId}`, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify({ quantity }),
+    });
+
+    if (!res.ok) {
+      return NextResponse.json(
+        { error: 'Failed to update cart item' },
+        { status: res.status },
+      );
+    }
+
+    const data = await res.json();
+    return NextResponse.json(data);
+  } catch (err: any) {
+    console.error('❌ Proxy error (PATCH):', err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+};
+
+export const GET = async (
+  req: Request,
+  context: { params: { productId: string } },
+) => {
+  try {
+    const { productId } = await context.params;
+
+    if (!productId) {
+      return NextResponse.json(
+        { error: 'Product ID is required' },
+        { status: 400 },
+      );
+    }
+
+    const cookies = cookie.parse(req.headers.get('cookie') || '');
+    const token = cookies.jwt;
+
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': req.headers.get('Content-Type') || 'application/json',
+    };
+
+    const res = await fetch(`http://localhost:3001/cart/${productId}`, {
+      method: 'GET',
+      headers,
+    });
+
+    if (!res.ok) {
+      return NextResponse.json(
+        { error: 'Failed to add to cart' },
+        { status: res.status },
+      );
+    }
+
+    const data = await res.json();
+    return NextResponse.json(data);
+  } catch (err: any) {
+    console.error('❌ Proxy error:', err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+};
