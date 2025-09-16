@@ -8,10 +8,7 @@ interface RatingStarsProps {
   defaultValue: number | null;
 }
 
-export default function RatingStars({
-  isStatic,
-  defaultValue,
-}: RatingStarsProps) {
+function RatingStars({ isStatic, defaultValue }: RatingStarsProps) {
   const [value, setValue] = useState(defaultValue);
 
   return (
@@ -41,3 +38,5 @@ export default function RatingStars({
     </Box>
   );
 }
+
+export default RatingStars;

@@ -1,20 +1,12 @@
 import { NextResponse } from 'next/server';
 import cookie from 'cookie';
 
-export async function GET(req: Request) {
+export const GET = async (req: Request) => {
   try {
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;
-    console.log('➡️ Token from cookie:', token);
 
-    if (!token) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      );
-    }
-
-    const res = await fetch('http://localhost:3001/user/profile', {
+    const res = await fetch('http://localhost:3001/wishlist', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -23,18 +15,15 @@ export async function GET(req: Request) {
 
     if (!res.ok) {
       return NextResponse.json(
-        { error: 'Failed to fetch profile' },
+        { error: 'Failed to fetch wishlist' },
         { status: res.status },
       );
     }
-    console.log('====> ', res);
 
     const data = await res.json();
-    console.log('====> ', data);
-    // 3️⃣ Return the backend response to the client
     return NextResponse.json(data);
   } catch (err: any) {
-    console.error('❌ Error fetching profile:', err);
+    console.error('❌ Proxy error:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
-}
+};

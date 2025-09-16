@@ -3,24 +3,20 @@ import { NextRequest, NextResponse } from 'next/server';
 const API_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/products?select=*`;
 const API_KEY = process.env.SUPABASE_KEY;
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
-  const { id } = params;
-
+export const GET = async (
+  req: Request,
+  context: { params: { productId: string } },
+) => {
   try {
-    const response = await fetch(
-      `${API_URL}&id=eq.${id}`,
-      {
-        headers: {
-          apikey: API_KEY!,
-          Authorization: `Bearer ${API_KEY}`,
-          Accept: 'application/json',
-          'Accept-Profile': 'public',
-        },
+    const { id } = await context.params;
+    const response = await fetch(`${API_URL}&id=eq.${id}`, {
+      headers: {
+        apikey: API_KEY!,
+        Authorization: `Bearer ${API_KEY}`,
+        Accept: 'application/json',
+        'Accept-Profile': 'public',
       },
-    );
+    });
     if (!response.ok) {
       throw new Error('Failed to fetch products');
     }
@@ -31,4 +27,4 @@ export async function GET(
     console.error('API Route Error:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
-}
+};
