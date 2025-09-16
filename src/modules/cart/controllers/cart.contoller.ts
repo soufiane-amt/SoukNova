@@ -43,4 +43,12 @@ export class CartController {
   getCart(@User('id') userId: number) {
     return this.cartService.getCart(userId);
   }
+
+  @Get(':productId')
+  getCartItemQuantity(
+    @User('id') userId: number,
+    @Param('productId') productId: string,
+  ) {
+    return this.cartService.getCartItemQuantity(userId, productId);
+  }
 }

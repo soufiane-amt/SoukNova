@@ -14,8 +14,9 @@ import { UpdateUserDto } from '../dto/updateUser.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 
-// @UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 @Controller('user')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -49,21 +50,18 @@ export class UsersController {
       }),
     }),
   )
-  async uploadProfilePicture(@UploadedFile() file: Express.Multer.File) {
-    const userId = 43;
-
+  async uploadProfilePicture(
+    @User('id') userId: number,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     const imageUrl = `/uploads/profile-pictures/${file.filename}`;
     await this.usersService.updateUserProfileImage(userId, imageUrl);
     return { url: imageUrl };
   }
 
   @Get('profile')
-  async getProfilePicture() {
-    console.log('------1---------');
-    const userId = 43;
-
+  async getProfilePicture(@User('id') userId: number) {
     const imageUrl = await this.usersService.getUserProfileImage(userId);
-    console.log('imageUrl : ', imageUrl);
     return { imageUrl: imageUrl };
   }
 }

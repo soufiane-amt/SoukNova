@@ -18,7 +18,6 @@ export class AuthService {
   ) {}
 
   getSecret() {
-    console.log("----------------4-------------")
     return this.configService.get<string>('JWT_SECRET');
   }
 

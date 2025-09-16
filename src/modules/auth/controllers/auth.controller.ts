@@ -20,7 +20,7 @@ export class AuthController {
         maxAge: 1000 * 60 * 60 * 24,
         sameSite: 'lax',
       });
-      return { message: 'Login successful' };
+      return { message: 'Signup is successful' };
     } catch (e) {
       if (e instanceof ConflictException) {
         throw new ConflictException(
@@ -32,7 +32,24 @@ export class AuthController {
   }
 
   @Post('signin')
-  async signIn(@Body() user: UserCredentialsDto) {
-    return await this.authService.signIn(user);
+  async signIn(
+    @Body() user: UserCredentialsDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const token = await this.authService.signIn(user);
+    res.cookie('jwt', token.access_token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
+      sameSite: 'lax',
+    });
+    return { message: 'Login successful' };
+  }
+  catch(e) {
+    if (e instanceof ConflictException) {
+      throw new ConflictException(
+        'This account already existing, please sign in instead!',
+      );
+    }
+    throw e;
   }
 }

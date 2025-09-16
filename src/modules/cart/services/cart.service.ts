@@ -48,4 +48,13 @@ export class CartService {
 
     return products;
   }
+
+  async getCartItemQuantity(userId: number, productId: string) {
+    return this.prisma.cartItem.findUnique({
+      where: {
+        userId_productId: { userId, productId },
+      },
+      select: { quantity: true },
+    });
+  }
 }
