@@ -23,11 +23,11 @@ export class CartController {
   }
 
   @Delete(':productId')
-  removeFromCart(
+  decreaseFromCart(
     @User('id') userId: number,
     @Param('productId') productId: string,
   ) {
-    return this.cartService.removeFromCart(userId, productId);
+    return this.cartService.decreaseFromCart(userId, productId);
   }
 
   @Patch(':productId')
@@ -45,10 +45,14 @@ export class CartController {
   }
 
   @Get(':productId')
-  getCartItemQuantity(
+  async getCartItemQuantity(
     @User('id') userId: number,
     @Param('productId') productId: string,
   ) {
-    return this.cartService.getCartItemQuantity(userId, productId);
+    console.log('-------------Dazz------');
+    const data = await this.cartService.getCartItemQuantity(userId, productId);
+    console.log('Data : ', data);
+
+    return data;
   }
 }
