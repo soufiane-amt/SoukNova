@@ -2,24 +2,47 @@
 import { inter } from '@/layout';
 import Image from 'next/image';
 import { useState } from 'react';
+import { getFirstTwoWords } from '../../../utils/helpers';
 
 interface CheckoutCartItemProps {
+  productId: string;
   productImage: string;
   productName: string;
   price: number;
+  quantity: number;
 }
 export function CheckoutCartItem({
+  productId,
   productImage,
   productName,
   price,
+  quantity,
 }: CheckoutCartItemProps) {
-  const [quantity, setQuantity] = useState(0);
+  const processedName = getFirstTwoWords(productName);
+  const UpdateProductToCart = async (
+    productId: string,
+    method: 'POST' | 'DELETE',
+  ) => {
+    if (method === 'DELETE' && quantity === 0) return;
+    try {
+      const res = await fetch(`/api/cart/${productId}`, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-  const increaseQuantity = () => {
-    setQuantity((prev) => prev + 1);
-  };
-  const decreaseQuantity = () => {
-    if (quantity > 0) setQuantity((prev) => prev - 1);
+      if (!res.ok) {
+        throw new Error('Failed to add product to cart');
+      }
+
+      const data = await res.json();
+      setQuantity(data.quantity);
+
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -40,7 +63,7 @@ export function CheckoutCartItem({
         >
           <div className="flex flex-col justify-around h-full">
             <div>
-              <p className="font-semibold">{productName}</p>
+              <p className="font-semibold">{processedName}</p>
             </div>
             <div>
               <p className="text-[var(--color-primary)] text-xs">
@@ -48,11 +71,19 @@ export function CheckoutCartItem({
               </p>
             </div>
             <div className="flex justify-around items-center font-bold rounded border h-7 w-20 border-gray-500">
-              <button aria-label="Decrease quantity" className="cursor-pointer" onClick={decreaseQuantity}>
+              <button
+                aria-label="Decrease quantity"
+                className="cursor-pointer"
+                onClick={() => UpdateProductToCart(productId, 'DELETE')}
+              >
                 -
               </button>
               <span className="text-xs">{quantity}</span>
-              <button aria-label="Increase quantity" className="cursor-pointer" onClick={increaseQuantity}>
+              <button
+                aria-label="Increase quantity"
+                className="cursor-pointer"
+                onClick={() => UpdateProductToCart(productId, 'POST')}
+              >
                 +
               </button>
             </div>

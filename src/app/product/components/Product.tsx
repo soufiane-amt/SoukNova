@@ -31,14 +31,15 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
 
       if (!productData?.id) return;
 
-      const response = await fetch(`/api/cart/${productData.id}`, {
+      const res = await fetch(`/api/cart/${productData.id}`, {
         method: 'GET',
       });
-      if (!response.ok) {
+      console.log('res : ', res);
+      if (!res.ok) {
         throw new Error('Failed to fetch product data.');
       }
+      const data = await res.json();
 
-      const data = await response.json();
       setQuantity(data.quantity);
     };
 
@@ -53,40 +54,14 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
     setActiveImage(image.trim());
   };
 
-  const increaseQuantity = () => {
-    setQuantity((prev) => prev + 1);
-    
-  };
-  const decreaseQuantity = () => {
-    if (quantity > 0) setQuantity((prev) => prev - 1);
-  };
-
-  const addProductToWishlist = async (productId: string) => {
-    try {
-      const res = await fetch(`/api/wishlist/${productId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to add product to wishlist');
-      }
-
-      const data = await res.json();
-      console.log('Wishlist updated:', data);
-      return data;
-    } catch (err) {
-      console.error(err);
-      alert('Error adding product to wishlist');
-    }
-  };
-
-  const addProductToCart = async (productId: string) => {
+  const UpdateProductToCart = async (
+    productId: string,
+    method: 'POST' | 'DELETE',
+  ) => {
+    if (method === 'DELETE' && quantity === 0) return;
     try {
       const res = await fetch(`/api/cart/${productId}`, {
-        method: 'POST',
+        method: method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -97,13 +72,11 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
       }
 
       const data = await res.json();
-      increaseQuantity();
+      setQuantity(data.quantity);
 
-      console.log('Cart updated:', data);
       return data;
     } catch (err) {
       console.error(err);
-      alert('Error adding product to cart');
     }
   };
 
@@ -197,11 +170,17 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             data-aos-delay="300"
           >
             <div className="bg-[#F5F5F5] flex-1 flex justify-around items-center font-bold rounded-lg">
-              <button className="cursor-pointer" onClick={decreaseQuantity}>
+              <button
+                className="cursor-pointer"
+                onClick={() => UpdateProductToCart(productData.id, 'DELETE')}
+              >
                 -
               </button>
               <span>{quantity}</span>
-              <button className="cursor-pointer" onClick={increaseQuantity}>
+              <button
+                className="cursor-pointer"
+                onClick={() => UpdateProductToCart(productData.id, 'POST')}
+              >
                 +
               </button>
             </div>
@@ -209,7 +188,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
               className="w-full rounded-lg bg-white border flex items-center justify-center space-x-2 flex-2 py-3 cursor-pointer"
               data-aos="zoom-in"
               data-aos-delay="400"
-              onClick={() => addProductToWishlist(productData.id)}
+              onClick={() => UpdateProductToCart(productData.id, 'POST')}
             >
               <svg
                 width="16"
@@ -234,7 +213,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             data-aos-delay="400"
           >
             <button
-              onClick={() => addProductToCart(productData.id)}
+              onClick={() => UpdateProductToCart(productData.id, 'POST')}
               className="w-full bg-black text-white rounded-lg py-4 cursor-pointer font-semibold"
               data-aos="zoom-in"
               data-aos-delay="500"

@@ -43,7 +43,7 @@ export const POST = async (
   }
 };
 
-export const PATCH = async (
+export const DELETE = async (
   req: Request,
   context: { params: { productId: string } },
 ) => {
@@ -57,16 +57,6 @@ export const PATCH = async (
       );
     }
 
-    const body = await req.json();
-    const { quantity } = body;
-
-    if (typeof quantity !== 'number' || quantity <= 0) {
-      return NextResponse.json(
-        { error: 'Valid quantity is required' },
-        { status: 400 },
-      );
-    }
-
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;
 
@@ -76,9 +66,8 @@ export const PATCH = async (
     };
 
     const res = await fetch(`http://localhost:3001/cart/${productId}`, {
-      method: 'PATCH',
+      method: 'DELETE',
       headers,
-      body: JSON.stringify({ quantity }),
     });
 
     if (!res.ok) {
