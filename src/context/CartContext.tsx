@@ -6,6 +6,8 @@ import {
   ReactNode,
   useEffect,
 } from 'react';
+import { Product } from '../../public/Product';
+import { getFirstTwoWords } from '../utils/helpers';
 
 export interface CartItem {
   productId: string;
@@ -46,7 +48,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           throw new Error(errorBody.message || 'Failed to update profile');
         }
         const data = await res.json();
-        setCart(data);
+        setCart(
+          data.map((product) => ({
+            ...product,
+            productName: getFirstTwoWords(product.productName),
+          })),
+        );
         console.log('data : ', data);
       } catch (err: any) {
         console.error(err);
@@ -59,7 +66,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await fetch(`/api/cart/${productId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
       });
       if (!res.ok) throw new Error('Failed to add to cart');
       const item: CartItem = await res.json();
@@ -98,7 +104,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await fetch(`/api/cart/${productId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
       });
       if (!res.ok) throw new Error('Failed to update cart');
 
