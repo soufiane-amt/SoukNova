@@ -3,6 +3,7 @@ import { inter } from '@/layout';
 import Image from 'next/image';
 import { useState } from 'react';
 import { getFirstTwoWords } from '../../../utils/helpers';
+import { useCart } from '../../../context/CartContext';
 
 interface CheckoutCartItemProps {
   productId: string;
@@ -18,33 +19,10 @@ export function CheckoutCartItem({
   price,
   quantity,
 }: CheckoutCartItemProps) {
+  const { addToCart, removeFromCart, decreaseFromCart, setCart } = useCart();
+
   const processedName = getFirstTwoWords(productName);
-  const UpdateProductToCart = async (
-    productId: string,
-    method: 'POST' | 'DELETE',
-  ) => {
-    if (method === 'DELETE' && quantity === 0) return;
-    try {
-      const res = await fetch(`/api/cart/${productId}`, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to add product to cart');
-      }
-
-      const data = await res.json();
-      setQuantity(data.quantity);
-
-      return data;
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+  if (!quantity) return <></>;
   return (
     <div className="w-full flex py-3 border-b border-gray-200">
       <div className="bg-[#f4f4f4] mr-4 h-[80px] min-w-[80px]">
@@ -74,7 +52,7 @@ export function CheckoutCartItem({
               <button
                 aria-label="Decrease quantity"
                 className="cursor-pointer"
-                onClick={() => UpdateProductToCart(productId, 'DELETE')}
+                onClick={() => decreaseFromCart(productId)}
               >
                 -
               </button>
@@ -82,7 +60,7 @@ export function CheckoutCartItem({
               <button
                 aria-label="Increase quantity"
                 className="cursor-pointer"
-                onClick={() => UpdateProductToCart(productId, 'POST')}
+                onClick={() => addToCart(productId)}
               >
                 +
               </button>
