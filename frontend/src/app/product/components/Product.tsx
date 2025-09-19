@@ -14,37 +14,40 @@ import ThumbnailList from './ThumbnailList';
 import RatingStars from '../../../components/inputs/RatingStars';
 import ReviewsSort from './ReviewsSort';
 import { Review } from '../../../components/cards/Review';
+import { useCart } from '../../../context/CartContext';
 
 interface ProductProps {
   productData: any;
 }
 
 const Product: React.FC<ProductProps> = ({ productData }) => {
+  const { cart, addToCart, removeFromCart, decreaseFromCart, setCart } =
+    useCart();
   const [quantity, setQuantity] = useState(0);
   const [activeImage, setActiveImage] = useState(
     productData?.images?.[0]?.trim() || '',
   );
 
-  useEffect(() => {
-    const fetchPoductCartQuantity = async () => {
-      console.log('useEffect triggered with:', productData?.id);
+  // useEffect(() => {
+  //   const fetchPoductCartQuantity = async () => {
+  //     console.log('useEffect triggered with:', productData?.id);
 
-      if (!productData?.id) return;
+  //     if (!productData?.id) return;
 
-      const res = await fetch(`/api/cart/${productData.id}`, {
-        method: 'GET',
-      });
-      console.log('res : ', res);
-      if (!res.ok) {
-        throw new Error('Failed to fetch product data.');
-      }
-      const data = await res.json();
+  //     const res = await fetch(`/api/cart/${productData.id}`, {
+  //       method: 'GET',
+  //     });
+  //     console.log('res : ', res);
+  //     if (!res.ok) {
+  //       throw new Error('Failed to fetch product data.');
+  //     }
+  //     const data = await res.json();
 
-      setQuantity(data.quantity);
-    };
+  //     setQuantity(data.quantity);
+  //   };
 
-    fetchPoductCartQuantity();
-  }, [productData.id]);
+  //   fetchPoductCartQuantity();
+  // }, [productData.id]);
 
   useEffect(() => {
     setActiveImage(productData?.images?.[0]?.trim() || '');
@@ -54,31 +57,31 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
     setActiveImage(image.trim());
   };
 
-  const UpdateProductToCart = async (
-    productId: string,
-    method: 'POST' | 'DELETE',
-  ) => {
-    if (method === 'DELETE' && quantity === 0) return;
-    try {
-      const res = await fetch(`/api/cart/${productId}`, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  // const UpdateProductToCart = async (
+  //   productId: string,
+  //   method: 'POST' | 'DELETE',
+  // ) => {
+  //   if (method === 'DELETE' && quantity === 0) return;
+  //   try {
+  //     const res = await fetch(`/api/cart/${productId}`, {
+  //       method: method,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
 
-      if (!res.ok) {
-        throw new Error('Failed to add product to cart');
-      }
+  //     if (!res.ok) {
+  //       throw new Error('Failed to add product to cart');
+  //     }
 
-      const data = await res.json();
-      setQuantity(data.quantity);
+  //     const data = await res.json();
+  //     setQuantity(data.quantity);
 
-      return data;
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  //     return data;
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   return (
     <div>
@@ -172,14 +175,17 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             <div className="bg-[#F5F5F5] flex-1 flex justify-around items-center font-bold rounded-lg">
               <button
                 className="cursor-pointer"
-                onClick={() => UpdateProductToCart(productData.id, 'DELETE')}
+                onClick={() => decreaseFromCart(productData.id)}
               >
                 -
               </button>
-              <span>{quantity}</span>
+              <span>
+                {cart.find((item) => item.productId === productData.id)
+                  ?.quantity || 0}
+              </span>
               <button
                 className="cursor-pointer"
-                onClick={() => UpdateProductToCart(productData.id, 'POST')}
+                onClick={() => addToCart(productData.id)}
               >
                 +
               </button>

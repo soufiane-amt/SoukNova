@@ -43,7 +43,7 @@ export const POST = async (
   }
 };
 
-export const DELETE = async (
+export const PATCH = async (
   req: Request,
   context: { params: { productId: string } },
 ) => {
@@ -66,7 +66,7 @@ export const DELETE = async (
     };
 
     const res = await fetch(`http://localhost:3001/cart/${productId}`, {
-      method: 'DELETE',
+      method: 'PATCH',
       headers,
     });
 
