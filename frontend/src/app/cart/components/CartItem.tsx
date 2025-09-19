@@ -2,21 +2,22 @@
 import { inter } from '@/layout';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useCart } from '../../../context/CartContext';
 
 interface CartItemProps {
+  productId: string;
   productImage: string;
   productName: string;
   price: number;
 }
-export function CartItem({ productImage, productName, price }: CartItemProps) {
-  const [quantity, setQuantity] = useState(1);
-
-  const increaseQuantity = () => {
-    setQuantity((prev) => prev + 1);
-  };
-  const decreaseQuantity = () => {
-    if (quantity > 1) setQuantity((prev) => prev - 1);
-  };
+export function CartItem({
+  productId,
+  productImage,
+  productName,
+  price,
+}: CartItemProps) {
+  const { cart, addToCart, removeFromCart, decreaseFromCart, setCart } =
+    useCart();
 
   return (
     <div className="w-full flex py-3 border-b border-gray-200">
@@ -50,22 +51,41 @@ export function CartItem({ productImage, productName, price }: CartItemProps) {
               </button>
             </div>
             <div className="flex justify-around items-center font-bold rounded border h-7 w-20 border border-gray-500 md:hidden">
-              <button className="cursor-pointer" onClick={decreaseQuantity}>
+              <button
+                className="cursor-pointer"
+                onClick={() => decreaseFromCart(productId)}
+              >
                 -
               </button>
-              <span className="text-xs">{quantity}</span>
-              <button className="cursor-pointer" onClick={increaseQuantity}>
+              <span className="text-xs">
+                {cart.find((item) => item.productId === productId)?.quantity ||
+                  0}
+              </span>
+              <button
+                className="cursor-pointer"
+                onClick={() => addToCart(productId)}
+              >
                 +
               </button>
             </div>
           </div>
         </div>
         <div className="hidden md:flex flex justify-around items-center font-bold rounded border h-8 w-20 border border-gray-500">
-          <button aria-label="Decrease quantity" className="cursor-pointer" onClick={decreaseQuantity}>
+          <button
+            aria-label="Decrease quantity"
+            className="cursor-pointer"
+            onClick={() => decreaseFromCart(productId)}
+          >
             -
           </button>
-          <span className="text-xs">{quantity}</span>
-          <button aria-label="Increase quantity"  className="cursor-pointer" onClick={increaseQuantity}>
+          <span className="text-xs">
+            {cart.find((item) => item.productId === productId)?.quantity || 0}
+          </span>
+          <button
+            aria-label="Increase quantity"
+            className="cursor-pointer"
+            onClick={() => addToCart(productId)}
+          >
             +
           </button>
         </div>
@@ -77,7 +97,7 @@ export function CartItem({ productImage, productName, price }: CartItemProps) {
           </button>
           <div></div>
         </div>
-        <div className='hidden md:block'>
+        <div className="hidden md:block">
           <p className=" font-semibold text-[15px] md:text-[18px]">${price}</p>
         </div>
       </div>
