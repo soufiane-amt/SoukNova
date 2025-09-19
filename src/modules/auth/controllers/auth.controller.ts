@@ -17,7 +17,7 @@ export class AuthController {
       const token = await this.authService.signUp(user);
       res.cookie('jwt', token.access_token, {
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24,
+        maxAge: 1000 * 60 * 60 * 240,
         sameSite: 'lax',
       });
       return { message: 'Signup is successful' };
