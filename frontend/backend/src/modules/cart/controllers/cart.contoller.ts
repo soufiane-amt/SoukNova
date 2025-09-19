@@ -22,7 +22,7 @@ export class CartController {
     return this.cartService.addToCart(userId, productId);
   }
 
-  @Delete(':productId')
+  @Patch(':productId')
   decreaseFromCart(
     @User('id') userId: number,
     @Param('productId') productId: string,
@@ -30,14 +30,14 @@ export class CartController {
     return this.cartService.decreaseFromCart(userId, productId);
   }
 
-  @Patch(':productId')
-  updateQuantity(
-    @User('id') userId: number,
-    @Param('productId') productId: string,
-    @Body('quantity') quantity: number,
-  ) {
-    return this.cartService.updateQuantity(userId, productId, quantity);
-  }
+  // @Patch(':productId')
+  // updateQuantity(
+  //   @User('id') userId: number,
+  //   @Param('productId') productId: string,
+  //   @Body('quantity') quantity: number,
+  // ) {
+  //   return this.cartService.updateQuantity(userId, productId, quantity);
+  // }
 
   @Get()
   getCart(@User('id') userId: number) {

@@ -11,12 +11,39 @@ export class CartService {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async addToCart(userId: number, productId: string) {
-    return this.prisma.cartItem.upsert({
+  async addToCart(
+    userId: number,
+    productId: string,
+  ): Promise<CartItemFullProps | undefined> {
+    const cartItem = await this.prisma.cartItem.upsert({
       where: { userId_productId: { userId, productId } },
       update: { quantity: { increment: 1 } },
       create: { userId, productId, quantity: 1 },
     });
+
+    // Fetch product details
+    const res = await fetch(
+      `https://oowcjcmdcfitnnsqfohw.supabase.co/rest/v1/products?id=eq.${productId}`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+        },
+      },
+    );
+
+    const [productData] = await res.json();
+    if (!productData) return undefined;
+
+    const fullCartItem: CartItemFullProps = {
+      productId: productData.id,
+      productName: productData.title,
+      image: productData.primary_image,
+      price: productData.Price,
+      quantity: cartItem.quantity,
+    };
+
+    return fullCartItem;
   }
 
   async decreaseFromCart(userId: number, productId: string) {
@@ -37,9 +64,10 @@ export class CartService {
         },
       });
     } else {
-      return this.prisma.cartItem.delete({
+      await this.prisma.cartItem.delete({
         where: { userId_productId: { userId, productId } },
       });
+      return { quantity: 0 };
     }
   }
 
@@ -61,19 +89,23 @@ export class CartService {
   }
 
   async getCart(userId: number): Promise<CartItemProps[]> {
-    const productsIds = await this.prisma.cartItem.findMany({
+    const products = await this.prisma.cartItem.findMany({
       where: { userId },
       select: { productId: true, quantity: true },
     });
 
-    const cartList: CartItemProps[] = [];
+    const cartList: CartItemFullProps[] = [];
 
-    for (const item of productsIds) {
+    for (const item of products) {
       if (this.cache.has(item.productId)) {
         console.log('Serving from cache');
         const cached = this.cache.get(item.productId);
         if (cached) {
-          cartList.push(cached);
+          cartList.push({
+            ...cached,
+            quantity: item.quantity,
+            productId: item.productId,
+          });
           continue;
         }
         continue;
@@ -91,7 +123,7 @@ export class CartService {
       const [data] = await res.json();
 
       const product: CartItemFullProps = {
-        productId: data.id,
+        productId: item.productId,
         productName: data.title,
         image: data.primary_image,
         price: data.Price,
@@ -106,6 +138,7 @@ export class CartService {
     console.log('cartList : ', cartList);
     return cartList;
   }
+
   async getCartItemQuantity(userId: number, productId: string) {
     const quantity = await this.prisma.cartItem.findUnique({
       where: {
