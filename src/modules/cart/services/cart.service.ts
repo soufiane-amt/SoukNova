@@ -41,6 +41,7 @@ export class CartService {
       image: productData.primary_image,
       price: productData.Price,
       quantity: cartItem.quantity,
+      discount: parseInt(productData.discount),
     };
 
     return fullCartItem;
@@ -98,7 +99,6 @@ export class CartService {
 
     for (const item of products) {
       if (this.cache.has(item.productId)) {
-        console.log('Serving from cache');
         const cached = this.cache.get(item.productId);
         if (cached) {
           cartList.push({
@@ -119,7 +119,6 @@ export class CartService {
           },
         },
       );
-      console.log('===> res : ', res);
       const [data] = await res.json();
 
       const product: CartItemFullProps = {
@@ -128,6 +127,7 @@ export class CartService {
         image: data.primary_image,
         price: data.Price,
         quantity: item.quantity,
+        discount: parseInt(data.discount),
       };
 
       this.cache.set(item.productId, product);
@@ -135,7 +135,6 @@ export class CartService {
       cartList.push(product);
     }
 
-    console.log('cartList : ', cartList);
     return cartList;
   }
 
@@ -146,7 +145,14 @@ export class CartService {
       },
       select: { quantity: true },
     });
-    console.log('quantity : ', quantity);
     return quantity || { quantity: 0 };
+  }
+
+  async deleteCarts(userId: number) {
+    return this.prisma.cartItem.deleteMany({
+      where: {
+        userId: userId,
+      },
+    });
   }
 }

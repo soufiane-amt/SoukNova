@@ -30,14 +30,19 @@ export class CartController {
     return this.cartService.decreaseFromCart(userId, productId);
   }
 
-  // @Patch(':productId')
-  // updateQuantity(
-  //   @User('id') userId: number,
-  //   @Param('productId') productId: string,
-  //   @Body('quantity') quantity: number,
-  // ) {
-  //   return this.cartService.updateQuantity(userId, productId, quantity);
-  // }
+  @Delete('/reset')
+  async deleteCarts(@User('id') userId: number) {
+    console.log('userId : ', userId);
+    return this.cartService.deleteCarts(userId);
+  }
+
+  @Delete(':productId')
+  updateQuantity(
+    @User('id') userId: number,
+    @Param('productId') productId: string,
+  ) {
+    return this.cartService.removeFromCart(userId, productId);
+  }
 
   @Get()
   getCart(@User('id') userId: number) {
@@ -49,10 +54,7 @@ export class CartController {
     @User('id') userId: number,
     @Param('productId') productId: string,
   ) {
-    console.log('-------------Dazz------');
     const data = await this.cartService.getCartItemQuantity(userId, productId);
-    console.log('Data : ', data);
-
     return data;
   }
 }
