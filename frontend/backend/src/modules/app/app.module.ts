@@ -4,6 +4,7 @@ import { AuthModule } from '../auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { WishlistModule } from '../whishlist/wishlist.module';
 import { CartModule } from '../cart/cart.module';
+import { OrderModule } from '../order/order.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CartModule } from '../cart/cart.module';
     AuthModule,
     WishlistModule,
     CartModule,
+    OrderModule,
   ],
   controllers: [],
   providers: [],

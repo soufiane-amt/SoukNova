@@ -27,17 +27,14 @@ export class WishlistService {
   }
 
   async getWishlist(userId: number) {
-    console.log('====> 1');
     const productsIds = await this.prisma.wishlist.findMany({
       where: { userId },
       select: { productId: true },
     });
-    console.log('====> 2');
 
     const wishlists: WishItemType[] = [];
     for (const item of productsIds) {
       if (this.cache.has(item.productId)) {
-        console.log('Serving from cache');
         const cached = this.cache.get(item.productId);
         if (cached) {
           wishlists.push(cached);
@@ -54,7 +51,6 @@ export class WishlistService {
           },
         },
       );
-      console.log('===> res : ', res);
       const [data] = await res.json();
 
       const product: WishItemType = {
@@ -69,7 +65,6 @@ export class WishlistService {
       wishlists.push(product);
     }
 
-    console.log('wishlists : ', wishlists);
     return wishlists;
   }
 }

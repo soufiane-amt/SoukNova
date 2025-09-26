@@ -144,6 +144,13 @@ exports.Prisma.CartItemScalarFieldEnum = {
   addedAt: 'addedAt'
 };
 
+exports.Prisma.OrderScalarFieldEnum = {
+  id: 'id',
+  price: 'price',
+  userId: 'userId',
+  addedAt: 'addedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -163,7 +170,8 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   User: 'User',
   Wishlist: 'Wishlist',
-  CartItem: 'CartItem'
+  CartItem: 'CartItem',
+  Order: 'Order'
 };
 
 /**

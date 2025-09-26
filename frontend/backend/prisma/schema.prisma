@@ -25,6 +25,7 @@ model User {
   createdAt DateTime @default(now())
   wishlist      Wishlist[]
   cartItems          CartItem[]
+  orders    Order[]
 }
 
 model Wishlist {
@@ -48,3 +49,11 @@ model CartItem {
   @@unique([userId, productId]) 
 }
 
+model Order {
+  id   Int   @id @default(autoincrement())
+  price    Float
+  userId  Int
+  user      User   @relation(fields: [userId], references: [id])
+
+  addedAt   DateTime @default(now())
+}
