@@ -19,7 +19,7 @@ export function CheckoutCartItem({
   price,
   quantity,
 }: CheckoutCartItemProps) {
-  const { addToCart, removeFromCart, decreaseFromCart, setCart } = useCart();
+  const { addToCart, decreaseFromCart } = useCart();
 
   const processedName = getFirstTwoWords(productName);
   if (!quantity) return <></>;
@@ -69,9 +69,7 @@ export function CheckoutCartItem({
         </div>
 
         <div className="flex flex-col justify-start font-medium">
-          <p className="text-[12px] md:text-[14px]">
-            ${(quantity * price).toFixed(2)}
-          </p>
+          <p className="text-[12px] md:text-[14px]">{price}$</p>
         </div>
       </div>
     </div>

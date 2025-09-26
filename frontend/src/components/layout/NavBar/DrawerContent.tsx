@@ -5,11 +5,14 @@ import {
   List,
   ListItemText,
   ListItemButton,
+  ListItem,
 } from '@mui/material';
 import FavoriteBorderSharpIcon from '@mui/icons-material/FavoriteBorderSharp';
 import { SearchIcon, ShoppingBag, X } from 'lucide-react';
 import { SocialIcons } from '../../icons/SocialIcons';
 import { NAV_ITEMS } from '../../../constants/navItems';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface DrawerItemProps {
   label: string;
@@ -42,10 +45,9 @@ interface DrawerContentProps {
   isOpen: boolean;
 }
 
-export function DrawerContent({
-  toggleDrawer,
-  isOpen,
-}: DrawerContentProps) {
+export function DrawerContent({ toggleDrawer, isOpen }: DrawerContentProps) {
+  const pathname = usePathname();
+
   return (
     <Drawer anchor="left" open={isOpen} onClose={toggleDrawer(false)}>
       <div className="mx-3 my-2 flex flex-col h-full">
@@ -77,30 +79,33 @@ export function DrawerContent({
           style={{ width: 320 }}
           className="flex-grow flex flex-col justify-between"
         >
-          <List disablePadding>
-            {NAV_ITEMS.map((text, index) => (
-              <ListItemButton
-                className="border-b border-gray-200 transition-all duration-300 hover:bg-gray-100"
-                sx={{ px: 0 }}
-                key={text}
-                style={{ transitionDelay: `${index * 50}ms` }}
-              >
-                <ListItemText
-                  primaryTypographyProps={{
-                    fontSize: '0.9rem',
-                    fontWeight: 600,
-                  }}
-                  primary={text}
-                />
-              </ListItemButton>
-            ))}
+          <List>
+            {NAV_ITEMS.map((item) => {
+              const path = `/${item.toLowerCase()}`;
+              return (
+                <Link href={path} key={item}>
+                  <ListItem className="group relative cursor-pointer overflow-hidden">
+                    <ListItemText
+                      primary={item}
+                      primaryTypographyProps={{
+                        sx: {
+                          color:
+                            pathname === path
+                              ? 'black'
+                              : 'var(--color-primary)',
+                          fontSize: '16px',
+                          fontFamily: 'Poppins, sans-serif',
+                          fontWeight: 500,
+                        },
+                      }}
+                    />
+                  </ListItem>
+                </Link>
+              );
+            })}
           </List>
           <div className="mt-auto pb-4">
             <List disablePadding>
-              <DrawerItem
-                label="Cart"
-                icon={<ShoppingBag className="w-6 h-6 text-gray-800" />}
-              />
               <DrawerItem
                 label="Wishlist"
                 icon={

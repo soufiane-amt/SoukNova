@@ -5,13 +5,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import api from '../../../utils/axios';
+import { useRouter } from 'next/navigation';
 
 const inputClass =
   'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
 
 export default function SignInForm() {
   const [serverMessage, setServerMessage] = useState('');
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -24,6 +25,7 @@ export default function SignInForm() {
     try {
       await api.post('/auth/signin', data);
       setServerMessage('');
+      router.push("/home")
     } catch (error: any) {
       const msg = error.response?.data?.message || 'Signin failed';
       setServerMessage(msg);

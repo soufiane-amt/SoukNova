@@ -6,7 +6,7 @@ export const GET = async (req: Request) => {
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;
 
-    const res = await fetch('http://localhost:3001/cart', {
+    const res = await fetch('http://localhost:3001/order', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -15,7 +15,7 @@ export const GET = async (req: Request) => {
 
     if (!res.ok) {
       return NextResponse.json(
-        { error: 'Failed to fetch cart' },
+        { error: 'Failed to fetch order' },
         { status: res.status },
       );
     }
@@ -28,21 +28,27 @@ export const GET = async (req: Request) => {
   }
 };
 
-export const DELETE = async (req: Request) => {
-  try {
-    const cookies = cookie.parse(req.headers.get('cookie') || '');
-    const token = cookies.jwt;
+export async function POST(req: Request) {
+  const cookies = cookie.parse(req.headers.get('cookie') || '');
+  const token = cookies.jwt;
 
-    const res = await fetch('http://localhost:3001/cart/reset', {
-      method: 'DELETE',
+  console.log('➡️ Token from cookie:', token);
+
+  try {
+    const body = await req.json();
+
+    const res = await fetch('http://localhost:3001/order', {
+      method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(body),
     });
 
     if (!res.ok) {
       return NextResponse.json(
-        { error: 'Failed to delete carts' },
+        { error: 'Failed to place order' },
         { status: res.status },
       );
     }
@@ -53,4 +59,4 @@ export const DELETE = async (req: Request) => {
     console.error('❌ Proxy error:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
-};
+}

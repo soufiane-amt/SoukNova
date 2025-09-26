@@ -2,9 +2,11 @@ import { Typography } from '@mui/material';
 import Image from 'next/image';
 import RatingStars from '../../inputs/RatingStars';
 import { poppins } from '@/layout';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import { useRouter } from 'next/navigation';
+import { useCart } from '../../../context/CartContext';
 
-
-function getFirstTwoWords(title :string) {
+function getFirstTwoWords(title: string) {
   const words = title.split(' ');
   if (words.length >= 2) {
     return `${words[0]} ${words[1]}`;
@@ -21,8 +23,22 @@ function isProductNew(productDateString: string) {
   return differenceInDays <= daysThreshold;
 }
 
+const LikeButton = () => {
+  return (
+    <button
+      className="rounded-full bg-white p-1 shadow-lg cursor-pointer"
+      onClick={(e) => {
+        e.stopPropagation(); // Prevent click from bubbling up
+        console.log('Like clicked');
+      }}
+    >
+      <FavoriteBorderOutlinedIcon />
+    </button>
+  );
+};
 
 interface ProductCardProps {
+  productId: string;
   productName: string;
   currentPrice: number;
   originalPrice?: number;
@@ -33,19 +49,28 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
+  productId,
   productName,
   currentPrice,
   originalPrice,
   discountPercentage,
   rating,
   image,
-  date
+  date,
 }) => {
-  productName = getFirstTwoWords(productName)
-  const isNew = isProductNew(date)
+  const { addToCart } = useCart();
+  productName = getFirstTwoWords(productName);
+  const isNew = isProductNew(date);
+  const route = useRouter();
+  const handleClickProduct = () => {
+    route.push(`/product/${productId}`);
+  };
   return (
-    <div className="w-[300px] flex-shrink-0 cursor-pointer mb-5" >
-      <div className="relative  bg-[#f4f4f4] w-full h-[349px] flex items-center justify-center">
+    <div
+      className="w-[300px] flex-shrink-0 cursor-pointer mb-5"
+      onClick={handleClickProduct}
+    >
+      <div className="relative group bg-[#f4f4f4] w-full h-[349px] flex items-center justify-center">
         <Image
           src={image}
           alt={`${productName}`}
@@ -66,6 +91,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </Typography>
           )}
         </div>
+        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100">
+          <LikeButton />
+        </div>
+        <div className="absolute bottom-4 w-[90%] opacity-0 cursor-pointer group-hover:opacity-100">
+          <button
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent click from bubbling up
+              addToCart(productId);
+            }}
+            className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold"
+            data-aos="zoom-in"
+            data-aos-delay="500"
+          >
+            Add To Cart
+          </button>
+        </div>
       </div>
       <div className="mt-3">
         <RatingStars isStatic={true} defaultValue={rating} />
@@ -80,7 +121,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <Typography className="text-color-primary line-through !text-sm">
               ${Number(originalPrice).toFixed(2)}
             </Typography>
-          ) }
+          )}
         </div>
       </div>
     </div>

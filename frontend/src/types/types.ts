@@ -6,3 +6,5 @@ export interface Article {
 }
 
 export type priceType = [number, number];
+
+export type ShippingOption = 'free' | 'express' | 'pickup';

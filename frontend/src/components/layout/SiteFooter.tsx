@@ -117,7 +117,7 @@ export function SiteFooter() {
             variant="body2"
             sx={{ fontSize: '12px', color: '#E8ECEF', textAlign: 'center' }}
           >
-            Copyright © {new Date().getFullYear()} Your Name. All rights
+            Copyright © {new Date().getFullYear()} Soufiane. All rights
             reserved.
           </Typography>
         </div>
