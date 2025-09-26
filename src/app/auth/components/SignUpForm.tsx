@@ -10,6 +10,8 @@ const inputClass =
   'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
 
 export default function SignUpForm() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -23,6 +25,7 @@ export default function SignUpForm() {
     try {
       await api.post('/auth/signup', data);
       setServerMessage('');
+      router.push('/home');
     } catch (error: any) {
       const msg = error.response?.data?.message || 'Signup failed';
       setServerMessage(msg);

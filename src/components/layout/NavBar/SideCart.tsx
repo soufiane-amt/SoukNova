@@ -3,15 +3,20 @@ import EmptySectionMessage from '../../feedback/EmptySection';
 import { poppins } from '@/layout';
 import CheckoutCartItem from '@/checkout/components/CheckoutCartItem';
 import { useCart } from '../../../context/CartContext';
+import { useRouter } from 'next/navigation';
 
 interface SideCartProps {
   isOpen: boolean;
-  subtotal?: number;
-  total?: number;
 }
-function SideCart({ isOpen, subtotal, total }: SideCartProps) {
-  const { cart } = useCart();
-
+function SideCart({ isOpen }: SideCartProps) {
+  const { cart, subtotal, total } = useCart();
+  const route = useRouter();
+  const navigateCart = () => {
+    if (cart.length > 0) route.push('/cart');
+  };
+  const navigateCheckout = () => {
+    if (cart.length > 0) route.push('/checkout?shipping=free');
+  };
   return (
     <AnimatePresence>
       {isOpen && (
@@ -50,17 +55,23 @@ function SideCart({ isOpen, subtotal, total }: SideCartProps) {
             <div className="">
               <div className="text-md flex justify-between py-4 border-b border-gray-200">
                 <label>Subtotal</label>
-                <p className="font-medium">{subtotal}</p>
+                <p className="font-medium">{subtotal.toFixed(2)}</p>
               </div>
               <div className="text-xl flex justify-between py-4 font-medium">
                 <label>Total</label>
-                <p className="font-semibold">{total}</p>
+                <p className="font-semibold">{total.toFixed(2)}</p>
               </div>
               <div className="flex flex-col items-center my-5">
-                <button className="w-full bg-black text-white rounded-lg py-3 cursor-pointer font-medium">
+                <button
+                  className="w-full bg-black text-white rounded-lg py-3 cursor-pointer font-medium"
+                  onClick={navigateCheckout}
+                >
                   Checkout
                 </button>
-                <button className="cursor-pointer text-sm font-semibold border-b w-20 mt-4">
+                <button
+                  className="cursor-pointer text-sm font-semibold border-b w-20 mt-4"
+                  onClick={navigateCart}
+                >
                   View Cart
                 </button>
               </div>

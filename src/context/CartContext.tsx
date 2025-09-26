@@ -6,23 +6,43 @@ import {
   ReactNode,
   useEffect,
 } from 'react';
-import { Product } from '../../public/Product';
-import { getFirstTwoWords } from '../utils/helpers';
+import { fetchWithAuth, getFirstTwoWords } from '../utils/helpers';
+import { ShippingOption } from '../types/types';
 
-export interface CartItem {
+const calculateSubtotalCart = (cart: CartItemType[]) => {
+  return cart.reduce((accumulator, currentItem) => {
+    return accumulator + currentItem.price * currentItem.quantity;
+  }, 0);
+};
+
+const calculateTotalCart = (cart: CartItemType[]) => {
+  return cart.reduce((accumulator, currentItem) => {
+    const { price, quantity, discount } = currentItem;
+    let total = price * quantity;
+    if (discount) total = total - total * (discount / 100);
+    return accumulator + total;
+  }, 0);
+};
+
+export interface CartItemType {
   productId: string;
   productName: string;
   image: string;
   price: number;
   quantity: number;
+  discount: number;
 }
 
 interface CartContextType {
-  cart: CartItem[];
+  cart: CartItemType[];
+  subtotal: number;
+  total: number;
   addToCart: (productId: string, quantity?: number) => Promise<void>;
   removeFromCart: (productId: string) => Promise<void>;
   decreaseFromCart: (productId: string) => Promise<void>;
-  setCart: (items: CartItem[]) => void;
+  setSubtotal: (items: number) => void;
+  setTotal: (items: number) => void;
+  resetCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -34,20 +54,27 @@ export const useCart = () => {
 };
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItemType[]>([]);
+  const [subtotal, setSubtotal] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
 
-  // Load cart from backend when app starts
+  const resetCart = () => {
+    setCart([]);
+    setSubtotal(0);
+    setTotal(0);
+  };
+
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const res = await fetch('/api/cart', {
           method: 'GET',
         });
-        if (!res.ok) {
-          const errorBody = await res.json().catch(() => ({}));
+        if (!res?.ok) {
+          const errorBody = await res?.json().catch(() => ({}));
           throw new Error(errorBody.message || 'Failed to update profile');
         }
-        const data = await res.json();
+        const data = await res?.json();
         setCart(
           data.map((product) => ({
             ...product,
@@ -62,13 +89,21 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     fetchCart();
   }, []);
 
+  useEffect(() => {
+    const subtotal = calculateSubtotalCart(cart);
+    const total = calculateTotalCart(cart);
+
+    setSubtotal(subtotal);
+    setTotal(total);
+  }, [cart]);
+
   const addToCart = async (productId: string, quantity: number = 1) => {
     try {
-      const res = await fetch(`/api/cart/${productId}`, {
+      const res = await fetchWithAuth(`/api/cart/${productId}`, {
         method: 'POST',
       });
-      if (!res.ok) throw new Error('Failed to add to cart');
-      const item: CartItem = await res.json();
+      if (!res?.ok) throw new Error('Failed to add to cart');
+      const item: CartItemType = await res?.json();
 
       setCart((prev) => {
         const existing = prev.find((i) => i.productId === productId);
@@ -89,7 +124,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const removeFromCart = async (productId: string) => {
     try {
       const res = await fetch(`/api/cart/${productId}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Failed to remove from cart');
+      if (!res?.ok) throw new Error('Failed to remove from cart');
 
       setCart((prev) => prev.filter((i) => i.productId !== productId));
     } catch (err) {
@@ -102,10 +137,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       cart.find((item) => item.productId === productId)?.quantity || 0;
     if (quantity < 1) return;
     try {
-      const res = await fetch(`/api/cart/${productId}`, {
+      const res = await fetchWithAuth(`/api/cart/${productId}`, {
         method: 'PATCH',
       });
-      if (!res.ok) throw new Error('Failed to update cart');
+      if (!res?.ok) throw new Error('Failed to update cart');
 
       if (quantity > 1)
         setCart((prev) =>
@@ -121,7 +156,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, decreaseFromCart, setCart }}
+      value={{
+        cart,
+        subtotal,
+        total,
+        addToCart,
+        removeFromCart,
+        decreaseFromCart,
+        setSubtotal,
+        setTotal,
+        resetCart,
+      }}
     >
       {children}
     </CartContext.Provider>

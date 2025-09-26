@@ -1,12 +1,14 @@
 'use client';
 import { useEffect } from 'react';
-import CartItem from './CartItem';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { useCart } from '../../../context/CartContext';
+import { CartItemType } from '../../../context/CartContext';
+import CartItem from './CartItem';
 
-function CartItemsTable() {
-  const { cart } = useCart();
+interface CartItemsTableProps {
+  cart: CartItemType[];
+}
+function CartItemsTable({ cart }: CartItemsTableProps) {
   useEffect(() => {
     AOS.init({
       duration: 800,

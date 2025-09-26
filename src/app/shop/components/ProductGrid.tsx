@@ -1,5 +1,4 @@
 import { Grid } from '@mui/material';
-import Link from 'next/link';
 import { useState } from 'react';
 import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
 import { ProductCard } from '../../../components/cards/ProductCard/ProductCard';
@@ -29,17 +28,16 @@ function ProductGrid({ products, selectedShape }: ProductGridProps) {
       >
         {products.slice(0, showCount).map((item, index) => (
           <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
-            <Link href={`/product/${item.id}`}>
-              <ProductCard
-                productName={item.title}
-                currentPrice={item.Price}
-                originalPrice={item.originalPrice}
-                discountPercentage={item.discount}
-                rating={item.Rate}
-                image={item.primary_image}
-                date={item.Date}
-              />
-            </Link>
+            <ProductCard
+              productId={item.id}
+              productName={item.title}
+              currentPrice={item.Price}
+              originalPrice={item.originalPrice}
+              discountPercentage={item.discount}
+              rating={item.Rate}
+              image={item.primary_image}
+              date={item.Date}
+            />
           </div>
         ))}
       </Grid>

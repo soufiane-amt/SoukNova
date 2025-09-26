@@ -21,33 +21,21 @@ interface ProductProps {
 }
 
 const Product: React.FC<ProductProps> = ({ productData }) => {
-  const { cart, addToCart, removeFromCart, decreaseFromCart, setCart } =
-    useCart();
-  const [quantity, setQuantity] = useState(0);
+  const { cart, addToCart, decreaseFromCart } = useCart();
   const [activeImage, setActiveImage] = useState(
     productData?.images?.[0]?.trim() || '',
   );
 
-  // useEffect(() => {
-  //   const fetchPoductCartQuantity = async () => {
-  //     console.log('useEffect triggered with:', productData?.id);
-
-  //     if (!productData?.id) return;
-
-  //     const res = await fetch(`/api/cart/${productData.id}`, {
-  //       method: 'GET',
-  //     });
-  //     console.log('res : ', res);
-  //     if (!res.ok) {
-  //       throw new Error('Failed to fetch product data.');
-  //     }
-  //     const data = await res.json();
-
-  //     setQuantity(data.quantity);
-  //   };
-
-  //   fetchPoductCartQuantity();
-  // }, [productData.id]);
+  const handleAddWishlist = async (productId: string) => {
+    try {
+      const res = await fetch(`/api/wishlist/${productId}`, {
+        method: 'POST',
+      });
+      if (!res.ok) throw new Error('Failed to delete');
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     setActiveImage(productData?.images?.[0]?.trim() || '');
@@ -56,32 +44,6 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
   const handleSelectImage = (image: string) => {
     setActiveImage(image.trim());
   };
-
-  // const UpdateProductToCart = async (
-  //   productId: string,
-  //   method: 'POST' | 'DELETE',
-  // ) => {
-  //   if (method === 'DELETE' && quantity === 0) return;
-  //   try {
-  //     const res = await fetch(`/api/cart/${productId}`, {
-  //       method: method,
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     if (!res.ok) {
-  //       throw new Error('Failed to add product to cart');
-  //     }
-
-  //     const data = await res.json();
-  //     setQuantity(data.quantity);
-
-  //     return data;
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
 
   return (
     <div>
@@ -194,7 +156,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
               className="w-full rounded-lg bg-white border flex items-center justify-center space-x-2 flex-2 py-3 cursor-pointer"
               data-aos="zoom-in"
               data-aos-delay="400"
-              onClick={() => UpdateProductToCart(productData.id, 'POST')}
+              onClick={() =>handleAddWishlist(productData.id)}
             >
               <svg
                 width="16"
@@ -219,7 +181,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             data-aos-delay="400"
           >
             <button
-              onClick={() => UpdateProductToCart(productData.id, 'POST')}
+              onClick={() => addToCart(productData.id)}
               className="w-full bg-black text-white rounded-lg py-4 cursor-pointer font-semibold"
               data-aos="zoom-in"
               data-aos-delay="500"

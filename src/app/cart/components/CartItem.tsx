@@ -1,7 +1,7 @@
 'use client';
 import { inter } from '@/layout';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useCart } from '../../../context/CartContext';
 
 interface CartItemProps {
@@ -18,6 +18,13 @@ export function CartItem({
 }: CartItemProps) {
   const { cart, addToCart, removeFromCart, decreaseFromCart, setCart } =
     useCart();
+  const productQuantityMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    cart.forEach((item) => {
+      map[item.productId] = item.quantity;
+    });
+    return map;
+  }, [cart]);
 
   return (
     <div className="w-full flex py-3 border-b border-gray-200">
@@ -45,7 +52,10 @@ export function CartItem({
               </p>
             </div>
             <div className="hidden md:block">
-              <button className="flex space-x-2 rounded-full hover:bg-gray-200 text-xl text-gray-500 px-4 text-end font-bold">
+              <button
+                className="flex space-x-2 rounded-full cursor-pointer text-xl text-gray-500 px-4 text-end font-bold"
+                onClick={() => removeFromCart(productId)}
+              >
                 <p className="text-sm">&#x2715;</p>
                 <p className="text-sm">Remove</p>
               </button>
@@ -58,8 +68,7 @@ export function CartItem({
                 -
               </button>
               <span className="text-xs">
-                {cart.find((item) => item.productId === productId)?.quantity ||
-                  0}
+                {productQuantityMap[productId] || 0}
               </span>
               <button
                 className="cursor-pointer"
@@ -78,9 +87,7 @@ export function CartItem({
           >
             -
           </button>
-          <span className="text-xs">
-            {cart.find((item) => item.productId === productId)?.quantity || 0}
-          </span>
+          <span className="text-xs">{productQuantityMap[productId] || 0} </span>
           <button
             aria-label="Increase quantity"
             className="cursor-pointer"
@@ -98,7 +105,9 @@ export function CartItem({
           <div></div>
         </div>
         <div className="hidden md:block">
-          <p className=" font-semibold text-[15px] md:text-[18px]">${price}</p>
+          <p className=" font-semibold text-[15px] md:text-[18px]">
+            ${((productQuantityMap[productId] || 0) * price).toFixed(2)}
+          </p>
         </div>
       </div>
     </div>

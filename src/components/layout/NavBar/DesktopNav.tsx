@@ -81,7 +81,7 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
                       sx: {
                         color:
                           pathname === path ? 'black' : 'var(--color-primary)',
-                        fontSize: '14px',
+                        fontSize: '16px',
                         fontFamily: 'Poppins, sans-serif',
                         fontWeight: 500,
                       },
