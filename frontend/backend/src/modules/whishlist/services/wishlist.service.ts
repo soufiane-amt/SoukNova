@@ -12,6 +12,16 @@ export class WishlistService {
   constructor(private readonly prisma: PrismaService) {}
 
   async addToWishlist(userId: number, productId: string) {
+    const existing = await this.prisma.wishlist.findUnique({
+      where: {
+        userId_productId: { userId, productId },
+      },
+    });
+
+    if (existing) {
+      return existing; 
+    }
+
     return this.prisma.wishlist.create({
       data: { userId, productId },
     });
