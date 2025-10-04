@@ -13,18 +13,18 @@ body {
   padding: 0;
 }
 .custom-scrollbar::-webkit-scrollbar {
-  width: 10px; /* Width of the vertical scrollbar */
+  width: 5px; /* Width of the vertical scrollbar */
   height: 10px; /* Height of the horizontal scrollbar */
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #f1f1f1; /* Color of the scrollbar track */
-  border-radius: 5px;
+  border-radius: 0px !important;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #343839; /* Color of the scrollbar thumb */
-  border-radius: 5px; /* Rounded corners for the thumb */
+  border-radius: 0px !important; /* Rounded corners for the thumb */
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {

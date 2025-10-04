@@ -54,7 +54,7 @@ export default function BlogCatalog({ articles }: BlogProps) {
               <ArticleCard
                 id={article.id}
                 title={article.title}
-                image={article.images[0]}
+                image={article.image}
                 date={article.date}
               />
             </div>

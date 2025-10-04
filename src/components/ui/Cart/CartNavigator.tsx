@@ -44,7 +44,6 @@ function CartNavigatorElement({
 
 function CartNavigator() {
   const pathname = usePathname().slice(1);
-  console.log('=========>  : ', pathname);
   return (
     <div className="flex justify-between overflow-x-hidden pb-12 md:mx-50">
       <CartNavigatorElement

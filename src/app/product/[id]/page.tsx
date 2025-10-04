@@ -22,7 +22,7 @@ export default function ProductPage() {
 
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`/api/products/${id}`);
+        const response = await fetch(`/api/product/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch product data.');
         }

@@ -66,6 +66,15 @@ const Dropdown = () => {
                 {item}
               </Link>
             ))}
+            <Link
+              key={item}
+              href={`/${item.toLowerCase()}`}
+              className={`text-gray-700 block px-4 py-2 text-md mb-2 hover:bg-gray-100 ${
+                current === item ? 'font-bold' : 'font-medium'
+              } ${inter.className}`}
+            >
+              {item}
+            </Link>
           </div>
         </div>
       )}

@@ -5,13 +5,9 @@ export async function GET(req: Request) {
   try {
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;
-    console.log('➡️ Token from cookie:', token);
 
     if (!token) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
     const res = await fetch('http://localhost:3001/user/profile', {
@@ -27,11 +23,8 @@ export async function GET(req: Request) {
         { status: res.status },
       );
     }
-    console.log('====> ', res);
 
     const data = await res.json();
-    console.log('====> ', data);
-    // 3️⃣ Return the backend response to the client
     return NextResponse.json(data);
   } catch (err: any) {
     console.error('❌ Error fetching profile:', err);

@@ -54,7 +54,7 @@ function Order({ orderId, cartItems }: OrderProps) {
         setOrderInfo({
           id: data.id,
           totalPrice: data.price,
-          date: getFormatInDate(data.addedAt),
+          date: data.addedAt,
         });
         resetCart();
         deleteCarts();

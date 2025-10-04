@@ -81,7 +81,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             productName: getFirstTwoWords(product.productName),
           })),
         );
-        console.log('data : ', data);
       } catch (err: any) {
         console.error(err);
       }

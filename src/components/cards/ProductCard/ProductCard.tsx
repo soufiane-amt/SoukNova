@@ -1,10 +1,13 @@
 import { Typography } from '@mui/material';
 import Image from 'next/image';
 import RatingStars from '../../inputs/RatingStars';
-import { poppins } from '@/layout';
+import { inter, poppins } from '@/layout';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
+import { useState } from 'react';
+import { fetchWithAuth } from '../../../utils/helpers';
 
 function getFirstTwoWords(title: string) {
   const words = title.split(' ');
@@ -23,19 +26,45 @@ function isProductNew(productDateString: string) {
   return differenceInDays <= daysThreshold;
 }
 
-const LikeButton = () => {
+interface LikeButtonProps {
+  productId: string;
+}
+const LikeButton = ({ productId }: LikeButtonProps) => {
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
+  const handleAddWishlist = async (productId: string) => {
+    try {
+      const res = await fetchWithAuth(`/api/wishlist/${productId}`, {
+        method: 'POST',
+      });
+
+      if (!res.ok) throw new Error('Failed to delete');
+      setIsWishlisted((prev) => !prev);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleAddWishlist(productId);
+  };
+
   return (
     <button
       className="rounded-full bg-white p-1 shadow-lg cursor-pointer"
-      onClick={(e) => {
-        e.stopPropagation(); // Prevent click from bubbling up
-        console.log('Like clicked');
-      }}
+      onClick={handleClick}
     >
-      <FavoriteBorderOutlinedIcon />
+      {isWishlisted ? (
+        <FavoriteIcon className="text-red-500" />
+      ) : (
+        <FavoriteBorderOutlinedIcon />
+      )}
     </button>
   );
 };
+
+export default LikeButton;
 
 interface ProductCardProps {
   productId: string;
@@ -92,7 +121,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </div>
         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100">
-          <LikeButton />
+          <LikeButton productId={productId} />
         </div>
         <div className="absolute bottom-4 w-[90%] opacity-0 cursor-pointer group-hover:opacity-100">
           <button

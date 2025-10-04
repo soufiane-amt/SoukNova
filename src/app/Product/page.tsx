@@ -25,7 +25,6 @@ export default function ProductPage() {
 
       try {
         const data = await fetchFromSupabase<any[]>("products", `select=*&id=eq.${id}`);
-        console.log("data : ", data)
         if (data.length > 0) {
           setProductData(data[0]);
         } else {

@@ -10,8 +10,8 @@ import { ArticleCard } from '@/home/components/ArticleCard';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { SiteFooter } from '../../../components/layout/SiteFooter';
 import { ARTICLES } from '../../../constants/articalList';
-import Loader from '../../../components/ui/loader/Loader';
 import ArticlMetaData from '../components/ArticlMetaData';
+import Loader from '../../../components/feedback/loader/Loader';
 
 function articalPage() {
   const { id } = useParams();

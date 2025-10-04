@@ -8,7 +8,6 @@ export const GET = async (
   try {
     const { orderId } = await context.params;
 
-
     if (!orderId) {
       return NextResponse.json(
         { error: 'Order ID is required' },
@@ -18,7 +17,6 @@ export const GET = async (
 
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;
-    console.log("Token ====>   : ", token)
 
     const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
