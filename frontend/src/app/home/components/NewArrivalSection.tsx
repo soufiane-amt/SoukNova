@@ -9,28 +9,26 @@ import Loader from '../../../components/feedback/loader/Loader';
 
 export default function NewArrivalSection() {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await fetchFromSupabase<any[]>('products', `select=*`);
+        const response = await fetch('/api/product', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+
         setProducts(data.slice(0, 7));
       } catch (e) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
+        console.error(e.message);
       }
     };
 
     fetchProducts();
   }, []);
-
-  if (loading) {
-    return <Loader />;
-  }
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <section aria-labelledby="new-arrivals" className="my-12">

@@ -32,7 +32,6 @@ function CheckoutPage() {
       }
 
       const data = await res.json();
-      console.log('Order placed:', data);
       router.push(`/orderComplete?orderId=${data.id}`);
     } catch (e: any) {
       console.error(e.message);

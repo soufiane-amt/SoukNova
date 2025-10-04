@@ -3,13 +3,9 @@ import { NextResponse } from 'next/server';
 const API_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/products?select=*`;
 const API_KEY = process.env.SUPABASE_KEY;
 
-export const GET = async (
-  req: Request,
-  context: { params: { productId: string } },
-) => {
+export const GET = async (req: Request) => {
   try {
-    const { id } = await context.params;
-    const response = await fetch(`${API_URL}&id=eq.${id}`, {
+    const response = await fetch(`${API_URL}`, {
       headers: {
         apikey: API_KEY!,
         Authorization: `Bearer ${API_KEY}`,

@@ -4,7 +4,6 @@ import { NewsLetterSub } from '@/home/components/NewsLetterSub';
 import { SiteFooter } from '../../components/layout/SiteFooter';
 import { useEffect, useState } from 'react';
 import SectionShow from '../../components/ui/SectionShow';
-import { fetchFromSupabase } from '../../lib/supbaseApi';
 import { inter } from '@/layout';
 import ShopFilter from './components/ShopFilter';
 import Loader from '../../components/feedback/loader/Loader';
@@ -37,8 +36,8 @@ export default function ShopPage() {
         if (selectedOrder !== null) {
           query += `&order=${selectedOrder}`;
         }
-        const data = await fetchFromSupabase<any[]>('products', query);
-
+        const res = await fetch(`/api/product?${query}`);
+        const data = await res.json();
         setProducts(data);
       } catch (e) {
         setError(e.message);
@@ -51,7 +50,7 @@ export default function ShopPage() {
   }, [priceRange, selectedCategory, selectedOrder]);
 
   if (loading) {
-    return <Loader/>;
+    return <Loader />;
   }
   if (error) return <div>Error: {error}</div>;
 

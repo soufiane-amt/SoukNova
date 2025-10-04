@@ -4,6 +4,7 @@ import Carousel from 'react-material-ui-carousel';
 import { Typography } from '@mui/material';
 import CountdownTimer from '../../../components/ui/CountDownTimer';
 import {
+  fetchWithAuth,
   getDiscountedPrice,
   getFirstTwoWords,
   isProductNew,
@@ -22,15 +23,19 @@ interface ProductProps {
 
 const Product: React.FC<ProductProps> = ({ productData }) => {
   const { cart, addToCart, decreaseFromCart } = useCart();
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
   const [activeImage, setActiveImage] = useState(
     productData?.images?.[0]?.trim() || '',
   );
 
   const handleAddWishlist = async (productId: string) => {
     try {
-      const res = await fetch(`/api/wishlist/${productId}`, {
+      const res = await fetchWithAuth(`/api/wishlist/${productId}`, {
         method: 'POST',
       });
+      setIsWishlisted((prev) => !prev);
+
       if (!res.ok) throw new Error('Failed to delete');
     } catch (err) {
       console.error(err);
@@ -60,7 +65,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             {activeImage && (
               <ProductImage
                 image={activeImage}
-                isNew={isProductNew(productData.Date)}
+                isNew={isProductNew(productData.date)}
               />
             )}
           </Carousel>
@@ -73,7 +78,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
         <div className="lg:w-[508px]" data-aos="fade-left" data-aos-delay="200">
           <div className="flex flex-col gap-2">
             <div className="flex items-start space-x-2" data-aos="fade-up">
-              <RatingStars isStatic={true} defaultValue={productData?.Rate} />
+              <RatingStars isStatic={true} defaultValue={productData?.rate} />
               <Typography sx={{ fontSize: '0.675rem' }}>
                 <span>{productData?.reviews?.length ?? 0}</span> Reviews
               </Typography>
@@ -95,15 +100,15 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
               <Typography className="!font-semibold !text-2xl !overflow-hidden !whitespace-nowrap !text-ellipsis">
                 $
                 {Number(
-                  getDiscountedPrice(productData.Price, productData.discount),
+                  getDiscountedPrice(productData.price, productData.discount),
                 ).toFixed(2)}
               </Typography>
-              {productData.Price && (
+              {productData.price && (
                 <Typography
                   className="line-through !text-2xl"
                   sx={{ color: 'var(--color-primary)' }}
                 >
-                  ${Number(productData.Price).toFixed(2)}
+                  ${Number(productData.price).toFixed(2)}
                 </Typography>
               )}
             </div>
@@ -156,7 +161,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
               className="w-full rounded-lg bg-white border flex items-center justify-center space-x-2 flex-2 py-3 cursor-pointer"
               data-aos="zoom-in"
               data-aos-delay="400"
-              onClick={() =>handleAddWishlist(productData.id)}
+              onClick={() => handleAddWishlist(productData.id)}
             >
               <svg
                 width="16"
@@ -169,7 +174,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
                   fillRule="evenodd"
                   clipRule="evenodd"
                   d="M8.46162 2.61137C8.20367 2.85892 7.79637 2.85892 7.53842 2.61137L7.07682 2.1684C6.53653 1.64992 5.80664 1.33333 5.00002 1.33333C3.34317 1.33333 2.00002 2.67648 2.00002 4.33333C2.00002 5.92175 2.85988 7.23337 4.10119 8.31104C5.34357 9.38963 6.82895 10.105 7.71645 10.47C7.90202 10.5464 8.09802 10.5464 8.28359 10.47C9.17109 10.105 10.6565 9.38963 11.8988 8.31104C13.1402 7.23336 14 5.92175 14 4.33333C14 2.67648 12.6569 1.33333 11 1.33333C10.1934 1.33333 9.46351 1.64991 8.92322 2.1684L8.46162 2.61137ZM8.00002 1.20638C7.22142 0.459203 6.16435 0 5.00002 0C2.60679 0 0.666687 1.9401 0.666687 4.33333C0.666687 8.57884 5.31358 10.9233 7.20921 11.7031C7.71973 11.9131 8.28031 11.9131 8.79083 11.7031C10.6865 10.9233 15.3334 8.57883 15.3334 4.33333C15.3334 1.9401 13.3933 0 11 0C9.83569 0 8.77862 0.459203 8.00002 1.20638Z"
-                  fill="#141718"
+                  fill={isWishlisted ? 'red' : '#141718'}
                 />
               </svg>
               <p className="font-medium">Wishlist</p>
@@ -195,13 +200,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             data-aos-delay="500"
           >
             <p className="w-[65px] text-[var(--color-primary)]">CATEGORY</p>
-            <p>
-              {Array.isArray(productData.categoriesText)
-                ? productData.categoriesText
-                    .map((c: any) => `{${c}}`)
-                    .join(', ')
-                : productData.categoriesText || ''}
-            </p>
+            <p>{productData.categoriesText}</p>
           </div>
         </div>
       </div>
@@ -228,7 +227,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
           Customer Reviews
         </Typography>
         <div className="flex space-x-4 mt-5" data-aos="fade-up">
-          <RatingStars isStatic={true} defaultValue={productData.Rate} />
+          <RatingStars isStatic={true} defaultValue={productData.rate} />
           <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
             <span>{productData?.reviews?.length ?? 0}</span> Reviews
           </Typography>

@@ -48,7 +48,7 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
   };
 
   return (
-    <nav className="flex justify-between mx-4 mt-2 px-6 md:px-12 lg:px-24 max-w-screen-2xl mx-auto">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-white  flex justify-between mx-4  px-6 md:px-12 lg:px-24 max-w-screen-2xl mx-auto py-3 md:py-0 ">
       <div className="flex items-center">
         <div className="md:hidden mr-2">
           <button

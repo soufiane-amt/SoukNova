@@ -17,7 +17,10 @@ function CartItemsTable({ cart }: CartItemsTableProps) {
   }, []);
 
   return (
-    <div className="flex-1 mb-10 xl:max-w-[500px]" data-aos="fade-up">
+    <div
+      className="flex-1 mb-10 xl:max-w-[700px] h-[300px] "
+      data-aos="fade-up"
+    >
       <div
         className="w-full flex justify-between font-semibold py-5 border-b"
         data-aos="fade-up"
@@ -32,7 +35,11 @@ function CartItemsTable({ cart }: CartItemsTableProps) {
           <p className="max-sm:hidden">Subtotal</p>
         </div>
       </div>
-      <div data-aos="fade-up" data-aos-delay="200">
+      <div
+        data-aos="fade-up"
+        data-aos-delay="200"
+        className="max-h-[400px] overflow-y-auto pr-2"
+      >
         {cart.map((item) => (
           <CartItem
             key={item.productId}

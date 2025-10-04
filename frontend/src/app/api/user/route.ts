@@ -5,8 +5,6 @@ export async function PUT(req: Request) {
   const cookies = cookie.parse(req.headers.get('cookie') || '');
   const token = cookies.jwt;
 
-  console.log('➡️ Token from cookie:', token);
-
   try {
     const body = await req.json();
 
