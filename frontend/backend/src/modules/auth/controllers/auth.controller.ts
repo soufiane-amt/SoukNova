@@ -1,12 +1,29 @@
-import { Body, ConflictException, Controller, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { CreateUserDto } from '../../users/dto/createUser.dto';
 import { UserCredentialsDto } from '../../users/dto/userCredentials.dto';
 import { Response } from 'express';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @UseGuards(AuthGuard)
+  @Get('verify-token')
+  verifyToken() {
+    return { valid: true };
+  }
 
   @Post('signup')
   async signUp(
@@ -51,5 +68,11 @@ export class AuthController {
       );
     }
     throw e;
+  }
+
+  @Post('signout')
+  signOut(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('jwt');
+    return { message: 'Signed out successfully' };
   }
 }
