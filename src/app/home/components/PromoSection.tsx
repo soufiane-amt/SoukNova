@@ -30,8 +30,8 @@ export const PromoSection = () => {
           data-aos-delay="200"
         >
           <p className="text-color-primary">
-            <span className="text-black font-medium">3legant</span> is a gift &
-            decorations store based in HCMC, Vietnam. Est since 2019.
+            <span className="text-black font-medium">SoukNova</span> is a gift &
+            decorations store based in HCMC, Morocco. Est since 2019.
           </p>
         </div>
       </div>

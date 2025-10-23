@@ -1,6 +1,6 @@
 'use client';
 
-import { ShoppingBag, CircleUserRound, Search} from 'lucide-react';
+import { ShoppingBag, CircleUserRound, Search } from 'lucide-react';
 
 import { Menu } from 'lucide-react';
 import { List, ListItem, ListItemText } from '@mui/material';
@@ -12,6 +12,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import SideCart from './SideCart';
+import { useCart } from '../../../context/CartContext';
 
 export const listItemVariants = {
   hidden: { opacity: 0, x: -100 },
@@ -42,6 +43,7 @@ interface DesktopNavProps {
 export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
   const [isOpen, setOpen] = useState(false);
   const pathname = usePathname();
+  const { cart } = useCart();
 
   const toggleCartSideBar = () => {
     setOpen(!isOpen);
@@ -61,7 +63,7 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
         </div>
         <div>
           <TypeAnimation
-            sequence={['3legant.']}
+            sequence={['SoukNova.']}
             speed={50}
             className={`font-medium text-xl ${poppins.className}`}
             wrapper="h1"
@@ -102,7 +104,7 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
         <div className="hidden md:flex">
           <motion.button
             aria-label="Search"
-            className="ml-4 transform transition-transform duration-200 hover:scale-110"
+            className="ml-4 transform transition-transform duration-200 hover:scale-110 cursor-pointer"
             variants={listContainerVariants}
           >
             <Search className="w-6 h-6 text-gray-800" />
@@ -110,7 +112,7 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
           <Link href="/account" className="flex justify-center">
             <motion.button
               aria-label="User profile"
-              className="ml-4 transform transition-transform duration-200 hover:scale-110"
+              className="ml-4 transform transition-transform duration-200 hover:scale-110 cursor-pointer"
               variants={listContainerVariants}
             >
               <CircleUserRound className="w-6 h-6 text-gray-800" />
@@ -120,11 +122,14 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
         <div className="ml-4 flex justify-end">
           <motion.button
             aria-label="Shopping bag"
-            className="transform transition-transform duration-200 hover:scale-110"
+            className="transform transition-transform duration-200 hover:scale-110 cursor-pointer flex"
             variants={listContainerVariants}
             onClick={toggleCartSideBar}
           >
-            <ShoppingBag className="w-6 h-6 text-gray-800" />
+            <ShoppingBag className="w-6 h-6 text-gray-800 mr-1" />
+            <span className="flex h-[21px] w-[21px] items-center justify-center rounded-[50%] bg-black font-inter text-xs font-bold text-white">
+              {cart.length > 9 ? '9+' : cart.length}
+            </span>
           </motion.button>
         </div>
       </motion.div>

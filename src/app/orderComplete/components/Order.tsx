@@ -19,7 +19,7 @@ interface OrderProps {
 }
 function Order({ orderId, cartItems }: OrderProps) {
   const { resetCart } = useCart();
-  const [cart, setCartItems] = useState(cartItems);
+  const [cart] = useState(cartItems);
   const [orderInfo, setOrderInfo] = useState();
   useEffect(() => {
     AOS.init({

@@ -1,8 +1,8 @@
 'use client';
 
-import Loader from '../../components/feedback/loader/Loader';
-import SettingsNavigator from '../../components/ui/Settings/SettingsWrap';
-import { useLoader } from '../../hooks/useLoader';
+import Loader from '../../../components/feedback/loader/Loader';
+import SettingsNavigator from '../../../components/ui/Settings/SettingsWrap';
+import { useLoader } from '../../../hooks/useLoader';
 import OrderHistory from './components/OrderHistory';
 
 function OrderPage() {

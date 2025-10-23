@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import { priceType } from '../../../types/types';
 import SidebarFilter from './SidebarFilter';
 import ProductGrid from './ProductGrid';
@@ -25,6 +25,20 @@ export default function ShopFilter({
   setSelectedOrder,
 }: ShopFilterProps) {
   const [selectedShape, setSelectedShape] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1000) {
+        setSelectedShape(1);
+      } else {
+        setSelectedShape(0);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <div>

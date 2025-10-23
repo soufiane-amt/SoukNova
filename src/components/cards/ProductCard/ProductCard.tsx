@@ -31,6 +31,7 @@ interface LikeButtonProps {
 }
 const LikeButton = ({ productId }: LikeButtonProps) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const { showToast } = useCart();
 
   const handleAddWishlist = async (productId: string) => {
     try {
@@ -39,7 +40,9 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
       });
 
       if (!res.ok) throw new Error('Failed to delete');
+
       setIsWishlisted((prev) => !prev);
+      showToast('Item added to wishlist!');
     } catch (err) {
       console.error(err);
     }
@@ -87,7 +90,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   image,
   date,
 }) => {
-  const { addToCart } = useCart();
+  const { addToCart, showToast } = useCart();
+
   productName = getFirstTwoWords(productName);
   const isNew = isProductNew(date);
   const route = useRouter();
@@ -120,14 +124,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </Typography>
           )}
         </div>
-        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100">
+        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500">
           <LikeButton productId={productId} />
         </div>
-        <div className="absolute bottom-4 w-[90%] opacity-0 cursor-pointer group-hover:opacity-100">
+        <div className="absolute bottom-4 w-[90%] opacity-0 cursor-pointer group-hover:opacity-100 transition-all duration-500">
           <button
             onClick={(e) => {
-              e.stopPropagation(); // Prevent click from bubbling up
+              e.stopPropagation();
               addToCart(productId);
+              showToast('Item added to cart!');
             }}
             className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold"
             data-aos="zoom-in"

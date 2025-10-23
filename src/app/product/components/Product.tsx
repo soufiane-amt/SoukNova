@@ -22,7 +22,7 @@ interface ProductProps {
 }
 
 const Product: React.FC<ProductProps> = ({ productData }) => {
-  const { cart, addToCart, decreaseFromCart } = useCart();
+  const { cart, addToCart, decreaseFromCart, showToast } = useCart();
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const [activeImage, setActiveImage] = useState(
@@ -35,7 +35,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
         method: 'POST',
       });
       setIsWishlisted((prev) => !prev);
-
+      showToast('Product is added to wishlist!');
       if (!res.ok) throw new Error('Failed to delete');
     } catch (err) {
       console.error(err);

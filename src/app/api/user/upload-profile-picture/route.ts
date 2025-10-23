@@ -15,11 +15,14 @@ export const POST = async (req: Request) => {
       'Content-Type': req.headers.get('Content-Type') || '',
     };
 
-    const res = await fetch('http://localhost:3001/user/upload-profile-picture', {
-      method: 'POST',
-      headers,
-      body,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/upload-profile-picture`,
+      {
+        method: 'POST',
+        headers,
+        body,
+      },
+    );
 
     if (!res.ok) {
       return NextResponse.json(

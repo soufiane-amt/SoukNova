@@ -52,7 +52,7 @@ export function DrawerContent({ toggleDrawer, isOpen }: DrawerContentProps) {
     <Drawer anchor="left" open={isOpen} onClose={toggleDrawer(false)}>
       <div className="mx-3 my-2 flex flex-col h-full">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-md font-bold">3legant.</h1>
+          <h1 className="text-md font-bold">SoukNova.</h1>
           <button onClick={toggleDrawer(false)}>
             <X className="w-6 h-6 transform transition-transform duration-300 rotate-0 hover:rotate-90" />
           </button>

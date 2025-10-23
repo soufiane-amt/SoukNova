@@ -23,7 +23,7 @@ export default function ShopPage() {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        let query = 'select=*';
+        let query = '';
         if (selectedCategory !== 'All Rooms') {
           query += `&categoriesText=ilike.%25${encodeURIComponent(
             selectedCategory,

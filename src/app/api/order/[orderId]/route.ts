@@ -23,10 +23,13 @@ export const GET = async (
       'Content-Type': req.headers.get('Content-Type') || 'application/json',
     };
 
-    const res = await fetch(`http://localhost:3001/order/${orderId}`, {
-      method: 'GET',
-      headers,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/order/${orderId}`,
+      {
+        method: 'GET',
+        headers,
+      },
+    );
 
     if (!res.ok) {
       return NextResponse.json(

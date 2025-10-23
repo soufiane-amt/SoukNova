@@ -4,7 +4,7 @@ interface ShowMoreButtonProps {
 
 function ShowMoreButton({ handleShowMore }: ShowMoreButtonProps) {
   return (
-    <div className="flex justify-center mt-8">
+    <div data-aos="fade-up" className="flex justify-center mt-8">
       <button
         aria-label="Show More"
         onClick={handleShowMore}

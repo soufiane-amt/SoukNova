@@ -7,7 +7,7 @@ import {
   useEffect,
 } from 'react';
 import { fetchWithAuth, getFirstTwoWords } from '../utils/helpers';
-import { ShippingOption } from '../types/types';
+import Toast from '../components/ui/Toast';
 
 const calculateSubtotalCart = (cart: CartItemType[]) => {
   return cart.reduce((accumulator, currentItem) => {
@@ -43,6 +43,7 @@ interface CartContextType {
   setSubtotal: (items: number) => void;
   setTotal: (items: number) => void;
   resetCart: () => void;
+  showToast: (msg: string) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -57,6 +58,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItemType[]>([]);
   const [subtotal, setSubtotal] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    console.log('///////////////////////', msg);
+    setTimeout(() => setToast(null), 3000);
+  };
 
   const resetCart = () => {
     setCart([]);
@@ -165,9 +173,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         setSubtotal,
         setTotal,
         resetCart,
+        showToast,
       }}
     >
       {children}
+      {toast && <Toast mes={toast} />}
     </CartContext.Provider>
   );
 };

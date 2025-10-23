@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const API_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/new%20articles?select=*`;
 const API_KEY = process.env.SUPABASE_KEY;
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const response = await fetch(API_URL, {
       headers: {

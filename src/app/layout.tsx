@@ -19,6 +19,18 @@ export const inter = Inter({
   variable: '--font-inter',
 });
 
+
+function Toast({ message, onClose }: { message: string; onClose: () => void }) {
+  return (
+    <div className="fixed top-5 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in">
+      {message}
+      <button onClick={onClose} className="ml-3 text-sm underline">
+        Close
+      </button>
+    </div>
+  );
+}
+
 export default function RootLayout({
   children,
 }: {

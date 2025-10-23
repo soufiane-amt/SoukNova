@@ -23,10 +23,13 @@ export const POST = async (
       'Content-Type': req.headers.get('Content-Type') || 'application/json',
     };
 
-    const res = await fetch(`http://localhost:3001/cart/${productId}`, {
-      method: 'POST',
-      headers,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/cart/${productId}`,
+      {
+        method: 'POST',
+        headers,
+      },
+    );
 
     if (!res.ok) {
       return NextResponse.json(
@@ -65,10 +68,13 @@ export const DELETE = async (
       'Content-Type': req.headers.get('Content-Type') || 'application/json',
     };
 
-    const res = await fetch(`http://localhost:3001/cart/${productId}`, {
-      method: 'DELETE',
-      headers,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/cart/${productId}`,
+      {
+        method: 'DELETE',
+        headers,
+      },
+    );
 
     if (!res.ok) {
       return NextResponse.json(
@@ -107,10 +113,13 @@ export const PATCH = async (
       'Content-Type': 'application/json',
     };
 
-    const res = await fetch(`http://localhost:3001/cart/${productId}`, {
-      method: 'PATCH',
-      headers,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/cart/${productId}`,
+      {
+        method: 'PATCH',
+        headers,
+      },
+    );
 
     if (!res.ok) {
       return NextResponse.json(
@@ -149,10 +158,13 @@ export const GET = async (
       'Content-Type': req.headers.get('Content-Type') || 'application/json',
     };
 
-    const res = await fetch(`http://localhost:3001/cart/${productId}`, {
-      method: 'GET',
-      headers,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/cart/${productId}`,
+      {
+        method: 'GET',
+        headers,
+      },
+    );
 
     if (!res.ok) {
       return NextResponse.json(
