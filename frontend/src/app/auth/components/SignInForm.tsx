@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import api from '../../../utils/axios';
 import { useRouter } from 'next/navigation';
+import { useCart } from '../../../context/CartContext';
 
 const inputClass =
   'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
@@ -13,6 +14,7 @@ const inputClass =
 export default function SignInForm() {
   const [serverMessage, setServerMessage] = useState('');
   const router = useRouter();
+  const { showToast } = useCart();
   const {
     register,
     handleSubmit,
@@ -25,7 +27,8 @@ export default function SignInForm() {
     try {
       await api.post('/auth/signin', data);
       setServerMessage('');
-      router.push("/home")
+      router.push('/home');
+      showToast("You are signed in!")
     } catch (error: any) {
       const msg = error.response?.data?.message || 'Signin failed';
       setServerMessage(msg);

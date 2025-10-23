@@ -1,6 +1,6 @@
 import { inter } from '@/layout';
 import Image from 'next/image';
-import { getFirstTwoWords } from '../../../utils/helpers';
+import { getFirstTwoWords } from '../../../../utils/helpers';
 
 interface WishItemProps {
   productName: string;

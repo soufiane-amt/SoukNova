@@ -5,7 +5,9 @@ const API_KEY = process.env.SUPABASE_KEY;
 
 export const GET = async (req: Request) => {
   try {
-    const response = await fetch(`${API_URL}`, {
+
+    const searchParams = new URL(req.url).search;
+    const response = await fetch(`${API_URL}${searchParams}`, {
       headers: {
         apikey: API_KEY!,
         Authorization: `Bearer ${API_KEY}`,

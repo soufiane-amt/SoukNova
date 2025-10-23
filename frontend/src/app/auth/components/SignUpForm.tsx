@@ -5,12 +5,15 @@ import { SignUpSchema, SignUpInput } from '../schemas/signUpSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import api from '../../../utils/axios';
+import { useRouter } from 'next/navigation';
+import { useCart } from '../../../context/CartContext';
 
 const inputClass =
   'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
 
 export default function SignUpForm() {
   const router = useRouter();
+  const { showToast } = useCart();
 
   const {
     register,
@@ -26,6 +29,7 @@ export default function SignUpForm() {
       await api.post('/auth/signup', data);
       setServerMessage('');
       router.push('/home');
+      showToast('You are signed up!');
     } catch (error: any) {
       const msg = error.response?.data?.message || 'Signup failed';
       setServerMessage(msg);

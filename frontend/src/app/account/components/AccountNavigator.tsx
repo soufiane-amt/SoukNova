@@ -4,12 +4,14 @@ import { inter } from '@/layout';
 import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import api from '../../../utils/axios';
 
 const defaultUserImage = '/images/myAccount/default-user.png';
 
 const Dropdown = () => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
@@ -17,11 +19,15 @@ const Dropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const items = ['Account', 'Address', 'Orders', 'Wishlist', 'Log Out'];
+  const items = ['Account', 'Orders', 'Wishlist'];
 
   const current =
     items.find((item) => pathname === `/${item.toLowerCase()}`) || 'Account';
 
+  const handleSignOut = async () => {
+    await api.post('/auth/signout');
+    router.push('/auth/signin');
+  };
   return (
     <div className="inline-block text-left rounded-md mx-5">
       {/* Mobile dropdown button */}
@@ -58,7 +64,7 @@ const Dropdown = () => {
             {items.map((item) => (
               <Link
                 key={item}
-                href={`/${item.toLowerCase()}`}
+                href={`/account/${item.toLowerCase()}`}
                 className={`text-gray-700 block px-4 py-2 text-md mb-2 hover:bg-gray-100 ${
                   current === item ? 'font-bold' : 'font-medium'
                 } ${inter.className}`}
@@ -66,15 +72,15 @@ const Dropdown = () => {
                 {item}
               </Link>
             ))}
-            <Link
-              key={item}
-              href={`/${item.toLowerCase()}`}
-              className={`text-gray-700 block px-4 py-2 text-md mb-2 hover:bg-gray-100 ${
-                current === item ? 'font-bold' : 'font-medium'
-              } ${inter.className}`}
-            >
-              {item}
-            </Link>
+            <div>
+              <button
+                className={`text-gray-700 block px-4 py-2 text-md mb-2 hover:bg-gray-100 ${inter.className}`}
+                role="menuitem"
+                onClick={handleSignOut}
+              >
+                Log out
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -90,7 +96,7 @@ const Dropdown = () => {
           {items.map((item) => (
             <Link
               key={item}
-              href={`/${item.toLowerCase()}`}
+              href={`/account/${item.toLowerCase()}`}
               className={`text-gray-700 block py-2 text-md mb-2 hover:bg-gray-100 cursor-pointer ${
                 current === item ? 'font-bold border-b' : 'font-medium'
               } ${inter.className}`}
@@ -99,6 +105,15 @@ const Dropdown = () => {
               {item}
             </Link>
           ))}
+          <div>
+            <button
+              className={`text-gray-700 block py-2 text-md mb-2 hover:bg-gray-100 cursor-pointer ${inter.className}`}
+              role="menuitem"
+              onClick={handleSignOut}
+            >
+              Log out
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -173,7 +188,7 @@ function AccountNavigator() {
         const data = await res.json();
 
         const imageUrl = data.imageUrl
-          ? `http://localhost:3001${data.imageUrl}`
+          ? `${process.env.NEXT_PUBLIC_API_URL}${data.imageUrl}`
           : defaultUserImage;
         setProfileImage(imageUrl);
       } catch (err) {

@@ -26,7 +26,7 @@ function AboutUsCard() {
           About Us
         </p>
         <p className="mb-3 text-[14px]">
-          3legant is a gift & decorations store based in HCMC, Vietnam. Est
+          SoukNova is a gift & decorations store based in HCMC, Morocco. Est
           since 2019. Our customer service is always prepared to support you
           24/7
         </p>

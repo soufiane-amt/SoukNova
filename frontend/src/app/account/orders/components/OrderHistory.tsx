@@ -4,7 +4,6 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { inter } from '@/layout';
 import OrderInfo from './OrderInfo';
-import { getFormatInDate } from '../../../utils/helpers';
 
 function OrderHistory() {
   const [orders, setOrders] = useState([]);

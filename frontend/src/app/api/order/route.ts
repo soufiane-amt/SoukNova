@@ -6,7 +6,7 @@ export const GET = async (req: Request) => {
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;
 
-    const res = await fetch('http://localhost:3001/order', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const res = await fetch('http://localhost:3001/order', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

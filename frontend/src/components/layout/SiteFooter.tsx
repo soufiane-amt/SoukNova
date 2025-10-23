@@ -40,14 +40,12 @@ function SocialIcons() {
 
 export function SiteFooter() {
   return (
-    <footer
-      className="bg-[#232627] text-white p-15 w-full"
-    >
+    <footer className="bg-[#232627] text-white p-15 w-full">
       <div className="flex flex-col md:flex-row items-center justify-center md:justify-between">
         <div className="flex  flex-col md:flex-row items-center justify-center">
           <div className=" flex flex-col items-center md:flex-row">
             <h1 className="text-xl font-medium text-[24px] leading-[24px] font-poppins">
-              3legant.
+              SoukNova.
             </h1>
             <div className=" h-4 md:h-7 w-7 md:pr-10 md:border-r md:border-b-0 border-b border-[#E8ECEF]"></div>
           </div>
@@ -100,7 +98,9 @@ export function SiteFooter() {
         </nav>
       </div>
 
-      <div className={`${poppins.className} pt-5 md:pt-0 md:flex md:flex-row-reverse md:justify-between md:items-center w-full border-t-[0.5px] border-t-border-dark-gray`}>
+      <div
+        className={`${poppins.className} pt-5 md:pt-0 md:flex md:flex-row-reverse md:justify-between md:items-center w-full border-t-[0.5px] border-t-border-dark-gray`}
+      >
         <SocialIcons />
         <div className="md:flex md:flex-row-reverse md:items-center md:grid-cols-4 md:gap-5">
           <Stack

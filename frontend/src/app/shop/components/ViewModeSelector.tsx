@@ -58,7 +58,7 @@ function ViewModeSelector({
         </div>
       )}
 
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-between">
         <Menu as="div" className="relative inline-block text-left mr-10">
           <div>
             <MenuButton className="group inline-flex justify-center text-sm font-bold text-gray-700 hover:text-gray-900">
