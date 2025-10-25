@@ -109,13 +109,15 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
           >
             <Search className="w-6 h-6 text-gray-800" />
           </motion.button>
+        </div>
+        <div>
           <Link href="/account" className="flex justify-center">
             <motion.button
               aria-label="User profile"
               className="ml-4 transform transition-transform duration-200 hover:scale-110 cursor-pointer"
               variants={listContainerVariants}
             >
-              <CircleUserRound className="w-6 h-6 text-gray-800" />
+              <CircleUserRound className="md:w-6 md:h-6 w-5 h-5 text-gray-800" />
             </motion.button>
           </Link>
         </div>
@@ -126,8 +128,8 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
             variants={listContainerVariants}
             onClick={toggleCartSideBar}
           >
-            <ShoppingBag className="w-6 h-6 text-gray-800 mr-1" />
-            <span className="flex h-[21px] w-[21px] items-center justify-center rounded-[50%] bg-black font-inter text-xs font-bold text-white">
+            <ShoppingBag className="md:w-6 md:h-6 w-5 h-5 text-gray-800 mr-1" />
+            <span className="flex md:h-[21px] md:w-[21px] h-[18px] w-[18px] items-center justify-center rounded-[50%] bg-black font-inter md:text-xs text-[10px] font-bold text-white">
               {cart.length > 9 ? '9+' : cart.length}
             </span>
           </motion.button>

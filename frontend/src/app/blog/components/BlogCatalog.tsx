@@ -50,6 +50,7 @@ export default function BlogCatalog({ articles }: BlogProps) {
               key={article.id}
               data-aos="fade-up"
               data-aos-delay={`${index * 50}`}
+              className='flex justify-center'
             >
               <ArticleCard
                 id={article.id}

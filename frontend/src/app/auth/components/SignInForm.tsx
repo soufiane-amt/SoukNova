@@ -7,12 +7,15 @@ import { useState } from 'react';
 import api from '../../../utils/axios';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
+import { CircularProgress } from '@mui/material';
 
 const inputClass =
   'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
 
 export default function SignInForm() {
   const [serverMessage, setServerMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const { showToast } = useCart();
   const {
@@ -24,14 +27,17 @@ export default function SignInForm() {
   });
 
   const onSubmit = async (data: SignInInput) => {
+    setLoading(true);
     try {
       await api.post('/auth/signin', data);
       setServerMessage('');
       router.push('/home');
-      showToast("You are signed in!")
+      showToast('You are signed in!');
     } catch (error: any) {
       const msg = error.response?.data?.message || 'Signin failed';
       setServerMessage(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,7 +81,7 @@ export default function SignInForm() {
             className="w-[90%] md:w-full py-3 bg-[#141718] text-white rounded-md hover:bg-[#47555a] cursor-pointer transition-colors duration-300"
             type="submit"
           >
-            Sign In
+            {loading ? <CircularProgress size={20} color="inherit"/> : 'Sign In'}
           </button>
         </div>
         <div className="flex justify-center">

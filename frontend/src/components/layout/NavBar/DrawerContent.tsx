@@ -8,8 +8,8 @@ import {
   ListItem,
 } from '@mui/material';
 import FavoriteBorderSharpIcon from '@mui/icons-material/FavoriteBorderSharp';
-import { SearchIcon, ShoppingBag, X } from 'lucide-react';
-import { SocialIcons } from '../../icons/SocialIcons';
+import { SearchIcon, X } from 'lucide-react';
+import { SocialLinks } from '../../icons/SocialLinks';
 import { NAV_ITEMS } from '../../../constants/navItems';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -105,24 +105,16 @@ export function DrawerContent({ toggleDrawer, isOpen }: DrawerContentProps) {
             })}
           </List>
           <div className="mt-auto pb-4">
-            <List disablePadding>
+            <Link href={'/account/wishlist'}>
               <DrawerItem
                 label="Wishlist"
                 icon={
                   <FavoriteBorderSharpIcon className="w-6 h-6 text-gray-800" />
                 }
               />
-            </List>
-            <div className="flex justify-center my-4">
-              <button
-                className="w-[90%] py-2 bg-[#141718] text-white rounded-md hover:bg-[#47555a] cursor-pointer transition-colors duration-300"
-                type="submit"
-              >
-                Sign In
-              </button>
-            </div>
+            </Link>
             <div>
-              <SocialIcons />
+              <SocialLinks />
             </div>
           </div>
         </div>

@@ -5,21 +5,24 @@ import { benefits } from '../../../constants/benefitList';
 
 function BenefitsDisplay() {
   return (
-    <section className='my-12'>
-      <Grid
-        container
-        spacing={2}
-        justifyContent={{ xs: 'center', md: 'space-between' }}
-      >
+    <section className="my-12">
+      <Grid container justifyContent={{ xs: 'center', md: 'space-between' }}>
         {benefits.map((benefit, index) => (
-          <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
+          <Grid
+            item
+            key={index}
+            xs={12}
+            sm={6}
+            md={3}
+            data-aos="fade-up"
+            data-aos-delay={index * 100}
+          >
             <BenefitCard
-              key={index}
               iconName={benefit.icon}
               title={benefit.title}
               description={benefit.description}
             />
-          </div>
+          </Grid>
         ))}
       </Grid>
     </section>
