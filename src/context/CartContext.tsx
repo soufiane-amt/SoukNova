@@ -62,7 +62,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const showToast = (msg: string) => {
     setToast(msg);
-    console.log('///////////////////////', msg);
     setTimeout(() => setToast(null), 3000);
   };
 
@@ -123,6 +122,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         }
         return [...prev, { ...item, quantity }];
       });
+      showToast('Item added to cart!');
     } catch (err) {
       console.error(err);
     }

@@ -28,18 +28,18 @@ function SidebarFilter({
 }: SidebarFilterProps) {
   return (
     <form className="hidden lg:block">
-      <h2 className="mb-5 font-bold text-md">CATEGORIES</h2>
+      <h2 className="mb-5 font-bold text-sm">CATEGORIES</h2>
       <ul
         role="list"
-        className="space-y-4 pb-6 text-sm font-medium text-gray-900"
+        className="space-y-3 pb-6 text-sm font-medium text-gray-900"
       >
         {subCategories.map((category) => (
           <li key={category.name}>
             <button
               type="button"
-              className={`text-[#807E7E] text-sm ${
+              className={`text-[var(--color-primary)] text-sm ${
                 selectedCategory === category.name
-                  ? 'border-b text-black font-bold'
+                  ? 'border-b-2 text-black font-bold'
                   : ''
               }`}
               onClick={() => setSelectedCategory(category.name)}
@@ -52,13 +52,13 @@ function SidebarFilter({
 
       {
         <Disclosure key={priceFilter.id} as="div" className="py-6">
-          <h3 className="-my-3 flow-root">
+          <h2 className="-my-3 flow-root">
             <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-              <span className="font-bold text-gray-900">
+              <span className="font-bold text-gray-900 text-md">
                 {priceFilter.name}
               </span>
             </DisclosureButton>
-          </h3>
+          </h2>
           <div className="pt-6">
             <div className="space-y-4">
               {priceFilter.options.map((option, optionIdx) => (
@@ -71,7 +71,7 @@ function SidebarFilter({
                   </label>
 
                   <div className="flex h-5 shrink-0 items-center">
-                    <div className="group grid size-4 grid-cols-1">
+                    <div className="group grid size-5 grid-cols-1">
                       <input
                         id={`-${optionIdx}`}
                         name={`${priceFilter.id}[]`}

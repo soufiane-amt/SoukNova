@@ -8,35 +8,9 @@ import {
   Typography,
 } from '@mui/material';
 import Link from 'next/link';
-import { Facebook, Instagram, Youtube } from 'lucide-react';
 import { NAV_ITEMS } from '../../constants/navItems';
 import { inter, poppins } from '@/layout';
-
-const socialLinks = [
-  { icon: <Instagram />, url: 'https://instagram.com/', label: 'Instagram' },
-  { icon: <Facebook />, url: 'https://facebook.com/', label: 'Facebook' },
-  { icon: <Youtube />, url: 'https://youtube.com/', label: 'YouTube' },
-];
-
-function SocialIcons() {
-  return (
-    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-      {socialLinks.map(({ icon, url, label }) => (
-        <IconButton
-          key={label}
-          component="a"
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={label}
-          sx={{ color: 'inherit' }}
-        >
-          {icon}
-        </IconButton>
-      ))}
-    </Box>
-  );
-}
+import { SocialLinks } from '../icons/SocialLinks';
 
 export function SiteFooter() {
   return (
@@ -101,7 +75,7 @@ export function SiteFooter() {
       <div
         className={`${poppins.className} pt-5 md:pt-0 md:flex md:flex-row-reverse md:justify-between md:items-center w-full border-t-[0.5px] border-t-border-dark-gray`}
       >
-        <SocialIcons />
+        <SocialLinks />
         <div className="md:flex md:flex-row-reverse md:items-center md:grid-cols-4 md:gap-5">
           <Stack
             direction="row"

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import cookie from 'cookie';
 
 export async function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
@@ -12,14 +13,18 @@ export async function middleware(req: NextRequest) {
   const verifyUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/verify-token`;
 
   try {
+    const cookies = cookie.parse(req.headers.get('cookie') || '');
+    const token = cookies.jwt;
+
     const res = await fetch(verifyUrl, {
       method: 'GET',
       headers: {
-        cookie: req.headers.get('cookie') || '', 
+        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
     });
 
+    console.log('=============> ', res);
     if (res.ok) {
       return NextResponse.next();
     } else {

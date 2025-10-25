@@ -28,7 +28,7 @@ function ViewModeSelector({
   return (
     <div className="md:flex w-full items-baseline justify-between  pt-24 pb-6">
       {selectedShape === 1 ? (
-        <div className="flex flex-col md:flex-row w-full md:justify-between gap-4 md:w-1/3 gap-5 mb-5 md:mb-0">
+        <div className="flex flex-col md:flex-row w-full md:justify-between gap-4 md:w-1/2 gap-5 mb-5 md:mb-0">
           <BasicDropdownFilter
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
@@ -41,8 +41,8 @@ function ViewModeSelector({
       ) : (
         <div className="flex items-center space-x-2 ">
           <svg
-            width="15"
-            height="13"
+            width="20"
+            height="18"
             viewBox="0 0 20 18"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +54,7 @@ function ViewModeSelector({
               strokeLinecap="round"
             />
           </svg>
-          <h2 className="font-bold text-center">Filter</h2>
+          <h2 className="font-bold text-center text-2xl">Filter</h2>
         </div>
       )}
 

@@ -90,7 +90,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   image,
   date,
 }) => {
-  const { addToCart, showToast } = useCart();
+  const { addToCart } = useCart();
 
   productName = getFirstTwoWords(productName);
   const isNew = isProductNew(date);
@@ -132,7 +132,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               addToCart(productId);
-              showToast('Item added to cart!');
             }}
             className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold"
             data-aos="zoom-in"

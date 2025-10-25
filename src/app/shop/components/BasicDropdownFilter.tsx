@@ -25,11 +25,25 @@ function BasicDropdownFilter({
 
   return (
     <FormControl fullWidth>
+      <div className='mb-1 text-md font-bold text-[var(--color-primary)]'>
+        <p>PRICE</p>
+      </div>
       <Select
         labelId="category-select-label"
         value={selectedCategory}
         onChange={handleCategoryChange}
-        sx={{ height: 45, borderRadius: 2, fontWeight: 'bold' }}
+        sx={{
+          height: 45,
+          borderRadius: 2,
+          fontWeight: 'bold',
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'black', // border color
+            borderWidth: '2px', // border thickness
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'black', // focus border color
+          },
+        }}
       >
         {subCategories.map((el) => (
           <MenuItem key={el.name} value={el.name}>

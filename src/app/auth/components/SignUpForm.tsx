@@ -7,6 +7,7 @@ import { useState } from 'react';
 import api from '../../../utils/axios';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
+import { CircularProgress } from '@mui/material';
 
 const inputClass =
   'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
@@ -14,6 +15,7 @@ const inputClass =
 export default function SignUpForm() {
   const router = useRouter();
   const { showToast } = useCart();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -25,6 +27,7 @@ export default function SignUpForm() {
   const [serverMessage, setServerMessage] = useState('');
 
   const onSubmit = async (data: SignUpInput) => {
+    setLoading(true);
     try {
       await api.post('/auth/signup', data);
       setServerMessage('');
@@ -33,6 +36,9 @@ export default function SignUpForm() {
     } catch (error: any) {
       const msg = error.response?.data?.message || 'Signup failed';
       setServerMessage(msg);
+    }
+    finally{
+        setLoading(false);
     }
   };
 
@@ -46,13 +52,13 @@ export default function SignUpForm() {
       <div className=" md:my-8 my-4">
         <div className="md:my-6">
           <h1 className="text-[#141718] text-2xl md:text-4xl font-bold ">
-            Sign up
+            {loading ? <CircularProgress size={20} color="inherit"/> : 'Sign Up'}
           </h1>
         </div>
         <div>
           <label className="text-color-primary text-sm md:text-base ">
             Already have an account?&nbsp;
-            <a className="font-bold text-black" href="/auth/signin">
+            <a className="font-bold text-black text-orange-500 hover:border-b" href="/auth/signin">
               Sign in
             </a>
           </label>
@@ -103,7 +109,7 @@ export default function SignUpForm() {
             className="w-4 h-4 mr-3"
             {...register('acceptTerms')}
           />
-          <label className="text-color-primary text-xs md:text-base">
+          <label className="text-color-primary text-xs md:text-sm">
             I agree with&nbsp;
             <a className="font-bold text-black hover:underline cursor-pointer">
               Privacy Policy

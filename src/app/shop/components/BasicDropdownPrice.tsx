@@ -1,5 +1,5 @@
-import { FormControl, MenuItem, Select } from "@mui/material";
-import { priceType } from "../../../types/types";
+import { FormControl, MenuItem, Select } from '@mui/material';
+import { priceType } from '../../../types/types';
 
 export const sortOptions = [
   { label: 'Rate_desc', value: 'Rate.desc' },
@@ -39,7 +39,6 @@ export const priceFilter = {
   ],
 };
 
-
 interface BasicDropdownPriceProps {
   priceRange: priceType;
   setPriceRange: React.Dispatch<React.SetStateAction<priceType>>;
@@ -60,11 +59,25 @@ function BasicDropdownPrice({
 
   return (
     <FormControl fullWidth>
+      <div className='mb-1 text-md font-bold text-[var(--color-primary)]'>
+        <p>CATEGORY</p>
+      </div>
       <Select
         labelId="price-select-label"
         value={priceRange ? priceRange.join(',') : '0,Infinity'}
         onChange={handlePriceChange}
-        sx={{ height: 45, borderRadius: 2, fontWeight: 'bold' }}
+        sx={{
+          height: 45,
+          borderRadius: 2,
+          fontWeight: 'bold',
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'black', // border color
+            borderWidth: '2px', // border thickness
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'black', // focus border color
+          },
+        }}
       >
         {priceFilter.options.map((el, index) => (
           <MenuItem
