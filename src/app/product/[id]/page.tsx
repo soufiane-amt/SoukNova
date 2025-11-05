@@ -30,11 +30,7 @@ export default function ProductPage() {
         }
 
         const data = await response.json();
-        if (data.length > 0) {
-          setProductData(data[0]);
-        } else {
-          setProductData(null);
-        }
+        setProductData(data);
       } catch (err) {
         setError('Product not found or failed to load.');
       } finally {

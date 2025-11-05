@@ -28,10 +28,30 @@ function ProductTabs({ productData }: any) {
     productData.reviews,
     5,
   );
+  const [reviewInput, setReviewInput] = useState('');
+  // const [ratingInput, setRatingInput] = useState('');
+
+  const handleWrtitingReview = (e: any) => {
+    setReviewInput(e.target.value);
+  };
+
+  const handleAddReview = async () => {
+    if (!reviewInput) return;
+    try {
+      console.log("=========>  ", productData.id)
+      console.log("=========>  ", productData)
+      const res = await fetch(`/api/product/review/${productData.id}`, {
+        method: 'POST',
+        body: JSON.stringify({ content: reviewInput, rating: 3 }),
+      });
+      console.log('=========>  ', res);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div>
-      {/* Tabs Header */}
       <div className="flex border-b border-gray-300 mb-6 font-semibold">
         <button
           onClick={() => setActiveTab('reviews')}
@@ -84,12 +104,17 @@ function ProductTabs({ productData }: any) {
           >
             <input
               type="text"
+              onChange={handleWrtitingReview}
               placeholder="Share your review"
               className={`flex-1 text-gray-700 placeholder-gray-400 outline-none bg-transparent py-4 text-sm`}
             />
             <div className="flex items-end space-x-5" data-aos="fade-up">
               <RatingStars isStatic={false} defaultValue={1} size="medium" />
-              <button className="cursor-pointer bg-black text-white px-2 py-2 rounded-full md:px-8 font-medium">
+              <button
+                value={reviewInput}
+                onClick={handleAddReview}
+                className="cursor-pointer bg-black text-white px-2 py-2 rounded-full md:px-8 font-medium"
+              >
                 <EastIcon
                   sx={{
                     fontSize: '1rem',
@@ -134,7 +159,7 @@ function ProductTabs({ productData }: any) {
           <div>
             {visibleItems.map((item: any, index: number) => (
               <div
-                key={item.id}
+                key={index}
                 data-aos="fade-right"
                 data-aos-delay={`${index * 100}`}
               >
@@ -142,7 +167,7 @@ function ProductTabs({ productData }: any) {
                   name={item.name}
                   image={item.avatar}
                   rate={item.rate}
-                  comment={item.comments}
+                  comment={item.content}
                 />
               </div>
             ))}

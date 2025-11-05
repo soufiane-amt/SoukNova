@@ -6,17 +6,21 @@ import { CartProvider } from '../context/CartContext';
 import { usePathname } from 'next/navigation';
 import NavBar from '../components/layout/NavBar/Navbar';
 
-export const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-poppins',
-});
+// export const poppins = Poppins({
+//   subsets: ['latin'],
+//   weight: ['400', '500', '600', '700'],
+//   variable: '--font-poppins',
+// });
 
-export const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-inter',
-});
+// export const inter = Inter({
+//   subsets: ['latin'],
+//   weight: ['400', '500', '600', '700'],
+//   variable: '--font-inter',
+// });
+
+export const poppins = { className: '' };
+export const inter = { className: '' };
+
 
 export default function RootLayout({
   children,
