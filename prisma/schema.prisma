@@ -26,6 +26,7 @@ model User {
   wishlist      Wishlist[]
   cartItems          CartItem[]
   orders    Order[]
+  comments    Comment[]
 }
 
 model Wishlist {
@@ -55,5 +56,16 @@ model Order {
   userId  Int
   user      User   @relation(fields: [userId], references: [id])
 
+  addedAt   DateTime @default(now())
+}
+
+
+model Comment {
+  id   Int   @id @default(autoincrement())
+  userId  Int
+  user      User   @relation(fields: [userId], references: [id])
+  productId String 
+  content    String
+  rating     Int
   addedAt   DateTime @default(now())
 }

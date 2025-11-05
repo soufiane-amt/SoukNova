@@ -16,6 +16,7 @@ import { OrderModule } from '../order/order.module';
     WishlistModule,
     CartModule,
     OrderModule,
+    Comment
   ],
   controllers: [],
   providers: [],

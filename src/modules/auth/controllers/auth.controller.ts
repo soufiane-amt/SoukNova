@@ -4,9 +4,7 @@ import {
   Controller,
   Get,
   Post,
-  Req,
   Res,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
