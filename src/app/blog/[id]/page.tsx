@@ -12,6 +12,7 @@ import { SiteFooter } from '../../../components/layout/SiteFooter';
 import { ARTICLES } from '../../../constants/articalList';
 import ArticlMetaData from '../components/ArticlMetaData';
 import Loader from '../../../components/feedback/loader/Loader';
+import { ArticleSection } from '@/home/components/ArticleSection';
 
 function articalPage() {
   const { id } = useParams();
@@ -59,7 +60,7 @@ function articalPage() {
 
   return (
     <main>
-      <div className="mx-[160px] max-lg:mx-20 max-md:mx-10 max-sm:mx-8 mb-20 mt-4 max-xl:mx-20">
+      <div className="mx-[160px] max-lg:mx-20 max-md:mx-10 max-sm:mx-8 mb-20 mt-10  max-xl:mx-20">
         <div data-aos="fade-down" data-aos-delay="200">
           <Traversal
             items={[
@@ -176,37 +177,9 @@ function articalPage() {
             </p>
           ))}
         </div>
-
-        <div data-aos="fade-up" className="mt-20">
-          <div className="flex justify-between w-full mb-5">
-            <p
-              data-aos="fade-right"
-              data-aos-delay="200"
-              className={`${poppins.className} font-semibold md:block hidden text-3xl`}
-            >
-              You might also like
-            </p>
-            <div data-aos="fade-left" data-aos-delay="200">
-              <CustomButton label="More articles" href="/blog" />
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row items-start gap-x-5">
-            {ARTICLES.slice(0, 3).map((item, index) => (
-              <div
-                key={item.id}
-                data-aos="fade-up"
-                data-aos-delay={index * 100} // Stagger effect
-              >
-                <ArticleCard
-                  title={item.title}
-                  image={item.image}
-                  date={item.date}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
+      <ArticleSection />
+
       <SiteFooter />
     </main>
   );

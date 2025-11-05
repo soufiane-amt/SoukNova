@@ -3,6 +3,14 @@ import { NextResponse } from 'next/server';
 const API_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/new%20articles?select=*`;
 const API_KEY = process.env.SUPABASE_KEY;
 
+function getRandomIndices(length: number, count: number) {
+  const indices = new Set<number>();
+  while (indices.size < Math.min(count, length)) {
+    indices.add(Math.floor(Math.random() * length));
+  }
+  return Array.from(indices);
+}
+
 export async function GET() {
   try {
     const response = await fetch(API_URL, {
@@ -32,8 +40,10 @@ export async function GET() {
       date: item.date ?? null,
     }));
 
-    
-    return NextResponse.json(articles);
+    const randomIndices = getRandomIndices(articles.length, 3);
+    const randomArticles = randomIndices.map(i => articles[i]);
+
+    return NextResponse.json(randomArticles);
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

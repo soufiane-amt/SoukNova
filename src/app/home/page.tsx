@@ -3,7 +3,7 @@ import { ArticleSection } from './components/ArticleSection';
 import BenefitsDisplay from './components/BenefitsDisplay';
 import CustomCarousel from './components/CustomCarousel';
 import NewArrivalSection from './components/NewArrivalSection';
-import { NewsLetterSub } from './components/NewsLetterSub';
+import { NewsLetterSub } from '../../components/layout/NewsLetterSub';
 import { PromoHighlightSection } from './components/PromoHighlightSection';
 import { PromoSection } from './components/PromoSection';
 

@@ -3,30 +3,22 @@ import { useState } from 'react';
 import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
 import { ProductCard } from '../../../components/cards/ProductCard/ProductCard';
 import EmptySectionMessage from '../../../components/feedback/EmptySection';
+import { useShowMore } from '../../../hooks/useShowMore';
 
-const defaultShowCount = 12;
 interface ProductGridProps {
   products: any[];
   selectedShape: number;
 }
 
 function ProductGrid({ products, selectedShape }: ProductGridProps) {
-  const [showCount, setShowCount] = useState(defaultShowCount);
-
-  const handleShowMore = () => {
-    const newShowCount = Math.min(
-      showCount + defaultShowCount,
-      products.length,
-    );
-    setShowCount(newShowCount);
-  };
+  const { visibleItems, handleShowMore, hasMore } = useShowMore(products, 12);
 
   return (
     <div
       className={`${selectedShape === 0 ? 'lg:col-span-3' : 'lg:col-span-4'}`}
     >
       {!products.length ? (
-        <div className='flex justify-center items-center mt-20'>
+        <div className="flex justify-center items-center mt-20">
           <EmptySectionMessage message="No Products are available" />
         </div>
       ) : (
@@ -36,7 +28,7 @@ function ProductGrid({ products, selectedShape }: ProductGridProps) {
           sx={{ width: '100%' }}
           justifyContent={{ xs: 'center', md: 'space-between' }}
         >
-          {products.slice(0, showCount).map((item, index) => (
+          {visibleItems.map((item, index) => (
             <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
               <ProductCard
                 productId={item.id}
@@ -53,9 +45,7 @@ function ProductGrid({ products, selectedShape }: ProductGridProps) {
         </Grid>
       )}
 
-      {showCount < products.length && (
-        <ShowMoreButton handleShowMore={handleShowMore} />
-      )}
+      {hasMore && <ShowMoreButton handleShowMore={handleShowMore} />}
     </div>
   );
 }

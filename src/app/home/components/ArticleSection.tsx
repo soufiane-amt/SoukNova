@@ -1,9 +1,23 @@
+'use client';
 import { ArticleCard } from './ArticleCard';
 import CustomButton from '../../../components/buttons/CustomButton';
-import { ARTICLES } from '../../../constants/articalList';
 import { poppins } from '@/layout';
+import { useEffect, useState } from 'react';
 
 export function ArticleSection() {
+  const [articles, setArticles] = useState([]);
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch('/api/articles/random');
+        if (!response.ok) throw new Error('Network response was not ok');
+        setArticles(await response.json());
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchArticles();
+  }, []);
   return (
     <section className="flex flex-col justify-center px-4 md:px-12 lg:px-25 max-w-screen-2xl mx-auto my-12">
       <div className="flex justify-between w-full items-center mb-7">
@@ -11,10 +25,10 @@ export function ArticleSection() {
         <CustomButton label="More articles" href="/blog" />
       </div>
 
-      <div className="flex flex-col md:flex-row items-center justify-between gap-x-5">
-        {ARTICLES.map((item, index) => (
+      <div className=" flex flex-col md:flex-row items-center justify-between gap-x-5">
+        {articles.map((item, index) => (
           <div key={item.id} data-aos="fade-up" data-aos-delay={index * 150}>
-            <ArticleCard title={item.title} image={item.image} />
+            <ArticleCard id={item.id} title={item.title} image={item.image} />
           </div>
         ))}
       </div>

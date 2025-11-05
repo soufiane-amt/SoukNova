@@ -1,3 +1,5 @@
+'use client';
+import * as React from 'react';
 import { useEffect, useState } from 'react';
 import Traversal from '../../../components/ui/Traversal';
 import Carousel from 'react-material-ui-carousel';
@@ -16,6 +18,196 @@ import RatingStars from '../../../components/inputs/RatingStars';
 import ReviewsSort from './ReviewsSort';
 import { Review } from '../../../components/cards/Review';
 import { useCart } from '../../../context/CartContext';
+import { poppins } from '@/layout';
+import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
+import { useShowMore } from '../../../hooks/useShowMore';
+
+function ProductTabs({ productData }: any) {
+  const [activeTab, setActiveTab] = useState<'reviews' | 'info'>('reviews');
+  const { visibleItems, handleShowMore, hasMore } = useShowMore(
+    productData.reviews,
+    5,
+  );
+
+  return (
+    <div>
+      {/* Tabs Header */}
+      <div className="flex border-b border-gray-300 mb-6 font-semibold">
+        <button
+          onClick={() => setActiveTab('reviews')}
+          className={`px-4 py-2 text-lg cursor-pointer ${
+            activeTab === 'reviews'
+              ? 'border-b-2'
+              : 'text-[var(--color-primary)] font-medium'
+          }`}
+        >
+          Reviews
+        </button>
+        <button
+          onClick={() => setActiveTab('info')}
+          className={`px-4 py-2 text-lg cursor-pointer ${
+            activeTab === 'info'
+              ? 'border-b-2'
+              : 'text-[var(--color-primary)] font-medium'
+          }`}
+        >
+          Additional Info
+        </button>
+      </div>
+      {activeTab === 'reviews' && (
+        <div>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 550,
+              marginBottom: 2,
+              fontSize: {
+                xs: '0.75rem',
+                sm: '1rem',
+                md: '1.25rem',
+                lg: '1.75rem',
+              },
+              fontFamily: 'Poppins, sans-serif',
+            }}
+          >
+            Customer Reviews
+          </Typography>
+          <div className="flex space-x-4 mt-5" data-aos="fade-up">
+            <RatingStars isStatic={true} defaultValue={productData.rate} />
+            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+              <span>{productData?.reviews?.length ?? 0}</span> Reviews
+            </Typography>
+          </div>
+          <div
+            className={`border border-gray-300 flex justify-between items-center px-5 py-2 rounded-lg mt-6 ${poppins.className}`}
+            data-aos="fade-up"
+          >
+            <input
+              type="text"
+              placeholder="Share your review"
+              className={`flex-1 text-gray-700 placeholder-gray-400 outline-none bg-transparent py-4 text-sm`}
+            />
+            <div className="flex items-end space-x-5" data-aos="fade-up">
+              <RatingStars isStatic={false} defaultValue={1} size="medium" />
+              <button className="cursor-pointer bg-black text-white px-2 py-2 rounded-full md:px-8 font-medium">
+                <EastIcon
+                  sx={{
+                    fontSize: '1rem',
+                    color: 'white',
+                    bgcolor: 'black',
+                    borderRadius: '50%',
+                    p: '4px',
+                    width: 25,
+                    height: 25,
+                    display: {
+                      xs: 'inline-flex',
+                      md: 'none',
+                      lg: 'none',
+                    },
+                  }}
+                />
+                <span className="md:inline hidden">Write review</span>
+              </button>
+            </div>
+          </div>
+          <div
+            className="mt-12 flex justify-between items-end"
+            data-aos="fade-right"
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 500,
+                fontSize: {
+                  xs: '0.75rem',
+                  sm: '1rem',
+                  md: '1.25rem',
+                  lg: '1.75rem',
+                },
+                fontFamily: 'Poppins, sans-serif',
+              }}
+            >
+              <span>{productData?.reviews?.length ?? 0}</span> Reviews
+            </Typography>
+            <ReviewsSort />
+          </div>
+          <div>
+            {visibleItems.map((item: any, index: number) => (
+              <div
+                key={item.id}
+                data-aos="fade-right"
+                data-aos-delay={`${index * 100}`}
+              >
+                <Review
+                  name={item.name}
+                  image={item.avatar}
+                  rate={item.rate}
+                  comment={item.comments}
+                />
+              </div>
+            ))}
+          </div>
+          {hasMore && <ShowMoreButton handleShowMore={handleShowMore} />}
+        </div>
+      )}
+
+      {activeTab === 'info' && (
+        <div className={`${poppins.className} space-y-4`}>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 500,
+              marginBottom: 2,
+              fontSize: {
+                xs: '0.75rem',
+                sm: '1rem',
+                md: '1.25rem',
+                lg: '1.75rem',
+              },
+              fontFamily: 'Poppins, sans-serif',
+            }}
+          >
+            Additional Info
+          </Typography>
+
+          <div>
+            <p
+              className="font-semibold text-xl text-[var(--color-primary)]"
+              data-aos="fade-right"
+              data-aos-delay="100"
+            >
+              Details
+            </p>
+            <p
+              className="font-medium text-md"
+              data-aos="fade-right"
+              data-aos-delay="150"
+            >
+              {productData.about_item}
+            </p>
+          </div>
+
+          <div data-aos="fade-right">
+            <p
+              className="font-semibold text-xl text-[var(--color-primary)]"
+              data-aos="fade-right"
+              data-aos-delay="200"
+            >
+              Packaging
+            </p>
+            <p
+              className="font-medium text-md"
+              data-aos="fade-right"
+              data-aos-delay="250"
+            >
+              {productData.package_dimensions}
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface ProductProps {
   productData: any;
@@ -60,7 +252,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
         ]}
       />
       <div className="lg:flex w-full">
-        <div className="mb-10 lg:mr-15 lg:w-[500px]" data-aos="fade-right">
+        <div className="mb-10 lg:mr-15 lg:w-[550px]" data-aos="fade-right">
           <Carousel navButtonsAlwaysInvisible={true}>
             {activeImage && (
               <ProductImage
@@ -90,7 +282,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
               >
                 {getFirstTwoWords(productData.title)}
               </p>
-              <p className="max-h-[78px] w-full overflow-hidden text-ellipsis text-wrap font-inter leading-[26px] text-[var(--color-primary)] text-sm">
+              <p className=" w-full overflow-hidden text-ellipsis text-wrap font-inter leading-[26px] text-[var(--color-primary)] text-sm">
                 {productData.about_item}
               </p>
             </div>
@@ -105,7 +297,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
               </Typography>
               {productData.price && (
                 <Typography
-                  className="line-through !text-2xl"
+                  className="line-through !text-xl !font-semibold"
                   sx={{ color: 'var(--color-primary)' }}
                 >
                   ${Number(productData.price).toFixed(2)}
@@ -116,21 +308,10 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
               <CountdownTimer />
             </div>
             <div className="mt-5">
-              <p className="font-semibold text-black-shade-4 text-sm text-[var(--color-primary)]">
+              <p className="font-semibold text-black-shade-4 text-md text-[var(--color-primary)]">
                 Measurements
               </p>
               <p className="mt-2 text-xl">{productData.package_dimensions}</p>
-            </div>
-            <div className="my-11">
-              <p className="font-semibold text-black-shade-4 text-sm text-[var(--color-primary)]">
-                Choose color
-              </p>
-              <div className="flex space-x-2 mt-2">
-                <div className="w-10 h-10 bg-blue-500 rounded-full border border-blue-500"></div>
-                <div className="w-10 h-10 bg-yellow-200 rounded-full border border-blue-500"></div>
-                <div className="w-10 h-10 bg-white rounded-full border border-blue-500"></div>
-                <div className="w-10 h-10 bg-green-500 rounded-full border border-blue-500"></div>
-              </div>
             </div>
           </div>
 
@@ -139,7 +320,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             data-aos="fade-up"
             data-aos-delay="300"
           >
-            <div className="bg-[#F5F5F5] flex-1 flex justify-around items-center font-bold rounded-lg">
+            <div className="bg-[#F5F5F5] flex-1 flex justify-around items-center font-bold rounded-lg text-sm md:text-md">
               <button
                 className="cursor-pointer"
                 onClick={() => decreaseFromCart(productData.id)}
@@ -195,103 +376,28 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             </button>
           </div>
           <div
-            className="flex items-center gap-[58px] my-15"
+            className="my-15 text-xs space-y-2"
             data-aos="fade-up"
             data-aos-delay="500"
           >
-            <p className="w-[65px] text-[var(--color-primary)]">CATEGORY</p>
-            <p>{productData.categoriesText}</p>
+            <div className="flex items-center">
+              <p className="w-24 text-[var(--color-primary)] font-medium">
+                CATEGORY
+              </p>
+              <p className="text-gray-800">{productData.categoriesText}</p>
+            </div>
+
+            <div className="flex items-center">
+              <p className="w-24 text-[var(--color-primary)] font-medium">
+                SKU
+              </p>
+              <p className="text-gray-800">{productData.item_model_number}</p>
+            </div>
           </div>
         </div>
       </div>
       <div>
-        <div className="mb-10">
-          <p className="cursor-pointer border-b border-[#121212] font-medium text-[#121212] md:text-xl lg:text-2xl font-semibold">
-            Reviews
-          </p>
-        </div>
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: 550,
-            marginBottom: 2,
-            fontSize: {
-              xs: '1rem',
-              sm: '1.25rem',
-              md: '1.5rem',
-              lg: '2rem',
-            },
-            fontFamily: 'Poppins, sans-serif',
-          }}
-        >
-          Customer Reviews
-        </Typography>
-        <div className="flex space-x-4 mt-5" data-aos="fade-up">
-          <RatingStars isStatic={true} defaultValue={productData.rate} />
-          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-            <span>{productData?.reviews?.length ?? 0}</span> Reviews
-          </Typography>
-        </div>
-      </div>
-      <div
-        className="border flex justify-between items-center px-5 py-2 rounded-lg border-gray-400 mt-6"
-        data-aos="fade-up"
-      >
-        <input
-          type="text"
-          placeholder="Share your review"
-          className="flex-1 text-gray-700 placeholder-gray-400 outline-none bg-transparent"
-        />
-        <div className="flex items-end space-x-5">
-          <RatingStars isStatic={false} defaultValue={1} />
-          <button className="cursor-pointer">
-            <EastIcon
-              sx={{
-                fontSize: '1rem',
-                color: 'white',
-                bgcolor: 'black',
-                borderRadius: '50%',
-                p: '4px',
-                width: 25,
-                height: 25,
-              }}
-            />
-          </button>
-        </div>
-      </div>
-      <div className="mt-12">
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: 500,
-            fontSize: {
-              xs: '1rem',
-              sm: '1.25rem',
-              md: '1.5rem',
-              lg: '2rem',
-            },
-            fontFamily: 'Poppins, sans-serif',
-          }}
-        >
-          <span>{productData?.reviews?.length ?? 0}</span> Reviews
-        </Typography>
-        <ReviewsSort />
-      </div>
-      <div>
-        {productData.reviews.map((item: any, index: number) => (
-          <div
-            key={item.id}
-            data-aos="fade-up"
-            data-aos-delay={`${index * 100}`}
-          >
-            <Review
-              name={item.name}
-              image={item.avatar}
-              rate={item.rate}
-              comment={item.comments}
-            />
-          </div>
-        ))}
+        <ProductTabs productData={productData} />
       </div>
     </div>
   );

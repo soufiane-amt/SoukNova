@@ -1,7 +1,6 @@
 'use client';
 
 import { ShoppingBag, CircleUserRound, Search } from 'lucide-react';
-
 import { Menu } from 'lucide-react';
 import { List, ListItem, ListItemText } from '@mui/material';
 import { useState } from 'react';
@@ -13,6 +12,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import SideCart from './SideCart';
 import { useCart } from '../../../context/CartContext';
+import SearchContainer from './SearchContainer';
 
 export const listItemVariants = {
   hidden: { opacity: 0, x: -100 },
@@ -38,17 +38,22 @@ export const listContainerVariants = {
 
 interface DesktopNavProps {
   toggleDrawer: (state: boolean) => () => void;
+  toggleSearch: () => void;
+  isSearchOpen: boolean;
 }
 
-export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
+export function DesktopNav({
+  toggleDrawer,
+  toggleSearch,
+  isSearchOpen,
+}: DesktopNavProps) {
   const [isOpen, setOpen] = useState(false);
   const pathname = usePathname();
-  const { cart } = useCart();
+  const { cart, products } = useCart();
 
   const toggleCartSideBar = () => {
     setOpen(!isOpen);
   };
-
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-white  flex justify-between mx-4  px-6 md:px-12 lg:px-24 max-w-screen-2xl mx-auto py-3 md:py-0 ">
       <div className="flex items-center">
@@ -101,14 +106,22 @@ export function DesktopNav({ toggleDrawer }: DesktopNavProps) {
         initial="hidden"
         animate="visible"
       >
-        <div className="hidden md:flex">
+        <div className="hidden md:flex group relative">
           <motion.button
             aria-label="Search"
             className="ml-4 transform transition-transform duration-200 hover:scale-110 cursor-pointer"
             variants={listContainerVariants}
+            onClick={toggleSearch}
           >
             <Search className="w-6 h-6 text-gray-800" />
           </motion.button>
+          {isSearchOpen && (
+            <SearchContainer
+              products={products}
+              toggleSearch={toggleSearch}
+              isDesktop={true}
+            />
+          )}
         </div>
         <div>
           <Link href="/account" className="flex justify-center">

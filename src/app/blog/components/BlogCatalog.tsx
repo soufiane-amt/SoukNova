@@ -1,12 +1,13 @@
 'use client';
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import ArticleCard from './ArticalCard';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { poppins } from '@/layout';
 import { Article } from '../../../types/types';
 import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
+import { useShowMore } from '../../../hooks/useShowMore';
 
 interface BlogProps {
   articles: Article[];
@@ -19,16 +20,7 @@ export default function BlogCatalog({ articles }: BlogProps) {
       once: true,
     });
   }, []);
-  const [showCount, setShowCount] = useState(16);
-
-  const handleShowMore = () => {
-    const newShowCount = Math.min(showCount + 16, articles.length);
-    setShowCount(newShowCount);
-  };
-  const visibleArticles = React.useMemo(
-    () => articles.slice(0, showCount),
-    [articles, showCount],
-  );
+  const { visibleItems, handleShowMore, hasMore } = useShowMore(articles, 12);
 
   return (
     <div>
@@ -45,12 +37,12 @@ export default function BlogCatalog({ articles }: BlogProps) {
           Blogs
         </h2>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {visibleArticles.map((article, index) => (
+          {visibleItems.map((article, index) => (
             <div
               key={article.id}
               data-aos="fade-up"
               data-aos-delay={`${index * 50}`}
-              className='flex justify-center'
+              className="flex justify-center"
             >
               <ArticleCard
                 id={article.id}
@@ -61,9 +53,7 @@ export default function BlogCatalog({ articles }: BlogProps) {
             </div>
           ))}
         </div>
-        {showCount < articles.length && (
-          <ShowMoreButton handleShowMore={handleShowMore} />
-        )}
+        {hasMore && <ShowMoreButton handleShowMore={handleShowMore} />}
       </section>
     </div>
   );
