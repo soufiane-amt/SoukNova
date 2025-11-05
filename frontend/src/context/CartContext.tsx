@@ -37,6 +37,7 @@ interface CartContextType {
   cart: CartItemType[];
   subtotal: number;
   total: number;
+  products: any[];
   addToCart: (productId: string, quantity?: number) => Promise<void>;
   removeFromCart: (productId: string) => Promise<void>;
   decreaseFromCart: (productId: string) => Promise<void>;
@@ -56,6 +57,7 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItemType[]>([]);
+  const [products, setProducts] = useState<[]>([]);
   const [subtotal, setSubtotal] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
   const [toast, setToast] = useState<string | null>(null);
@@ -70,6 +72,26 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setSubtotal(0);
     setTotal(0);
   };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/product', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+
+        setProducts(data.slice(0, 7));
+      } catch (e) {
+        console.error(e.message);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -167,6 +189,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         cart,
         subtotal,
         total,
+        products,
         addToCart,
         removeFromCart,
         decreaseFromCart,

@@ -5,6 +5,8 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Loader from '../../../components/feedback/loader/Loader';
 import Product from '../components/Product';
+import { NewsLetterSub } from '../../../components/layout/NewsLetterSub';
+import { SiteFooter } from '../../../components/layout/SiteFooter';
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -51,8 +53,12 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="mx-10 lg:mx-30">
-      <Product productData={productData} />
-    </div>
+    <main>
+      <div className="mx-10 lg:mx-30 mb-10">
+        <Product productData={productData} />
+      </div>
+      <NewsLetterSub />
+      <SiteFooter />
+    </main>
   );
 }

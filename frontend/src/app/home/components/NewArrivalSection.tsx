@@ -1,34 +1,12 @@
 'use client';
 import { poppins } from '@/layout';
 import CustomButton from '../../../components/buttons/CustomButton';
-import { useEffect, useState } from 'react';
-import { fetchFromSupabase } from '../../../lib/supbaseApi';
 import Link from 'next/link';
 import { ProductCard } from '../../../components/cards/ProductCard/ProductCard';
-import Loader from '../../../components/feedback/loader/Loader';
+import { useCart } from '../../../context/CartContext';
 
 export default function NewArrivalSection() {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('/api/product', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const data = await response.json();
-
-        setProducts(data.slice(0, 7));
-      } catch (e) {
-        console.error(e.message);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  const { products } = useCart();
 
   return (
     <section aria-labelledby="new-arrivals" className="my-12">

@@ -26,7 +26,7 @@ export default function SectionShow({imageUrl, head, desc} : SectionShowProps) {
             items={[{ label: 'Home', href: '/' }, { label: head }]}
           />
         </div>
-        <div className="flex  justify-center text-center">
+        <div className="flex  justify-center text-center px-4">
           <div>
             <h1 className={`text-4xl md:text-6xl font-medium mb-5 ${poppins.className}`}>{`${head} Page`}</h1>
             <p className='text-sm md:text-md'>{desc}</p>

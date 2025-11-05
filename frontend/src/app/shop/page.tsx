@@ -1,6 +1,6 @@
 'use client';
 
-import { NewsLetterSub } from '@/home/components/NewsLetterSub';
+import { NewsLetterSub } from '../../components/layout/NewsLetterSub';
 import { SiteFooter } from '../../components/layout/SiteFooter';
 import { useEffect, useState } from 'react';
 import SectionShow from '../../components/ui/SectionShow';

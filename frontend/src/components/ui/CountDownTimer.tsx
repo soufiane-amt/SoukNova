@@ -62,19 +62,19 @@ const CountdownTimer: React.FC = () => {
   return (
     <div className={`${poppins.className}`}>
       {isOfferExpired ? (
-        <span className={`text-sm font-semibold text-red-500 ${poppins.className}`}>
+        <span className={`text-sm font-semibold `}>
           Offer Expired!
         </span>
       ) : (
         <div>
           <Typography
             variant="h6"
-            color="var(--color-primary)"
-            sx={{ fontWeight: 'medium', fontFamily: poppins.className, fontSize:17 }}
+            color="#343839"
+            sx={{ fontWeight: 'thin', fontSize:17 ,color: "text-red-500"}}
           >
             Offer expires in:
           </Typography>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mt-1">
             {timerComponents.length ? (
               timerComponents
             ) : (

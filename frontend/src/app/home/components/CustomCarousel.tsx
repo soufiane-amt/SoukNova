@@ -20,6 +20,7 @@ const CustomCarousel = () => (
       pagination={{ clickable: true }}
       autoplay={{ delay: 3000, disableOnInteraction: false }}
       loop={true}
+      
     >
       {CAROUSEL_IMAGES.map((img) => (
         <SwiperSlide key={img.src}>

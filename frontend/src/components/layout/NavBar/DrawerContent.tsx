@@ -13,6 +13,8 @@ import { SocialLinks } from '../../icons/SocialLinks';
 import { NAV_ITEMS } from '../../../constants/navItems';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import SearchContainer from './SearchContainer';
+import { useCart } from '../../../context/CartContext';
 
 interface DrawerItemProps {
   label: string;
@@ -42,12 +44,17 @@ function DrawerItem({ label, icon }: DrawerItemProps) {
 
 interface DrawerContentProps {
   toggleDrawer: (state: boolean) => () => void;
+  toggleSearch: () => void;
   isOpen: boolean;
 }
 
-export function DrawerContent({ toggleDrawer, isOpen }: DrawerContentProps) {
+export function DrawerContent({
+  toggleDrawer,
+  toggleSearch,
+  isOpen,
+}: DrawerContentProps) {
   const pathname = usePathname();
-
+  const { products } = useCart();
   return (
     <Drawer anchor="left" open={isOpen} onClose={toggleDrawer(false)}>
       <div className="mx-3 my-2 flex flex-col h-full">
@@ -58,18 +65,11 @@ export function DrawerContent({ toggleDrawer, isOpen }: DrawerContentProps) {
           </button>
         </div>
         <div className="mb-4">
-          <TextField
-            className="w-full"
-            label="Search"
-            variant="outlined"
-            size="small"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
+          <SearchContainer
+            products={products}
+            isDesktop={false}
+            toggleSearch={toggleSearch}
+            toggleDrawer={toggleDrawer}
           />
         </div>
         <div

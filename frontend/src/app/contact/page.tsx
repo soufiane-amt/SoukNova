@@ -22,7 +22,7 @@ function ContactPage() {
 
   return (
     <main>
-      <div className="mx-10 md:mx-15 lg:mx-30">
+      <div className="mx-10 md:mx-15 lg:mx-30 pt-5">
         <div>
           <div
             className="flex mt-4 space-x-2"

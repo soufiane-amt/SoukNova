@@ -18,6 +18,17 @@ export const GET = async (
         'Accept-Profile': 'public',
       },
     });
+
+    console.log('Requesting ...', process.env.NEXT_PUBLIC_API_URL);
+
+    const comments = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comment/${id}`, {
+      headers: {
+        Accept: 'application/json',
+        'Accept-Profile': 'public',
+      },
+    });
+    console.log('data : ', comments);
+
     if (!response.ok) {
       throw new Error('Failed to fetch products');
     }
@@ -40,6 +51,7 @@ export const GET = async (
         ', ',
       ),
       about_item: item.about_item,
+      item_model_number: item.item_model_number,
     }));
 
     return NextResponse.json(products);
