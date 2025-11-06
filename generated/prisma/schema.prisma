@@ -65,6 +65,6 @@ model Comment {
   user      User     @relation(fields: [userId], references: [id])
   productId String
   content   String
-  rating    Int
+  rating    Float
   addedAt   DateTime @default(now())
 }
