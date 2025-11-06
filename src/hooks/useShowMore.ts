@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from 'react';
 
 export function useShowMore<T>(items: T[], defaultShowCount: number = 5) {
   const [showCount, setShowCount] = useState(defaultShowCount);
+  const [visibleItems, setVisibleItems] = useState<T[]>([]);
 
   const handleShowMore = () => {
     setShowCount((prev) => Math.min(prev + defaultShowCount, items.length));
   };
 
-  const visibleItems = items.slice(0, showCount);
+  useEffect(() => {
+    setVisibleItems(items.slice(0, showCount));
+  }, [items, showCount]);
   const hasMore = showCount < items.length;
 
-  return { visibleItems, showCount, handleShowMore, hasMore };
+  return { visibleItems,setVisibleItems, showCount, handleShowMore, hasMore };
 }

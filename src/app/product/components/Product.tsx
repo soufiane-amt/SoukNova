@@ -21,16 +21,17 @@ import { useCart } from '../../../context/CartContext';
 import { poppins } from '@/layout';
 import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
 import { useShowMore } from '../../../hooks/useShowMore';
+import { useRouter } from 'next/navigation';
 
 function ProductTabs({ productData }: any) {
   const [activeTab, setActiveTab] = useState<'reviews' | 'info'>('reviews');
-  const { visibleItems, handleShowMore, hasMore } = useShowMore(
-    productData.reviews,
-    5,
-  );
+  const { visibleItems, setVisibleItems, handleShowMore, hasMore } =
+    useShowMore(productData.reviews, 5);
   const [reviewInput, setReviewInput] = useState('');
-  // const [ratingInput, setRatingInput] = useState('');
+  const [ratingInput, setRatingInput] = useState<number | null>(1);
+  const route = useRouter();
 
+  useEffect(() => {}, [visibleItems]);
   const handleWrtitingReview = (e: any) => {
     setReviewInput(e.target.value);
   };
@@ -38,13 +39,21 @@ function ProductTabs({ productData }: any) {
   const handleAddReview = async () => {
     if (!reviewInput) return;
     try {
-      console.log("=========>  ", productData.id)
-      console.log("=========>  ", productData)
       const res = await fetch(`/api/product/review/${productData.id}`, {
         method: 'POST',
-        body: JSON.stringify({ content: reviewInput, rating: 3 }),
+        body: JSON.stringify({ content: reviewInput, rating: ratingInput }),
       });
-      console.log('=========>  ', res);
+      if (res.status === 401) {
+        route.push('/auth/signin');
+        return;
+      }
+
+      const data = await res.json();
+      const newReview = {
+        ...data,
+        avatar: `${process.env.NEXT_PUBLIC_API_URL}${data.avatar}`,
+      };
+      setVisibleItems([newReview, ...visibleItems]);
     } catch (err) {
       console.error(err);
     }
@@ -106,10 +115,15 @@ function ProductTabs({ productData }: any) {
               type="text"
               onChange={handleWrtitingReview}
               placeholder="Share your review"
-              className={`flex-1 text-gray-700 placeholder-gray-400 outline-none bg-transparent py-4 text-sm`}
+              className={`flex-1 text-gray-700 placeholder-gray-400 outline-none bg-transparent py-2 md:py-4 text-sm`}
             />
             <div className="flex items-end space-x-5" data-aos="fade-up">
-              <RatingStars isStatic={false} defaultValue={1} size="medium" />
+              <RatingStars
+                isStatic={false}
+                defaultValue={1}
+                size="medium"
+                onChange={(newValue) => setRatingInput(newValue)}
+              />
               <button
                 value={reviewInput}
                 onClick={handleAddReview}
@@ -159,7 +173,7 @@ function ProductTabs({ productData }: any) {
           <div>
             {visibleItems.map((item: any, index: number) => (
               <div
-                key={index}
+                key={item.id}
                 data-aos="fade-right"
                 data-aos-delay={`${index * 100}`}
               >

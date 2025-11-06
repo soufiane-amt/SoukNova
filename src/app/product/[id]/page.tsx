@@ -50,7 +50,7 @@ export default function ProductPage() {
 
   return (
     <main>
-      <div className="mx-10 lg:mx-30 mb-10">
+      <div className="md:mx-20 mx-10  mt-10 lg:mx-30 mb-10">
         <Product productData={productData} />
       </div>
       <NewsLetterSub />

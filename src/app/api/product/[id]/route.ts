@@ -38,12 +38,15 @@ export const GET = async (
 
     const item = data[0];
 
+    console.log('fake reviews data: ', data);
     const fakeReviews: {
+      id: string;
       name: string;
       avatar: string;
       rate: number;
       content: string;
     }[] = item.reviews.map((review) => ({
+      id: review.id + review.name,
       name: review.name,
       avatar: review.avatar,
       rate: review.rate,
@@ -57,13 +60,15 @@ export const GET = async (
       ...fakeReviews,
     ];
 
+    const realReviewsRate =
+      realComments.reduce((a, b) => a + b.rate, 0) / realComments.length;
     const product = {
       id: item.id,
       title: getFirstTwoWords(item.title),
       price: item.Price,
       originalPrice: item.originalPrice,
       discount: item.discount,
-      rate: item.Rate,
+      rate: ((item.Rate + realReviewsRate) / 2).toFixed(2),
       primary_image: item.primary_image,
       date: item.Date,
       reviews: reviews,
