@@ -6458,7 +6458,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"Comment", 'Int'>
     readonly productId: FieldRef<"Comment", 'String'>
     readonly content: FieldRef<"Comment", 'String'>
-    readonly rating: FieldRef<"Comment", 'Int'>
+    readonly rating: FieldRef<"Comment", 'Float'>
     readonly addedAt: FieldRef<"Comment", 'DateTime'>
   }
     
@@ -7273,7 +7273,7 @@ export namespace Prisma {
     userId?: IntFilter<"Comment"> | number
     productId?: StringFilter<"Comment"> | string
     content?: StringFilter<"Comment"> | string
-    rating?: IntFilter<"Comment"> | number
+    rating?: FloatFilter<"Comment"> | number
     addedAt?: DateTimeFilter<"Comment"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -7296,7 +7296,7 @@ export namespace Prisma {
     userId?: IntFilter<"Comment"> | number
     productId?: StringFilter<"Comment"> | string
     content?: StringFilter<"Comment"> | string
-    rating?: IntFilter<"Comment"> | number
+    rating?: FloatFilter<"Comment"> | number
     addedAt?: DateTimeFilter<"Comment"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
@@ -7323,7 +7323,7 @@ export namespace Prisma {
     userId?: IntWithAggregatesFilter<"Comment"> | number
     productId?: StringWithAggregatesFilter<"Comment"> | string
     content?: StringWithAggregatesFilter<"Comment"> | string
-    rating?: IntWithAggregatesFilter<"Comment"> | number
+    rating?: FloatWithAggregatesFilter<"Comment"> | number
     addedAt?: DateTimeWithAggregatesFilter<"Comment"> | Date | string
   }
 
@@ -7565,7 +7565,7 @@ export namespace Prisma {
   export type CommentUpdateInput = {
     productId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: FloatFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutCommentsNestedInput
   }
@@ -7575,7 +7575,7 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     productId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: FloatFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7591,7 +7591,7 @@ export namespace Prisma {
   export type CommentUpdateManyMutationInput = {
     productId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: FloatFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7600,7 +7600,7 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     productId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: FloatFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -8577,7 +8577,7 @@ export namespace Prisma {
     userId?: IntFilter<"Comment"> | number
     productId?: StringFilter<"Comment"> | string
     content?: StringFilter<"Comment"> | string
-    rating?: IntFilter<"Comment"> | number
+    rating?: FloatFilter<"Comment"> | number
     addedAt?: DateTimeFilter<"Comment"> | Date | string
   }
 
@@ -8925,7 +8925,7 @@ export namespace Prisma {
   export type CommentUpdateWithoutUserInput = {
     productId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: FloatFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -8933,7 +8933,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     productId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: FloatFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -8941,7 +8941,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     productId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
-    rating?: IntFieldUpdateOperationsInput | number
+    rating?: FloatFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
