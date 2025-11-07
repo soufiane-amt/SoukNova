@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Comment" ALTER COLUMN "rating" SET DATA TYPE DOUBLE PRECISION;

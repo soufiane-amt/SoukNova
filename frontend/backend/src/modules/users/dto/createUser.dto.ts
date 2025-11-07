@@ -30,7 +30,11 @@ export class CreateUserDto {
       message: (args) => {
         const constraints = args.constraints[0] as StrongPasswordConstraints;
         const failedRules: string[] = [];
-        const value = args.value as string;
+        const value = args.value as string | undefined;
+
+        if (!value) {
+          return 'Password is required';
+        }
 
         if (value.length < constraints.minLength) {
           failedRules.push(`at least ${constraints.minLength} characters`);
