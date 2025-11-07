@@ -85,7 +85,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         const data = await response.json();
 
         setProducts(data.slice(0, 7));
-      } catch (e) {
+      } catch (e: any) {
         console.error(e.message);
       }
     };
@@ -105,7 +105,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         }
         const data = await res?.json();
         setCart(
-          data.map((product) => ({
+          data.map((product: any) => ({
             ...product,
             productName: getFirstTwoWords(product.productName),
           })),

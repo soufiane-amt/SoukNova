@@ -31,8 +31,8 @@ function BlogPage() {
 
         const data = await response.json();
         setArticles(data);
-      } catch (e) {
-        setError(e.message);
+      } catch (e:any) {
+        setError(e);
       } finally {
         setLoading(false);
       }

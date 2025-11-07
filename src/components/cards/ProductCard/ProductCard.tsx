@@ -39,7 +39,7 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
         method: 'POST',
       });
 
-      if (!res.ok) throw new Error('Failed to delete');
+      if (!res?.ok) throw new Error('Failed to delete');
 
       setIsWishlisted((prev) => !prev);
       showToast('Item added to wishlist!');

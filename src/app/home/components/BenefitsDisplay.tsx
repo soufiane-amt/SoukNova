@@ -8,6 +8,9 @@ function BenefitsDisplay() {
     <section className="my-12">
       <Grid container justifyContent={{ xs: 'center', md: 'space-between' }}>
         {benefits.map((benefit, index) => (
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+
           <Grid
             item
             key={index}

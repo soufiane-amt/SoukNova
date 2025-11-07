@@ -39,7 +39,7 @@ export default function ShopPage() {
         const res = await fetch(`/api/product?${query}`);
         const data = await res.json();
         setProducts(data);
-      } catch (e) {
+      } catch (e: any) {
         setError(e.message);
       } finally {
         setLoading(false);

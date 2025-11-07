@@ -267,7 +267,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
       });
       setIsWishlisted((prev) => !prev);
       showToast('Product is added to wishlist!');
-      if (!res.ok) throw new Error('Failed to delete');
+      if (!res?.ok) throw new Error('Failed to delete');
     } catch (err) {
       console.error(err);
     }

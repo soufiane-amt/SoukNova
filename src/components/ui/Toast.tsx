@@ -7,7 +7,7 @@ interface toastProps {
 }
 const Toast = ({ mes }: toastProps) => {
   const [isVisible, setIsVisible] = useState(false);
-  let timer;
+  let timer: any;
 
   useEffect(() => {
     if (mes) {

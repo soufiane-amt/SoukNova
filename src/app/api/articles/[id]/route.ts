@@ -4,23 +4,20 @@ const API_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/new%20articles?
 const API_KEY = process.env.SUPABASE_KEY;
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
-    const response = await fetch(
-      `${API_URL}&id=eq.${id}`,
-      {
-        headers: {
-          apikey: API_KEY!,
-          Authorization: `Bearer ${API_KEY}`,
-          Accept: 'application/json',
-          'Accept-Profile': 'public',
-        },
+    const response = await fetch(`${API_URL}&id=eq.${id}`, {
+      headers: {
+        apikey: API_KEY!,
+        Authorization: `Bearer ${API_KEY}`,
+        Accept: 'application/json',
+        'Accept-Profile': 'public',
       },
-    );
+    });
     if (!response.ok) {
       throw new Error('Failed to fetch articles');
     }

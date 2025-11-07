@@ -25,6 +25,7 @@ export default function NewArrivalSection() {
           <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
             <Link href={`/product/${item.id}`}>
               <ProductCard
+                productId={item.id}
                 productName={item.title}
                 currentPrice={item.Price}
                 originalPrice={item.originalPrice}

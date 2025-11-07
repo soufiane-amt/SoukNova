@@ -26,7 +26,7 @@ export function ArticleSection() {
       </div>
 
       <div className=" flex flex-col xl:flex-row items-center justify-between gap-x-5">
-        {articles.map((item, index) => (
+        {articles.map((item: any, index: number) => (
           <div key={item.id} data-aos="fade-up" data-aos-delay={index * 150}>
             <ArticleCard id={item.id} title={item.title} image={item.image} />
           </div>

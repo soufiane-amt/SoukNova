@@ -14,7 +14,7 @@ interface OrderProps {
 function Order({ orderId, cartItems }: OrderProps) {
   const { resetCart } = useCart();
   const [cart] = useState(cartItems);
-  const [orderInfo, setOrderInfo] = useState();
+  const [orderInfo, setOrderInfo] = useState<any>();
   useEffect(() => {
     AOS.init({
       duration: 800,

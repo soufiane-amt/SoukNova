@@ -1,14 +1,12 @@
-// app/api/wishlist/[productId]/route.ts
 import { NextResponse } from 'next/server';
-import cookie from 'cookie';
+import * as cookie from 'cookie';
 
 export const POST = async (
   req: Request,
-  context: { params: { productId: string } },
+  { params }: { params: Promise<{ productId: string }> },
 ) => {
+  const { productId } = await params;
   try {
-    const { productId } = await context.params;
-
     if (!productId) {
       return NextResponse.json(
         { error: 'Product ID is required' },
@@ -49,9 +47,9 @@ export const POST = async (
 
 export const DELETE = async (
   req: Request,
-  { params }: { params: { productId: string } },
+  { params }: { params: Promise<{ productId: string }> },
 ) => {
-  const { productId } = params;
+  const { productId } = await params;
   if (!productId)
     return NextResponse.json(
       { error: 'Product ID is required' },
