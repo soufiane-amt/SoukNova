@@ -13,8 +13,6 @@ import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 @UseGuards(AuthGuard)
 @Controller('wishlist')
 export class WishlistController {
-  private cache = new Map<string, any>();
-
   constructor(private readonly wishlistService: WishlistService) {}
 
   @Post(':productId')
