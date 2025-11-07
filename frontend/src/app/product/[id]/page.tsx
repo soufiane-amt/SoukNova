@@ -32,7 +32,7 @@ export default function ProductPage() {
         const data = await response.json();
         setProductData(data);
       } catch (err) {
-        setError('Product not found or failed to load.');
+        setError(err);
       } finally {
         setLoading(false);
       }

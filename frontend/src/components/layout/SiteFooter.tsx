@@ -1,12 +1,4 @@
-import {
-  Box,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
 import { NAV_ITEMS } from '../../constants/navItems';
 import { inter, poppins } from '@/layout';

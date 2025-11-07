@@ -6,15 +6,12 @@ import 'aos/dist/aos.css';
 import Traversal from '../../../components/ui/Traversal';
 import { poppins } from '@/layout';
 import Image from 'next/image';
-import { ArticleCard } from '@/home/components/ArticleCard';
-import CustomButton from '../../../components/buttons/CustomButton';
 import { SiteFooter } from '../../../components/layout/SiteFooter';
-import { ARTICLES } from '../../../constants/articalList';
 import ArticlMetaData from '../components/ArticlMetaData';
 import Loader from '../../../components/feedback/loader/Loader';
 import { ArticleSection } from '@/home/components/ArticleSection';
 
-function articalPage() {
+function ArticalPage() {
   const { id } = useParams();
   const [articalData, setArticalData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -42,6 +39,7 @@ function articalPage() {
           setArticalData(null);
         }
       } catch (err) {
+        console.error(err);
         setError('Product not found or failed to load.');
       } finally {
         setLoading(false);
@@ -185,4 +183,4 @@ function articalPage() {
   );
 }
 
-export default articalPage;
+export default ArticalPage;

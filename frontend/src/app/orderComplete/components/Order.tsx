@@ -5,15 +5,8 @@ import 'aos/dist/aos.css';
 import { inter, poppins } from '@/layout';
 import OrderedItem from './OrderedItem';
 import { CartItemType, useCart } from '../../../context/CartContext';
-import { getFormatInDate } from '../../../utils/helpers';
-import CartItem from '@/cart/components/CartItem';
 import Link from 'next/link';
 
-interface orderType {
-  id: number;
-  totalPrice: number;
-  date: string;
-}
 interface OrderProps {
   orderId: string | null;
   cartItems: CartItemType[];
@@ -64,7 +57,7 @@ function Order({ orderId, cartItems }: OrderProps) {
       }
     };
     fetchOrder();
-  }, [orderId]);
+  }, [orderId, resetCart]);
 
   return (
     <div

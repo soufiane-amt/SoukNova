@@ -24,7 +24,6 @@ export async function middleware(req: NextRequest) {
       credentials: 'include',
     });
 
-    console.log('=============> ', res);
     if (res.ok) {
       return NextResponse.next();
     } else {
@@ -32,7 +31,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(url);
     }
   } catch (error) {
-    // Backend unreachable or error occurred
+    console.error(error)
     url.pathname = '/auth/signin';
     return NextResponse.redirect(url);
   }

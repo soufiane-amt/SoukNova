@@ -1,8 +1,6 @@
-import { Typography } from '@mui/material';
 import Image from 'next/image';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { poppins } from '@/layout';
-import Link from 'next/link';
 
 interface ArticleCardProps {
   id: string;

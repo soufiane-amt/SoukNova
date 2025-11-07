@@ -1,5 +1,4 @@
 import { Grid } from '@mui/material';
-import { useState } from 'react';
 import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
 import { ProductCard } from '../../../components/cards/ProductCard/ProductCard';
 import EmptySectionMessage from '../../../components/feedback/EmptySection';

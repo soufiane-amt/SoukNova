@@ -1,14 +1,12 @@
 import {
-  TextField,
   Drawer,
-  InputAdornment,
   List,
   ListItemText,
   ListItemButton,
   ListItem,
 } from '@mui/material';
 import FavoriteBorderSharpIcon from '@mui/icons-material/FavoriteBorderSharp';
-import { SearchIcon, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { SocialLinks } from '../../icons/SocialLinks';
 import { NAV_ITEMS } from '../../../constants/navItems';
 import Link from 'next/link';

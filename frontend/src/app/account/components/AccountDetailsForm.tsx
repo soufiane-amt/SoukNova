@@ -48,6 +48,7 @@ function AccountDetailsForm() {
       newPassword: formData.newPassword,
     };
     const cleanedPayload = Object.fromEntries(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       Object.entries(payload).filter(([_, value]) => value.trim() !== ''),
     );
 
