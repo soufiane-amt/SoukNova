@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
-import cookie from 'cookie';
+import * as cookie from 'cookie';
 
 export const POST = async (
   req: Request,
-  context: { params: { productId: string } },
+  { params }: { params: Promise<{ productId: string }> },
 ) => {
+  const { productId } = await params;
   try {
-    const { productId } = await context.params;
-
     if (!productId) {
       return NextResponse.json(
         { error: 'Product ID is required' },
@@ -23,7 +22,7 @@ export const POST = async (
       'Content-Type': 'application/json',
     };
 
-    const body = await req.json(); // parse incoming JSON
+    const body = await req.json();
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/comment/${productId}`,
@@ -31,7 +30,6 @@ export const POST = async (
         method: 'POST',
         headers,
         body: JSON.stringify(body),
-        duplex: 'half',
       },
     );
 

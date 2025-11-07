@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import cookie from 'cookie';
+import * as cookie from 'cookie';
 
 export const POST = async (req: Request) => {
   try {

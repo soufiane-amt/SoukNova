@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
-import cookie from 'cookie';
+import * as cookie from 'cookie';
 
 export const GET = async (
   req: Request,
-  context: { params: { orderId: string } },
+  { params }: { params: Promise<{ orderId: string }> },
 ) => {
+  const { orderId } = await params;
   try {
-    const { orderId } = await context.params;
-
     if (!orderId) {
       return NextResponse.json(
         { error: 'Order ID is required' },

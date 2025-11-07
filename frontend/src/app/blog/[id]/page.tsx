@@ -128,15 +128,17 @@ function ArticalPage() {
             </div>
           </div>
 
-          {articalData.article_paragraphs.slice(1, 3).map((para, index) => (
-            <p
-              data-aos="fade-up"
-              key={index}
-              className={`${poppins.className} mb-2`}
-            >
-              {para}
-            </p>
-          ))}
+          {articalData.article_paragraphs
+            .slice(1, 3)
+            .map((para: string, index: number) => (
+              <p
+                data-aos="fade-up"
+                key={index}
+                className={`${poppins.className} mb-2`}
+              >
+                {para}
+              </p>
+            ))}
 
           <div
             data-aos="fade-up"
@@ -165,15 +167,17 @@ function ArticalPage() {
             </div>
           </div>
 
-          {articalData.article_paragraphs.slice(4, 10).map((para, index) => (
-            <p
-              data-aos="fade-up"
-              key={index}
-              className={`${poppins.className} mb-2`}
-            >
-              {para}
-            </p>
-          ))}
+          {articalData.article_paragraphs
+            .slice(4, 10)
+            .map((para: string, index: number) => (
+              <p
+                data-aos="fade-up"
+                key={index}
+                className={`${poppins.className} mb-2`}
+              >
+                {para}
+              </p>
+            ))}
         </div>
       </div>
       <ArticleSection />

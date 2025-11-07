@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import cookie from 'cookie';
+import * as cookie from 'cookie';
 
 export async function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
@@ -31,7 +31,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(url);
     }
   } catch (error) {
-    console.error(error)
+    console.error(error);
     url.pathname = '/auth/signin';
     return NextResponse.redirect(url);
   }

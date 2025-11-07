@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import cookie from 'cookie';
+import * as cookie from 'cookie';
 
 export async function GET(req: Request) {
   try {

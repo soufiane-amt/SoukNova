@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import cookie from 'cookie';
+import * as cookie from 'cookie';
 
 export const POST = async (
   req: Request,
-  context: { params: { productId: string } },
+  { params }: { params: Promise<{ productId: string }> },
 ) => {
   try {
-    const { productId } = await context.params;
+    const { productId } = await params;
 
     if (!productId) {
       return NextResponse.json(
@@ -48,11 +48,10 @@ export const POST = async (
 
 export const DELETE = async (
   req: Request,
-  context: { params: { productId: string } },
+  { params }: { params: Promise<{ productId: string }> },
 ) => {
   try {
-    const { productId } = await context.params;
-
+    const { productId } = await params;
     if (!productId) {
       return NextResponse.json(
         { error: 'Product ID is required' },
@@ -93,10 +92,10 @@ export const DELETE = async (
 
 export const PATCH = async (
   req: Request,
-  context: { params: { productId: string } },
+  { params }: { params: Promise<{ productId: string }> },
 ) => {
   try {
-    const { productId } = context.params;
+    const { productId } = await params;
 
     if (!productId) {
       return NextResponse.json(
@@ -138,11 +137,10 @@ export const PATCH = async (
 
 export const GET = async (
   req: Request,
-  context: { params: { productId: string } },
+  { params }: { params: Promise<{ productId: string }> },
 ) => {
   try {
-    const { productId } = await context.params;
-
+    const { productId } = await params;
     if (!productId) {
       return NextResponse.json(
         { error: 'Product ID is required' },

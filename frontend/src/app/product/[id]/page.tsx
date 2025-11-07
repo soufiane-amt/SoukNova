@@ -31,7 +31,7 @@ export default function ProductPage() {
 
         const data = await response.json();
         setProductData(data);
-      } catch (err) {
+      } catch (err: any) {
         setError(err);
       } finally {
         setLoading(false);

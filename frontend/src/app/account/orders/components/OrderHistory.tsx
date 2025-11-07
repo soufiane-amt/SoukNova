@@ -6,7 +6,7 @@ import { inter } from '@/layout';
 import OrderInfo from './OrderInfo';
 
 function OrderHistory() {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<any>([]);
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -42,7 +42,7 @@ function OrderHistory() {
         </p>
       </div>
       <div className='overflow-y-auto'>
-        {orders.map((order, idx) => (
+        {orders.map((order:any, idx:number) => (
           <div
             key={order.id}
             data-aos="fade-left"

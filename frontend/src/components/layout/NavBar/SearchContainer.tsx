@@ -5,7 +5,7 @@ import Link from 'next/link';
 interface SearchedItemsListProps {
   items: { id: string; title: string; image: string }[];
   toggleSearch: () => void;
-  isDesktop: boolen;
+  isDesktop: boolean;
   toggleDrawer?: (state: boolean) => () => void;
 }
 
@@ -18,8 +18,8 @@ function SearchedItemsList({
   if (!items || items.length === 0) return null;
 
   const handleResetUI = () => {
-    if (toggleDrawer) toggleDrawer(false)()
-    else toggleSearch()
+    if (toggleDrawer) toggleDrawer(false)();
+    else toggleSearch();
   };
   return (
     <div
@@ -28,7 +28,7 @@ function SearchedItemsList({
       } absolute   w-[280px] max-h-[500px] bg-white shadow-lg rounded-lg border border-gray-200 `}
     >
       <ul>
-        {items.slice(0, 15).map((item) => (
+        {items.slice(0, 15).map((item: any) => (
           <Link key={item.title} href={`/product/${item.id}`}>
             <li
               onClick={handleResetUI}
@@ -65,14 +65,14 @@ export default function SearchContainer({
   toggleDrawer,
 }: SearchContainerProps) {
   const [searchText, setSearchText] = useState('');
-  const containerRef = useRef(null);
+  const containerRef = useRef<any>(null);
 
   const handleSearchTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
 
   const filteredItems = products.filter(
-    (item) =>
+    (item: any) =>
       searchText && item.title.toLowerCase().includes(searchText.toLowerCase()),
   );
 

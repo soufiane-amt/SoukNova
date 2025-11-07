@@ -6,10 +6,10 @@ const API_KEY = process.env.SUPABASE_KEY;
 
 export const GET = async (
   req: Request,
-  context: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) => {
+  const { id } = await params;
   try {
-    const { id } = await context.params;
     const response = await fetch(`${API_URL}&id=eq.${id}`, {
       headers: {
         apikey: API_KEY!,
@@ -37,15 +37,13 @@ export const GET = async (
 
     const item = data[0];
 
-    console.log('fake reviews data: ', item);
-    // console.log('realComments  data: ', realComments);
     const fakeReviews: {
       id: string;
       name: string;
       avatar: string;
       rate: number;
       content: string;
-    }[] = item.reviews.map((review) => ({
+    }[] = item.reviews.map((review: any) => ({
       id: review.id + review.name,
       name: review.name,
       avatar: review.avatar,
@@ -53,16 +51,16 @@ export const GET = async (
       content: review.comments,
     }));
     const reviews = [
-      ...realComments.map((review) => ({
+      ...realComments.map((review: any) => ({
         ...review,
         avatar: `${process.env.NEXT_PUBLIC_API_URL}${review.avatar}`,
       })),
       ...fakeReviews,
     ];
 
-    console.log('========> Reviews : ', reviews);
     const realReviewsRate =
-      realComments.reduce((a, b) => a + b.rate, 0) / realComments.length;
+      realComments.reduce((a: number, b: any) => a + b.rate, 0) /
+      realComments.length;
     const product = {
       id: item.id,
       title: getFirstTwoWords(item.title),

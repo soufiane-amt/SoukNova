@@ -8,7 +8,7 @@ import ProductGrid from './ProductGrid';
 import ViewModeSelector from './ViewModeSelector';
 
 interface ShopFilterProps {
-  products: [];
+  products: any;
   selectedCategory: string;
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
   priceRange: priceType;
