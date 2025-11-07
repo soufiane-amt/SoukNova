@@ -18,7 +18,7 @@ function CartItemsTable({ cart }: CartItemsTableProps) {
 
   return (
     <div
-      className="flex-1 mb-10 xl:max-w-[700px] h-[300px] "
+      className="flex-1 mb-10 xl:max-w-[700px]"
       data-aos="fade-up"
     >
       <div

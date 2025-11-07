@@ -43,7 +43,7 @@ export default function SignInForm() {
 
   return (
     <motion.div
-      className="md:m-auto my-6 w-full max-w-sm font-sans md:mx-10 px-5"
+      className="md:m-auto my-6 w-full max-w-sm font-sans md:mx-10 px-5 mx-auto"
       initial={{ y: -200, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 1, ease: 'easeOut' }}
@@ -54,14 +54,25 @@ export default function SignInForm() {
             Sign In
           </h1>
         </div>
+        <div>
+          <label className="text-color-primary text-sm md:text-base ">
+            You don&apos;t have an account yet?&nbsp;
+            <a
+              className="font-bold text-black text-orange-500 hover:border-b"
+              href="/auth/signup"
+            >
+              Sign up
+            </a>
+          </label>
+        </div>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} >
         <div className="mb-4 md:mb-8">
           <input
             className={inputClass}
             {...register('email')}
             type="email"
-            placeholder="Username or email address"
+            placeholder="Email address"
           />
           <p className="text-red-500 text-xs">{errors.email?.message}</p>
         </div>
@@ -81,7 +92,11 @@ export default function SignInForm() {
             className="w-[90%] md:w-full py-3 bg-[#141718] text-white rounded-md hover:bg-[#47555a] cursor-pointer transition-colors duration-300"
             type="submit"
           >
-            {loading ? <CircularProgress size={20} color="inherit"/> : 'Sign In'}
+            {loading ? (
+              <CircularProgress size={20} color="inherit" />
+            ) : (
+              'Sign In'
+            )}
           </button>
         </div>
         <div className="flex justify-center">

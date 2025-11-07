@@ -44,7 +44,7 @@ function CheckoutPage() {
     <main className={`${inter.className} `}>
       <div className="mx-8 md:mx-16 lg:mx-32 my-12 flex flex-col gap-y-8">
         <div className="flex md:justify-center mb-2">
-          <p className="font-medium text-6xl">Checkout</p>
+          <p className="font-medium lg:text-6xl md:text-5xl text-4xl my-2">Checkout</p>
         </div>
         <CartNavigator />
         <form className="flex flex-col gap-15 md:flex-row md:justify-between">

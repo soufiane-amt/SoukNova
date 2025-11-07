@@ -25,7 +25,7 @@ function SearchedItemsList({
     <div
       className={`${
         isDesktop ? 'top-23 right-0' : 'z-50'
-      } absolute   w-[280px] max-h-[500px] bg-white shadow-lg rounded-lg border border-gray-200`}
+      } absolute   w-[280px] max-h-[500px] bg-white shadow-lg rounded-lg border border-gray-200 `}
     >
       <ul>
         {items.slice(0, 15).map((item) => (

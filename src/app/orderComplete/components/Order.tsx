@@ -76,18 +76,20 @@ function Order({ orderId, cartItems }: OrderProps) {
         data-aos-delay="100"
       >
         <div className="mb-3">
-          <p className="text-[28px] font-medium text-[var(--color-primary)]">
+          <p className="md:text-[28px] text-md font-medium text-[var(--color-primary)]">
             Thank you! 🎉
           </p>
         </div>
         <div>
-          <p className="text-[40px] font-medium leading-[44px] md:text-center">
+          <p className="md:text-[40px] text-lg font-medium md:leading-[44px] leading-[24px] md:text-center">
             Your order has been received
           </p>
         </div>
       </div>
       <div
-        className="flex justify-center gap-x-5 mt-12 mb-8"
+        className={`flex gap-x-5 mt-12 mb-8 overflow-x-auto py-2 ${
+          cart.length < 4 ? 'justify-center' : ''
+        }`}
         data-aos="fade-up"
         data-aos-delay="200"
       >

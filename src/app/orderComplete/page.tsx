@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import CartNavigator from '../../components/ui/Cart/CartNavigator';
 import { useLoader } from '../../hooks/useLoader';
 import Order from './components/Order';
@@ -19,7 +19,7 @@ function OrderComplete() {
     <main>
       <div className="mx-8 md:mx-16 lg:mx-32 my-12">
         <div className="flex md:justify-center mb-4">
-          <p className="font-medium text-6xl">Complete!</p>
+          <p className="font-medium lg:text-6xl md:text-5xl text-4xl my-2">Complete!</p>
         </div>
 
         <CartNavigator />

@@ -6,7 +6,7 @@ const API_KEY = process.env.SUPABASE_KEY;
 
 export const GET = async (
   req: Request,
-  context: { params: { productId: string } },
+  context: { params: { id: string } },
 ) => {
   try {
     const { id } = await context.params;
@@ -31,14 +31,14 @@ export const GET = async (
     const realComments = await comments.json();
 
     if (!response.ok) {
-      throw new Error('Failed to fetch products');
+      throw new Error('Failed to fetch product');
     }
-
     const data = await response.json();
 
     const item = data[0];
 
-    console.log('fake reviews data: ', data);
+    console.log('fake reviews data: ', item);
+    // console.log('realComments  data: ', realComments);
     const fakeReviews: {
       id: string;
       name: string;
@@ -60,6 +60,7 @@ export const GET = async (
       ...fakeReviews,
     ];
 
+    console.log('========> Reviews : ', reviews);
     const realReviewsRate =
       realComments.reduce((a, b) => a + b.rate, 0) / realComments.length;
     const product = {

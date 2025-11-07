@@ -4,6 +4,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { inter } from '@/layout';
 import WishItem from './WishItem';
+import EmptySectionMessage from '../../../../components/feedback/EmptySection';
 
 interface WishItemType {
   productId: string;
@@ -40,7 +41,7 @@ function WishList() {
         method: 'DELETE',
       });
       if (!res.ok) throw new Error('Failed to delete');
-      setWishlist(wishlist.filter (item => item.productId !== productId))
+      setWishlist(wishlist.filter((item) => item.productId !== productId));
     } catch (err) {
       console.error(err);
     }
@@ -52,17 +53,17 @@ function WishList() {
           Your Wishlist
         </p>
       </div>
-      <div>
-        <div
-          className="text-sm text-[var(--color-primary)] border-b border-gray-300 pb-2"
-          data-aos="fade-up"
-          data-aos-delay="200"
-        >
-          <p>Products</p>
-        </div>
-        <div data-aos="fade-right" data-aos-delay="300">
-          {wishlist.length > 0 ? (
-            wishlist.map((item) => (
+      {wishlist.length > 0 ? (
+        <div>
+          <div
+            className="text-sm text-[var(--color-primary)] border-b border-gray-300 pb-2"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            <p>Products</p>
+          </div>
+          <div data-aos="fade-right" data-aos-delay="300">
+            {wishlist.map((item) => (
               <WishItem
                 key={item.productId}
                 productName={item.productName}
@@ -70,15 +71,14 @@ function WishList() {
                 price={item.price}
                 onDelete={() => handleDeleteItem(item.productId)}
               />
-            ))
-          ) : (
-            <p className="text-gray-500 mt-4">Your wishlist is empty.</p>
-          )}
+            ))}
+          </div>
         </div>
-      </div>
-      {/* <div className="mt-30">
-        <EmptySectionMessage message="No Products In Wishlist" />
-      </div> */}
+      ) : (
+        <div className="mt-30">
+          <EmptySectionMessage message="No Products In Wishlist" />
+        </div>
+      )}
     </div>
   );
 }

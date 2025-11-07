@@ -27,7 +27,7 @@ function OrderSummaryCheckout() {
       <div className="mb-5" data-aos="fade-up" data-aos-delay="100">
         <p className={`${inter.className} text-[28px]`}>Order summary</p>
       </div>
-      <div className="mb-5 h-100" data-aos="fade-up" data-aos-delay="200">
+      <div className="mb-5 h-100 overflow-y-auto" data-aos="fade-up" data-aos-delay="200">
         {cart.map((item) => (
           <CheckoutCartItem
             key={item.productId}
