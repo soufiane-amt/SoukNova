@@ -36,12 +36,12 @@ function WishItem({
             />
           </div>
           <div
-            className={`text-sm flex flex-col md:flex-row justify-between ${inter.className}`}
+            className={`text-sm flex flex-col md:flex-row justify-between  ${inter.className}`}
           >
             <div className="md:flex  md:flex-col md:space-y-5">
               <p className="font-semibold">{shortendProductName}</p>
               <p className="text-[var(--color-primary)] text-xs md:m-0">
-                color: green
+                color: normal
               </p>
               <p className="md:hidden">${price}</p>
             </div>
@@ -51,8 +51,8 @@ function WishItem({
           <p>${price}</p>
         </div>
         <div className="mt-5 md:mt-0">
-          <button className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold md:px-5">
-            Add To Cart
+          <button className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold px-5">
+            Add <span className='md:hidden lg:block'>To Cart</span>
           </button>
         </div>
       </div>

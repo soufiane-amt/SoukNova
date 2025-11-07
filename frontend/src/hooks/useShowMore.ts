@@ -9,7 +9,8 @@ export function useShowMore<T>(items: T[], defaultShowCount: number = 5) {
   };
 
   useEffect(() => {
-    setVisibleItems(items.slice(0, showCount));
+    if (items.length > 0)
+      setVisibleItems(items.slice(0, showCount));
   }, [items, showCount]);
   const hasMore = showCount < items.length;
 

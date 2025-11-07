@@ -41,7 +41,7 @@ function OrderHistory() {
           Orders History
         </p>
       </div>
-      <div>
+      <div className='overflow-y-auto'>
         {orders.map((order, idx) => (
           <div
             key={order.id}

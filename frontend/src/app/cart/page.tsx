@@ -20,8 +20,8 @@ function CartPage() {
   return (
     <main className={`flex flex-col min-h-screen ${inter.className}`}>
       <div className="mx-8 md:mx-16 lg:mx-32 mt-12 mb-4 flex-1">
-        <div className="flex md:justify-center mb-2">
-          <p className="font-medium text-6xl">Cart</p>
+        <div className="flex md:justify-center my-2">
+          <p className="font-medium lg:text-6xl md:text-5xl text-4xl">Cart</p>
         </div>
 
         <CartNavigator />

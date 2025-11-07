@@ -44,7 +44,7 @@ export default function SignUpForm() {
 
   return (
     <motion.div
-      className=" m-auto w-full max-w-sm font-sans md:mx-10 px-5"
+      className="md:m-auto my-6 w-full max-w-sm font-sans md:mx-10 px-5 mx-auto"
       initial={{ y: -200, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 1, ease: 'easeOut' }}

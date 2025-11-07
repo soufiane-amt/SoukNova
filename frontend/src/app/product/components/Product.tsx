@@ -198,10 +198,10 @@ function ProductTabs({ productData }: any) {
               fontWeight: 500,
               marginBottom: 2,
               fontSize: {
-                xs: '0.75rem',
-                sm: '1rem',
-                md: '1.25rem',
-                lg: '1.75rem',
+                xs: '1rem',
+                sm: '1.25rem',
+                md: '1.50rem',
+                lg: '2rem',
               },
               fontFamily: 'Poppins, sans-serif',
             }}
@@ -211,14 +211,14 @@ function ProductTabs({ productData }: any) {
 
           <div>
             <p
-              className="font-semibold text-xl text-[var(--color-primary)]"
+              className="font-semibold md:text-xl text-md text-[var(--color-primary)]"
               data-aos="fade-right"
               data-aos-delay="100"
             >
               Details
             </p>
             <p
-              className="font-medium text-md"
+              className="font-medium md:text-md text-sm"
               data-aos="fade-right"
               data-aos-delay="150"
             >
@@ -228,14 +228,14 @@ function ProductTabs({ productData }: any) {
 
           <div data-aos="fade-right">
             <p
-              className="font-semibold text-xl text-[var(--color-primary)]"
+              className="font-semibold md:text-xl text-md text-[var(--color-primary)]"
               data-aos="fade-right"
               data-aos-delay="200"
             >
               Packaging
             </p>
             <p
-              className="font-medium text-md"
+              className="font-medium md:text-md text-sm"
               data-aos="fade-right"
               data-aos-delay="250"
             >

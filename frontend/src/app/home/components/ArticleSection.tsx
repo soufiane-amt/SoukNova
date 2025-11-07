@@ -25,7 +25,7 @@ export function ArticleSection() {
         <CustomButton label="More articles" href="/blog" />
       </div>
 
-      <div className=" flex flex-col md:flex-row items-center justify-between gap-x-5">
+      <div className=" flex flex-col xl:flex-row items-center justify-between gap-x-5">
         {articles.map((item, index) => (
           <div key={item.id} data-aos="fade-up" data-aos-delay={index * 150}>
             <ArticleCard id={item.id} title={item.title} image={item.image} />
