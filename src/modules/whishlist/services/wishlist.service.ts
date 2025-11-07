@@ -19,7 +19,7 @@ export class WishlistService {
     });
 
     if (existing) {
-      return existing; 
+      return existing;
     }
 
     return this.prisma.wishlist.create({
@@ -44,6 +44,7 @@ export class WishlistService {
 
     const wishlists: WishItemType[] = [];
     for (const item of productsIds) {
+      if (!item.productId) continue;
       if (this.cache.has(item.productId)) {
         const cached = this.cache.get(item.productId);
         if (cached) {
@@ -52,6 +53,7 @@ export class WishlistService {
         }
         continue;
       }
+      console.log('item.productId : ', item.productId);
       const res = await fetch(
         `https://oowcjcmdcfitnnsqfohw.supabase.co/rest/v1/products?id=eq.${item.productId}`,
         {
@@ -61,8 +63,14 @@ export class WishlistService {
           },
         },
       );
-      const [data] = await res.json();
 
+      const json = await res.json();
+      if (!json || json.length === 0) {
+        console.warn(`No product found for ${item.productId}`);
+        continue;
+      }
+
+      const data = json[0];
       const product: WishItemType = {
         productId: data.id,
         productName: data.title,
