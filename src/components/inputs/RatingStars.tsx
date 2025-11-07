@@ -37,7 +37,7 @@ export default function RatingStars({
         value={value}
         readOnly={isStatic}
         onChange={handleChange}
-        size={"small"}
+        size={size}
         sx={{
           '& .MuiRating-iconFilled, & .MuiRating-iconEmpty': {
             color: '#343839',

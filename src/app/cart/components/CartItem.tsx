@@ -1,7 +1,7 @@
 'use client';
 import { inter } from '@/layout';
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useCart } from '../../../context/CartContext';
 
 interface CartItemProps {
@@ -16,8 +16,7 @@ export function CartItem({
   productName,
   price,
 }: CartItemProps) {
-  const { cart, addToCart, removeFromCart, decreaseFromCart, setCart } =
-    useCart();
+  const { cart, addToCart, removeFromCart, decreaseFromCart } = useCart();
   const productQuantityMap = useMemo(() => {
     const map: Record<string, number> = {};
     cart.forEach((item) => {

@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import Image from 'next/image';
 import RatingStars from '../../inputs/RatingStars';
-import { inter, poppins } from '@/layout';
+import { poppins } from '@/layout';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useRouter } from 'next/navigation';

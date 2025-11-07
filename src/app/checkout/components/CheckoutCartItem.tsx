@@ -1,7 +1,6 @@
 'use client';
 import { inter } from '@/layout';
 import Image from 'next/image';
-import { useState } from 'react';
 import { getFirstTwoWords } from '../../../utils/helpers';
 import { useCart } from '../../../context/CartContext';
 

@@ -13,13 +13,7 @@ interface CartSummaryProps {
   setSubtotal: (items: number) => void;
   setTotal: (items: number) => void;
 }
-function CartSummary({
-  cart,
-  subtotal,
-  total,
-  setSubtotal,
-  setTotal,
-}: CartSummaryProps) {
+function CartSummary({ subtotal, total }: CartSummaryProps) {
   const [shipping, setShipping] = useState<ShippingOption>('free');
 
   useEffect(() => {
