@@ -16,7 +16,6 @@ export async function PUT(req: Request) {
       },
       body: JSON.stringify(body),
     });
-
     if (!res.ok) {
       return NextResponse.json(
         { error: 'Failed to update profile' },

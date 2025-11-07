@@ -4,6 +4,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { CartItemType } from '../../../context/CartContext';
 import CartItem from './CartItem';
+import { getFirstTwoWords } from '../../../utils/helpers';
 
 interface CartItemsTableProps {
   cart: CartItemType[];
@@ -35,6 +36,7 @@ function CartItemsTable({ cart }: CartItemsTableProps) {
           <p className="max-sm:hidden">Subtotal</p>
         </div>
       </div>
+      
       <div
         data-aos="fade-up"
         data-aos-delay="200"
@@ -44,7 +46,7 @@ function CartItemsTable({ cart }: CartItemsTableProps) {
           <CartItem
             key={item.productId}
             productId={item.productId}
-            productName={item.productName}
+            productName={getFirstTwoWords(item.productName)}
             productImage={item.image}
             price={item.price}
           />
