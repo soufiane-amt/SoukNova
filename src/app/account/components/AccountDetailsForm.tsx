@@ -47,14 +47,14 @@ function AccountDetailsForm() {
       oldPassword: formData.oldPassword,
       newPassword: formData.newPassword,
     };
+    const cleanedPayload = Object.fromEntries(
+      Object.entries(payload).filter(([_, value]) => value.trim() !== ''),
+    );
 
     try {
       const res = await fetch('/api/user', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(cleanedPayload),
       });
       if (!res.ok) {
         const errorBody = await res.json().catch(() => ({}));
@@ -77,7 +77,6 @@ function AccountDetailsForm() {
       data-aos="zoom-in"
       data-aos-delay="50"
     >
-      {/* Account Details */}
       <div data-aos="fade-right" data-aos-delay="100">
         <p className={`${inter.className} font-semibold text-xl mt-10 mb-5`}>
           Account Details
@@ -85,7 +84,7 @@ function AccountDetailsForm() {
 
         <div
           className="flex flex-col mb-8"
-          data-aos="fade-left"
+          data-aos="fade-right"
           data-aos-delay="50"
         >
           <label className="font-bold text-[var(--color-primary)] text-xs mb-2">
@@ -119,7 +118,7 @@ function AccountDetailsForm() {
 
         <div
           className="flex flex-col mb-8"
-          data-aos="fade-left"
+          data-aos="fade-right"
           data-aos-delay="150"
         >
           <label className="font-bold text-[var(--color-primary)] text-xs mb-2">
@@ -136,7 +135,6 @@ function AccountDetailsForm() {
         </div>
       </div>
 
-      {/* Password Section */}
       <div data-aos="fade-right" data-aos-delay="200">
         <p className={`${inter.className} font-semibold text-xl mt-10 mb-5`}>
           Password
@@ -144,7 +142,7 @@ function AccountDetailsForm() {
 
         <div
           className="flex flex-col mb-8"
-          data-aos="fade-left"
+          data-aos="fade-right"
           data-aos-delay="250"
         >
           <label className="font-bold text-[var(--color-primary)] text-xs mb-2">
@@ -180,7 +178,7 @@ function AccountDetailsForm() {
 
         <div
           className="flex flex-col mb-8"
-          data-aos="fade-left"
+          data-aos="fade-right"
           data-aos-delay="350"
         >
           <label className="font-bold text-[var(--color-primary)] text-xs mb-2">
@@ -209,9 +207,7 @@ function AccountDetailsForm() {
       </div>
 
       {/* Feedback messages */}
-      {error && (
-        <p className="text-red-600 font-semibold mt-4">{error}</p>
-      )}
+      {error && <p className="text-red-600 font-semibold mt-4">{error}</p>}
       {success && (
         <p className="text-green-600 font-semibold mt-4">{success}</p>
       )}

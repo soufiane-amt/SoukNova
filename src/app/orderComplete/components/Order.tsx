@@ -7,6 +7,7 @@ import OrderedItem from './OrderedItem';
 import { CartItemType, useCart } from '../../../context/CartContext';
 import { getFormatInDate } from '../../../utils/helpers';
 import CartItem from '@/cart/components/CartItem';
+import Link from 'next/link';
 
 interface orderType {
   id: number;
@@ -143,9 +144,11 @@ function Order({ orderId, cartItems }: OrderProps) {
         data-aos="fade-up"
         data-aos-delay="500"
       >
-        <button className="w-full bg-black text-white rounded-lg py-3 cursor-pointer font-semibold">
-          Purchase history
-        </button>
+        <Link href={'/account/orders'}>
+          <button className="w-full bg-black text-white rounded-lg py-3 cursor-pointer font-semibold">
+            Purchase history
+          </button>
+        </Link>
       </div>
     </div>
   );
