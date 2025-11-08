@@ -44,7 +44,7 @@ export function CheckoutCartItem({
             </div>
             <div>
               <p className="text-[var(--color-primary)] text-xs">
-                color: green
+                color: normal
               </p>
             </div>
             <div className="flex justify-around items-center font-bold rounded border h-7 w-20 border-gray-500">

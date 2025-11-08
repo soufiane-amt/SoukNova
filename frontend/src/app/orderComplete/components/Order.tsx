@@ -81,9 +81,7 @@ function Order({ orderId, cartItems }: OrderProps) {
         </div>
       </div>
       <div
-        className={`flex gap-x-5 mt-12 mb-8 overflow-x-auto py-2 ${
-          cart.length < 4 ? 'justify-center' : ''
-        }`}
+        className={`flex gap-x-5 mt-12 mb-8 overflow-x-auto custom-scrollbar py-2 justify-center`}
         data-aos="fade-up"
         data-aos-delay="200"
       >

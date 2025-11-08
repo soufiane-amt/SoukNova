@@ -40,7 +40,7 @@ function CartItemsTable({ cart }: CartItemsTableProps) {
       <div
         data-aos="fade-up"
         data-aos-delay="200"
-        className="max-h-[400px] overflow-y-auto pr-2"
+        className="max-h-[400px] overflow-y-auto custom-scrollbar pr-2"
       >
         {cart.map((item) => (
           <CartItem

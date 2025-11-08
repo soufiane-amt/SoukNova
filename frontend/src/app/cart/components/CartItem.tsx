@@ -47,7 +47,7 @@ export function CartItem({
             </div>
             <div>
               <p className="text-[var(--color-primary)] text-xs md:m-0">
-                color: green
+                color: normal
               </p>
             </div>
             <div className="hidden md:block">
