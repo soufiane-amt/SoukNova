@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import { CartProvider } from '../context/CartContext';
 import { usePathname } from 'next/navigation';
 import NavBar from '../components/layout/NavBar/Navbar';
+import { useEffect } from 'react';
 
 export const poppins = Poppins({
   subsets: ['latin'],
@@ -18,10 +19,6 @@ export const inter = Inter({
   variable: '--font-inter',
 });
 
-// export const poppins = { className: '' };
-// export const inter = { className: '' };
-
-
 export default function RootLayout({
   children,
 }: {
@@ -29,6 +26,11 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   const navBarExists = pathname.includes('/auth');
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
     <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
       <body className="antialiased">
