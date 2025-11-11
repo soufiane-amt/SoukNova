@@ -29,7 +29,6 @@ function Order({ orderId, cartItems }: OrderProps) {
       });
 
       if (!res.ok) {
-        console.log('Failed to delete carts : ', res);
         throw new Error(`Failed to delete carts: ${res.status}`);
       }
     };
@@ -40,7 +39,6 @@ function Order({ orderId, cartItems }: OrderProps) {
         });
 
         if (!res.ok) {
-          console.log('Failed to fetch order : ', res);
           throw new Error(`Failed to fetch order: ${res.status}`);
         }
 

@@ -8,9 +8,9 @@ import api from '../../../utils/axios';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
 import { CircularProgress } from '@mui/material';
+import { poppins } from '@/layout';
 
-const inputClass =
-  'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
+const inputClass = `w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base ${poppins.className}`;
 
 export default function SignInForm() {
   const [serverMessage, setServerMessage] = useState('');
@@ -66,7 +66,7 @@ export default function SignInForm() {
           </label>
         </div>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4 md:mb-8">
           <input
             className={inputClass}

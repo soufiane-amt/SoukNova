@@ -22,7 +22,6 @@ function OrderHistory() {
         });
 
         if (!res.ok) {
-          console.log('Failed to place order : ', res);
           throw new Error(`Failed to place order: ${res.status}`);
         }
 

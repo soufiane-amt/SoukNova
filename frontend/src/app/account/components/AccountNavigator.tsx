@@ -213,9 +213,6 @@ function AccountNavigator() {
       });
 
       if (!res.ok) throw new Error('Failed to upload');
-
-      const data = await res.json();
-      console.log('Uploaded file path:', data.url);
     } catch (err) {
       console.error(err);
     }

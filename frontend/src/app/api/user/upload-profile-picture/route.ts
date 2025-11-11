@@ -3,12 +3,9 @@ import * as cookie from 'cookie';
 
 export const POST = async (req: Request) => {
   try {
-    // Get JWT from cookies
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;
-    console.log('➡️ Token from cookie:', token);
 
-    // Forward the request body as-is (multipart/form-data)
     const body = await req.arrayBuffer(); // Read raw data
     const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,

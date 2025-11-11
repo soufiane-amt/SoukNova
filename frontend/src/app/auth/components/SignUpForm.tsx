@@ -8,9 +8,10 @@ import api from '../../../utils/axios';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
 import { CircularProgress } from '@mui/material';
+import { poppins } from '@/layout';
 
 const inputClass =
-  'w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base';
+  `w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base ${poppins.className}`
 
 export default function SignUpForm() {
   const router = useRouter();
