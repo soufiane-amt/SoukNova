@@ -8,6 +8,7 @@ export const GET = async (
   req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) => {
+  console.log('API_URL : ', API_URL);
   const { id } = await params;
   try {
     const response = await fetch(`${API_URL}&id=eq.${id}`, {

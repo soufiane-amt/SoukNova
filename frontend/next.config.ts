@@ -2,11 +2,18 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['m.media-amazon.com', '*.homify.com', 'localhost'],
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'm.media-amazon.com',
+      },
+      {
+        protocol: 'https',
         hostname: '*.homify.com',
+      },
+      {
+        protocol: 'http',
+        hostname: 'backend', 
       },
     ],
   },
