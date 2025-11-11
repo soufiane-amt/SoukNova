@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { WishItemType } from '../dto/wish-item.dto';
-
-const SUPABASE_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vd2NqY21kY2ZpdG5uc3Fmb2h3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA4MTI3MTksImV4cCI6MjA0NjM4ODcxOX0.bx4a1dNx8g-BZX2KWceWBuRlPwAqgxhZ80i7L4K8M7Y';
+import { SUPABASE_KEY, SUPABASE_URL } from 'src/exports';
 
 @Injectable()
 export class WishlistService {
@@ -53,9 +51,8 @@ export class WishlistService {
         }
         continue;
       }
-      console.log('item.productId : ', item.productId);
       const res = await fetch(
-        `https://oowcjcmdcfitnnsqfohw.supabase.co/rest/v1/products?id=eq.${item.productId}`,
+        `${SUPABASE_URL}/rest/v1/products?id=eq.${item.productId}`,
         {
           headers: {
             apikey: SUPABASE_KEY,

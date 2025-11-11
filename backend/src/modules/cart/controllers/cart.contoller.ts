@@ -32,7 +32,6 @@ export class CartController {
 
   @Delete('/reset')
   async deleteCarts(@User('id') userId: number) {
-    console.log('userId : ', userId);
     return this.cartService.deleteCarts(userId);
   }
 

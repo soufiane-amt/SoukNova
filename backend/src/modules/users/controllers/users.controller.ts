@@ -26,7 +26,6 @@ export class UsersController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     //pass AbCd12!@
-    console.log('PUT : ', updateUserDto);
     const updatedUser = await this.usersService.updateUserData(
       userId,
       updateUserDto,
