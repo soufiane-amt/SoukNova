@@ -13,7 +13,7 @@ export const POST = async (req: Request) => {
     };
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/upload-profile-picture`,
+      `${process.env.API_SERVER}/user/upload-profile-picture`,
       {
         method: 'POST',
         headers,

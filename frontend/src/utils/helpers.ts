@@ -8,6 +8,7 @@ export function isProductNew(productDateString: string) {
 }
 
 export function getFirstTwoWords(title: string) {
+  if (!title || typeof title !== 'string') return '';
   const words = title.split(' ');
   if (words.length >= 2) {
     return `${words[0]} ${words[1]}`;
@@ -34,13 +35,13 @@ export async function fetchWithAuth(url: string, options: RequestInit = {}) {
 }
 
 export const getFormatInDate = (date: string | Date) => {
-  const today = typeof date === "string" ? new Date(date) : date;
+  const today = typeof date === 'string' ? new Date(date) : date;
 
   const options: Intl.DateTimeFormatOptions = {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
   };
 
-  return today.toLocaleDateString("en-US", options);
+  return today.toLocaleDateString('en-US', options);
 };

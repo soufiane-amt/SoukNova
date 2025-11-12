@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'http',
-        hostname: 'backend', 
+        hostname: 'localhost', 
       },
     ],
   },

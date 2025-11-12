@@ -10,7 +10,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile`, {
+    const res = await fetch(`${process.env.API_SERVER}/user/profile`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,

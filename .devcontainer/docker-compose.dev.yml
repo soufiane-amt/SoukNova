@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: souknova-postgres
+    env_file:
+      - ../backend/.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    command: npm run start:dev
+    volumes:
+      - ../backend:/app
+      - /app/node_modules
+    ports:
+      - "3001:3001"
+    env_file:
+      - ../backend/.env
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    command: npm run dev
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - ../frontend/.env
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  pgdata:

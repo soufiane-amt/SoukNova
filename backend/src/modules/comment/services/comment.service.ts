@@ -58,13 +58,13 @@ export class CommentService {
         addedAt: 'desc',
       },
     });
-
+    console.log("comments:" , comments)
     return comments.map((comment) => ({
       id: comment.id,
       name: comment.user.firstName + ' ' + comment.user.lastName,
       avatar: comment.user.image,
       rate: comment.rating,
-      content: comment.content,
+      content: comment.content,  
     }));
   }
 }

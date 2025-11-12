@@ -30,7 +30,9 @@ export class CartService {
       },
     );
 
-    const [productData] = await res.json();
+    const data = await res.json();
+
+    const productData = Array.isArray(data) ? data[0] : data;
     if (!productData) return undefined;
 
     const fullCartItem: CartItemFullProps = {
@@ -117,15 +119,16 @@ export class CartService {
           },
         },
       );
-      const [data] = await res.json();
+      const data = await res.json();
+      const productData = Array.isArray(data) ? data[0] : data;
 
       const product: CartItemFullProps = {
         productId: item.productId,
-        productName: data.title,
-        image: data.primary_image,
-        price: data.Price,
+        productName: productData.title,
+        image: productData.primary_image,
+        price: productData.Price,
         quantity: item.quantity,
-        discount: parseInt(data.discount),
+        discount: parseInt(productData.discount),
       };
 
       this.cache.set(item.productId, product);

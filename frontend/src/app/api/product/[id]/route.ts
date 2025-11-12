@@ -20,16 +20,18 @@ export const GET = async (
       },
     });
 
-    const comments = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/comment/${id}`,
-      {
-        headers: {
-          Accept: 'application/json',
-          'Accept-Profile': 'public',
-        },
+    console.log('{process.env.API_SERVER}', process.env.API_SERVER);
+    const comments = await fetch(`${process.env.API_SERVER}/comment/${id}`, {
+      headers: {
+        Accept: 'application/json',
+        'Accept-Profile': 'public',
       },
-    );
+    });
+    console.log('Response : ', comments.ok);
+
     const realComments = await comments.json();
+
+    console.log('realComments : ', realComments);
 
     if (!response.ok) {
       throw new Error('Failed to fetch product');
@@ -54,7 +56,7 @@ export const GET = async (
     const reviews = [
       ...realComments.map((review: any) => ({
         ...review,
-        avatar: `${process.env.NEXT_PUBLIC_API_URL}${review.avatar}`,
+        avatar: `${process.env.API_SERVER}${review.avatar}`,
       })),
       ...fakeReviews,
     ];

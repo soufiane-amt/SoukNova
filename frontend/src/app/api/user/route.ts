@@ -8,7 +8,7 @@ export async function PUT(req: Request) {
   try {
     const body = await req.json();
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
+    const res = await fetch(`${process.env.API_SERVER}/user`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

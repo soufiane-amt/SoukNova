@@ -24,14 +24,11 @@ export const POST = async (
 
     const body = await req.json();
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/comment/${productId}`,
-      {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(body),
-      },
-    );
+    const res = await fetch(`${process.env.API_SERVER}/comment/${productId}`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    });
 
     if (!res.ok) {
       return NextResponse.json(

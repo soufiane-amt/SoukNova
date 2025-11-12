@@ -26,6 +26,8 @@ export class CommentController {
 
   @Get(':productId')
   async getComments(@Param('productId') productId: string) {
+    console.log("==================== ")
+    console.log("productId : ", productId)
     return await this.commentService.getComments(productId);
   }
 }
