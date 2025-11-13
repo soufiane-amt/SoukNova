@@ -69,11 +69,11 @@ Click the image to watch the demo.
 
 **Product Page:**
 Click the image to watch the demo.  
-[![Product Screenshot](https://github.com/user-attachments/assets/b9b369a8-ffcb-4ad3-bbf5-c294dcb98318)](https://youtu.be/VQXv8dUkiog)
+[![Product Screenshot](https://github.com/user-attachments/assets/7208e046-73e6-4e9b-b178-fddd28de00a7)](https://youtu.be/z6ZcQA4wGgk)
 
 **Shopping Cart:**
 Click the image to watch the demo.  
-[![Product page](https://github.com/user-attachments/assets/3f3a7fe3-1be6-46b6-b6f6-9b381d141ba6)](https://youtu.be/LO7EDb2ePgg)
+[![Product page](https://github.com/user-attachments/assets/2663d567-6c3d-403a-acc4-4f3dc7c38a12)](https://youtu.be/LO7EDb2ePgg)
 
 **Blog page:**
 Click the image to watch the demo.  
