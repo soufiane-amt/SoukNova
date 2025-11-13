@@ -45,6 +45,7 @@ SoukNova is designed to offer an intuitive online marketplace for home decoratio
 * [React](https://reactjs.org/) – UI library
 * [Tailwind CSS](https://tailwindcss.com/) – Styling
 * [Zod](https://zod.dev/) – Validation
+* [TypeScript](https://www.typescriptlang.org/) – Language
 
 **Backend:**
 
