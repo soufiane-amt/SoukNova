@@ -62,6 +62,7 @@ SoukNova is designed to offer an intuitive online marketplace for home decoratio
 
 * [Docker](https://www.docker.com/) – Containerization
 
+## Screenshots & Demo
 
 **Sign up / Login page:**
 Click the image to watch the demo.  
