@@ -10,9 +10,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const verifyUrl = `${process.env.API_SERVER}/auth/verify-token`;
+  const verifyUrl = `${process.env.NEXT_PUBLIC_API_SERVER}/auth/verify-token`;
 
-  console.log('verifyUrl : ', verifyUrl);
   try {
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;

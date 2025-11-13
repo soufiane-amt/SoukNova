@@ -22,10 +22,13 @@ export const POST = async (
       'Content-Type': req.headers.get('Content-Type') || 'application/json',
     };
 
-    const res = await fetch(`${process.env.API_SERVER}/wishlist/${productId}`, {
-      method: 'POST',
-      headers,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_SERVER}/wishlist/${productId}`,
+      {
+        method: 'POST',
+        headers,
+      },
+    );
 
     if (!res.ok) {
       return NextResponse.json(
@@ -57,12 +60,15 @@ export const DELETE = async (
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;
 
-    const res = await fetch(`${process.env.API_SERVER}/wishlist/${productId}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_SERVER}/wishlist/${productId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     if (!res.ok) throw new Error('Failed to remove from wishlist');
 

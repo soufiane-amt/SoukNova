@@ -24,7 +24,7 @@ export const POST = async (
     };
 
     const res = await fetch(
-      `${process.env.API_SERVER}/cart/${productId}`,
+      `${process.env.NEXT_PUBLIC_API_SERVER}/cart/${productId}`,
       {
         method: 'POST',
         headers,
@@ -68,7 +68,7 @@ export const DELETE = async (
     };
 
     const res = await fetch(
-      `${process.env.API_SERVER}/cart/${productId}`,
+      `${process.env.NEXT_PUBLIC_API_SERVER}/cart/${productId}`,
       {
         method: 'DELETE',
         headers,
@@ -113,7 +113,7 @@ export const PATCH = async (
     };
 
     const res = await fetch(
-      `${process.env.API_SERVER}/cart/${productId}`,
+      `${process.env.NEXT_PUBLIC_API_SERVER}/cart/${productId}`,
       {
         method: 'PATCH',
         headers,
@@ -157,7 +157,7 @@ export const GET = async (
     };
 
     const res = await fetch(
-      `${process.env.API_SERVER}/cart/${productId}`,
+      `${process.env.NEXT_PUBLIC_API_SERVER}/cart/${productId}`,
       {
         method: 'GET',
         headers,

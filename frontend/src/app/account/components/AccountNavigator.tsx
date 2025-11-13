@@ -188,7 +188,7 @@ function AccountNavigator() {
         const data = await res.json();
 
         const imageUrl = data.imageUrl
-          ? `${process.env.NEXT_PUBLIC_API_URL}${data.imageUrl}`
+          ? `${process.env.NEXT_PUBLIC_API_SERVER}${data.imageUrl}`
           : defaultUserImage;
         setProfileImage(imageUrl);
       } catch (err) {

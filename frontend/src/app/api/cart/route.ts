@@ -6,7 +6,7 @@ export const GET = async (req: Request) => {
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;
 
-    const res = await fetch(`${process.env.API_SERVER}/cart`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/cart`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -33,12 +33,15 @@ export const DELETE = async (req: Request) => {
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;
 
-    const res = await fetch(`${process.env.API_SERVER}/cart/reset`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_SERVER}/cart/reset`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     if (!res.ok) {
       return NextResponse.json(

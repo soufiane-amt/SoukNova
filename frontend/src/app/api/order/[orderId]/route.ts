@@ -23,7 +23,7 @@ export const GET = async (
     };
 
     const res = await fetch(
-      `${process.env.API_SERVER}/order/${orderId}`,
+      `${process.env.NEXT_PUBLIC_API_SERVER}/order/${orderId}`,
       {
         method: 'GET',
         headers,

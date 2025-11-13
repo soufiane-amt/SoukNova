@@ -13,7 +13,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'http',
-        hostname: 'localhost', 
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'http',
+        hostname: 'backend',
+        port: '3001',
+        pathname: '/uploads/**',
       },
     ],
   },

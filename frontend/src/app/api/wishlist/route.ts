@@ -6,7 +6,7 @@ export const GET = async (req: Request) => {
     const cookies = cookie.parse(req.headers.get('cookie') || '');
     const token = cookies.jwt;
 
-    const res = await fetch(`${process.env.API_SERVER}/wishlist`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/wishlist`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
