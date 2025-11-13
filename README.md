@@ -80,7 +80,7 @@ SoukNova is designed to offer an intuitive online marketplace for home decoratio
 
 **Demo Video:**
 
-[![SoukNova Demo](path/to/video-thumbnail.png)](link-to-video.mp4)
+[![SoukNova Demo](https://youtu.be/cv4Tq6BzPLY)](https://youtu.be/cv4Tq6BzPLY)
 
 > Tip: You can record your screen using tools like [OBS Studio](https://obsproject.com/) and upload to GitHub or YouTube for embedding.
 
