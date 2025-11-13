@@ -64,24 +64,31 @@ SoukNova is designed to offer an intuitive online marketplace for home decoratio
 
 
 **Sign up / Login page:**
-![Homepage Screenshot](https://github.com/user-attachments/assets/b60fa9e2-6419-4f09-b624-9187187c7698)](https://youtu.be/e8XgETTezHU)
+Click the image to watch the demo.  
+[![Homepage Screenshot](https://github.com/user-attachments/assets/b60fa9e2-6419-4f09-b624-9187187c7698)](https://youtu.be/e8XgETTezHU)
 
 **Homepage:**
-![Homepage Screenshot](https://github.com/user-attachments/assets/3f3a7fe3-1be6-46b6-b6f6-9b381d141ba6)](https://youtu.be/IMTMzRkBcdo)
+Click the image to watch the demo.  
+[![Homepage Screenshot](https://github.com/user-attachments/assets/3f3a7fe3-1be6-46b6-b6f6-9b381d141ba6)](https://youtu.be/IMTMzRkBcdo)
 
 **Product Page:**
-![Product Screenshot](https://github.com/user-attachments/assets/b9b369a8-ffcb-4ad3-bbf5-c294dcb98318)](https://youtu.be/VQXv8dUkiog)
+Click the image to watch the demo.  
+[![Product Screenshot](https://github.com/user-attachments/assets/b9b369a8-ffcb-4ad3-bbf5-c294dcb98318)](https://youtu.be/VQXv8dUkiog)
 
 **Shopping Cart:**
-![Product page](https://github.com/user-attachments/assets/3f3a7fe3-1be6-46b6-b6f6-9b381d141ba6)](https://youtu.be/LO7EDb2ePgg)
+Click the image to watch the demo.  
+[![Product page](https://github.com/user-attachments/assets/3f3a7fe3-1be6-46b6-b6f6-9b381d141ba6)](https://youtu.be/LO7EDb2ePgg)
 
 **Blog page:**
+Click the image to watch the demo.  
 [![Blog page](https://github.com/user-attachments/assets/ac16e075-96d8-484c-a976-f3ac1340e7c8)](https://youtu.be/VQXv8dUkiog)
 
 **Contact page:**
+Click the image to watch the demo.  
 [![Blog page](https://github.com/user-attachments/assets/1b813b70-2a11-4ebe-9f4e-51da14c9c3a2)](https://youtu.be/pwh0Uj4ogTU)
 
 **Demo Video:**
+Click the image to watch the demo.  
 [![SoukNova Demo](https://github.com/user-attachments/assets/48404313-8b69-4184-ad8b-6ea79e2a18b9)](https://youtu.be/cv4Tq6BzPLY)
 
 
