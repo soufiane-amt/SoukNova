@@ -12,11 +12,6 @@
 4. [Screenshots & Demo](#screenshots--demo)
 5. [Installation & Setup](#installation--setup)
 6. [Usage](#usage)
-7. [API Endpoints](#api-endpoints)
-8. [Database Structure](#database-structure)
-9. [Contributing](#contributing)
-10. [License](#license)
-
 ---
 
 ## Project Overview
@@ -95,7 +90,7 @@ Click the image to watch the demo.
 
 ---
 
-## Installation & Setup (Using Docker Compose)
+## Installation & Setup
 
 ### Prerequisites
 
@@ -159,17 +154,3 @@ This way, anyone can run your entire app with **a single command** (`docker-comp
 * Proceed to checkout and place an order.
 
 ---
-
-## API Endpoints
-
-| Method | Endpoint          | Description         |
-| ------ | ----------------- | ------------------- |
-| POST   | `/auth/signup`    | Register a user     |
-| POST   | `/auth/signin`    | Login a user        |
-| GET    | `/shop`           | Get all products    |
-| GET    | `/product/:id`    | Get product details |
-| POST   | `/orders`         | Create a new order  |
-| GET    | `/orders/:userId` | Get user orders     |
-
-
-Do you want me to do that next?
