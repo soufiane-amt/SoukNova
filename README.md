@@ -134,6 +134,11 @@ docker-compose up --build
 * Backend: `http://localhost:3001`
 * Frontend: `http://localhost:3000`
 * PostgreSQL: `localhost:5432`
+  
+Please go to you browser and copy the following address :
+```Application address
+http://localhost:3000
+```
 
 > Docker Compose will automatically build images, start the database, and run both backend and frontend.
 
