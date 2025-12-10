@@ -6,6 +6,8 @@ import { WishlistModule } from '../whishlist/wishlist.module';
 import { CartModule } from '../cart/cart.module';
 import { OrderModule } from '../order/order.module';
 import { CommentModule } from '../comment/comment.module';
+import { ProductModule } from '../product/product.module';
+import { ArticleModule } from '../article/article.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { CommentModule } from '../comment/comment.module';
     CartModule,
     OrderModule,
     CommentModule,
+    ProductModule,
+    ArticleModule
   ],
   controllers: [],
   providers: [],
