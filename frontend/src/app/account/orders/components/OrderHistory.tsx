@@ -17,9 +17,13 @@ function OrderHistory() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch('/api/order', {
-          method: 'GET',
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/order`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          },
+        );
 
         if (!res.ok) {
           throw new Error(`Failed to place order: ${res.status}`);
@@ -40,8 +44,8 @@ function OrderHistory() {
           Orders History
         </p>
       </div>
-      <div className='overflow-y-auto'>
-        {orders.map((order:any, idx:number) => (
+      <div className="overflow-y-auto">
+        {orders.map((order: any, idx: number) => (
           <div
             key={order.id}
             data-aos="fade-left"

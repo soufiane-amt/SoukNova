@@ -24,7 +24,13 @@ export default function ProductPage() {
 
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`/api/product/${id}`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/product/${id}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          },
+        );
         if (!response.ok) {
           throw new Error('Failed to fetch product data.');
         }

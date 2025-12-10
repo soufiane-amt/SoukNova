@@ -9,7 +9,7 @@ const subCategories = [
   { name: 'Bedroom' },
   { name: 'Kitchen' },
   { name: 'Bathroom' },
-  { name: 'Dinning' },
+  { name: 'Dining' },
   { name: 'Outdoor' },
 ];
 
@@ -34,10 +34,10 @@ function SidebarFilter({
         className="space-y-3 pb-6 text-sm font-medium text-gray-900"
       >
         {subCategories.map((category) => (
-          <li key={category.name}>
+          <li key={category.name} >
             <button
               type="button"
-              className={`text-[var(--color-primary)] text-sm ${
+              className={`text-[var(--color-primary)] text-sm cursor-pointer ${
                 selectedCategory === category.name
                   ? 'border-b-2 text-black font-bold'
                   : ''
@@ -76,6 +76,7 @@ function SidebarFilter({
                         id={`-${optionIdx}`}
                         name={`${priceFilter.id}[]`}
                         defaultChecked={
+                          priceRange && option.value&&
                           priceRange[0] === option.value.minPrice &&
                           priceRange[1] === option.value.maxPrice
                         }

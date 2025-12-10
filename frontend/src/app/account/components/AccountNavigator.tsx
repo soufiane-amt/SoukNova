@@ -182,7 +182,13 @@ function AccountNavigator() {
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const res = await fetch('/api/user/profile');
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/user/profile`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          },
+        );
         if (!res.ok) throw new Error('Failed to fetch profile');
 
         const data = await res.json();
@@ -207,10 +213,14 @@ function AccountNavigator() {
     formData.append('file', file);
 
     try {
-      const res = await fetch('/api/user/upload-profile-picture', {
-        method: 'POST',
-        body: formData,
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/upload-profile-picture`,
+        {
+          method: 'POST',
+          body: formData,
+          credentials: 'include',
+        },
+      );
 
       if (!res.ok) throw new Error('Failed to upload');
     } catch (err) {

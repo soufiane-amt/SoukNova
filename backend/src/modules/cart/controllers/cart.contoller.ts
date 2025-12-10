@@ -12,7 +12,7 @@ import { CartService } from '../services/cart.service';
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { User } from 'src/modules/users/user.decorator';
 
-@Controller('cart')
+@Controller('api/cart')
 @UseGuards(AuthGuard)
 export class CartController {
   constructor(private readonly cartService: CartService) {}

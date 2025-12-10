@@ -11,19 +11,17 @@ export async function middleware(req: NextRequest) {
   }
 
   const verifyUrl = `${process.env.NEXT_PUBLIC_API_SERVER}/auth/verify-token`;
+  const cookies = cookie.parse(req.headers.get('cookie') || '');
+  const token = cookies.jwt;
+
+  const headers: Record<string, string> = {};
+  if (token) headers.cookie = `jwt=${token}`;
 
   try {
-    const cookies = cookie.parse(req.headers.get('cookie') || '');
-    const token = cookies.jwt;
-
     const res = await fetch(verifyUrl, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: 'include',
+      headers,
     });
-
     if (res.ok) {
       return NextResponse.next();
     } else {

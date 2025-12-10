@@ -19,11 +19,15 @@ function CheckoutPage() {
 
   const placeOrder = async () => {
     try {
-      const res = await fetch('/api/order', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order`, {
         method: 'POST',
         body: JSON.stringify({
           orderTotal: total,
         }),
+        headers:{
+          'content-type': 'application/json'
+        },
+        credentials: 'include',
       });
 
       if (!res.ok) {
@@ -43,7 +47,9 @@ function CheckoutPage() {
     <main className={`${inter.className} `}>
       <div className="mx-8 md:mx-16 lg:mx-32 my-12 flex flex-col gap-y-8">
         <div className="flex md:justify-center mb-2">
-          <p className="font-medium lg:text-6xl md:text-5xl text-4xl my-2">Checkout</p>
+          <p className="font-medium lg:text-6xl md:text-5xl text-4xl my-2">
+            Checkout
+          </p>
         </div>
         <CartNavigator />
         <form className="flex flex-col gap-15 md:flex-row md:justify-between">

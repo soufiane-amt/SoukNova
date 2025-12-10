@@ -76,12 +76,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/product', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/product`,
+          {
+            method: 'GET',
+            credentials: 'include',
           },
-        });
+        );
+
         const data = await response.json();
 
         setProducts(data.slice(0, 7));
@@ -96,8 +98,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const res = await fetch('/api/cart', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
           method: 'GET',
+          credentials: 'include',
         });
         if (!res?.ok) {
           const errorBody = await res?.json().catch(() => ({}));
@@ -127,9 +130,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addToCart = async (productId: string, quantity: number = 1) => {
     try {
-      const res = await fetchWithAuth(`/api/cart/${productId}`, {
-        method: 'POST',
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${productId}`,
+        {
+          method: 'POST',
+          credentials: 'include',
+        },
+      );
       if (!res?.ok) throw new Error('Failed to add to cart');
       const item: CartItemType = await res?.json();
 
@@ -152,7 +159,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const removeFromCart = async (productId: string) => {
     try {
-      const res = await fetch(`/api/cart/${productId}`, { method: 'DELETE' });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${productId}`,
+        { method: 'DELETE', credentials: 'include' },
+      );
       if (!res?.ok) throw new Error('Failed to remove from cart');
 
       setCart((prev) => prev.filter((i) => i.productId !== productId));
@@ -166,9 +176,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       cart.find((item) => item.productId === productId)?.quantity || 0;
     if (quantity < 1) return;
     try {
-      const res = await fetchWithAuth(`/api/cart/${productId}`, {
-        method: 'PATCH',
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${productId}`,
+        {
+          method: 'PATCH',
+          credentials: 'include',
+        },
+      );
       if (!res?.ok) throw new Error('Failed to update cart');
 
       if (quantity > 1)

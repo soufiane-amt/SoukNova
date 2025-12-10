@@ -1,50 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CartItemFullProps, CartItemProps } from '../dto/cart.dto';
-import { SUPABASE_KEY, SUPABASE_URL } from 'src/exports';
 
 @Injectable()
 export class CartService {
-  private cache = new Map<string, CartItemProps>();
-
   constructor(private readonly prisma: PrismaService) {}
 
   async addToCart(
     userId: number,
     productId: string,
-  ): Promise<CartItemFullProps | undefined> {
-    const cartItem = await this.prisma.cartItem.upsert({
+  ): Promise<CartItemFullProps> {
+    const updatedItem = await this.prisma.cartItem.upsert({
       where: { userId_productId: { userId, productId } },
       update: { quantity: { increment: 1 } },
       create: { userId, productId, quantity: 1 },
-    });
-
-    // Fetch product details
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/products?id=eq.${productId}`,
-      {
-        headers: {
-          apikey: SUPABASE_KEY,
-          Authorization: `Bearer ${SUPABASE_KEY}`,
+      select: {
+        quantity: true,
+        product: {
+          select: {
+            id: true,
+            title: true,
+            primary_image: true,
+            discount: true,
+            price: true,
+          },
         },
       },
-    );
+    });
 
-    const data = await res.json();
-
-    const productData = Array.isArray(data) ? data[0] : data;
-    if (!productData) return undefined;
-
-    const fullCartItem: CartItemFullProps = {
-      productId: productData.id,
-      productName: productData.title,
-      image: productData.primary_image,
-      price: productData.Price,
-      quantity: cartItem.quantity,
-      discount: parseInt(productData.discount),
+    const cartItem: CartItemFullProps = {
+      productId: updatedItem.product.id,
+      productName: updatedItem.product.title,
+      image: updatedItem.product.primary_image,
+      price: updatedItem.product.price,
+      quantity: updatedItem.quantity,
+      discount: parseInt(updatedItem.product.discount ?? '0'),
     };
-
-    return fullCartItem;
+    return cartItem;
   }
 
   async decreaseFromCart(userId: number, productId: string) {
@@ -89,53 +81,31 @@ export class CartService {
     });
   }
 
-  async getCart(userId: number): Promise<CartItemProps[]> {
-    const products = await this.prisma.cartItem.findMany({
+  async getCart(userId: number): Promise<CartItemFullProps[]> {
+    const cartProducts = await this.prisma.cartItem.findMany({
       where: { userId },
-      select: { productId: true, quantity: true },
-    });
-
-    const cartList: CartItemFullProps[] = [];
-
-    for (const item of products) {
-      if (this.cache.has(item.productId)) {
-        const cached = this.cache.get(item.productId);
-        if (cached) {
-          cartList.push({
-            ...cached,
-            quantity: item.quantity,
-            productId: item.productId,
-          });
-          continue;
-        }
-        continue;
-      }
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/products?id=eq.${item.productId}`,
-        {
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`,
+      select: {
+        quantity: true,
+        product: {
+          select: {
+            id: true,
+            title: true,
+            primary_image: true,
+            discount: true,
+            price: true,
           },
         },
-      );
-      const data = await res.json();
-      const productData = Array.isArray(data) ? data[0] : data;
+      },
+    });
 
-      const product: CartItemFullProps = {
-        productId: item.productId,
-        productName: productData.title,
-        image: productData.primary_image,
-        price: productData.Price,
-        quantity: item.quantity,
-        discount: parseInt(productData.discount),
-      };
-
-      this.cache.set(item.productId, product);
-
-      cartList.push(product);
-    }
-
+    const cartList: CartItemFullProps[] = cartProducts.map((item) => ({
+      productId: item.product.id,
+      productName: item.product.title,
+      image: item.product.primary_image,
+      price: item.product.price,
+      quantity: item.quantity,
+      discount: parseInt(item.product.discount ?? '0'),
+    }));
     return cartList;
   }
 

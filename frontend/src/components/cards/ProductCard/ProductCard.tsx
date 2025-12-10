@@ -35,11 +35,15 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
 
   const handleAddWishlist = async (productId: string) => {
     try {
-      const res = await fetchWithAuth(`/api/wishlist/${productId}`, {
-        method: 'POST',
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/wishlist/${productId}`,
+        {
+          method: 'POST',
+          credentials: 'include',
+        },
+      );
 
-      if (!res?.ok) throw new Error('Failed to delete');
+      if (!res?.ok) throw new Error('Failed to Add to wishlist');
 
       setIsWishlisted((prev) => !prev);
       showToast('Item added to wishlist!');

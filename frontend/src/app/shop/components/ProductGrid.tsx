@@ -32,10 +32,10 @@ function ProductGrid({ products, selectedShape }: ProductGridProps) {
               <ProductCard
                 productId={item.id}
                 productName={item.title}
-                currentPrice={item.Price}
+                currentPrice={item.price}
                 originalPrice={item.originalPrice}
                 discountPercentage={item.discount}
-                rating={item.Rate}
+                rating={item.rate}
                 image={item.primary_image}
                 date={item.Date}
               />

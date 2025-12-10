@@ -12,12 +12,15 @@ interface ReviewProps {
 }
 
 export const Review = ({ name, image, rate, comment }: ReviewProps) => {
+  const imageUrl = image
+    ? `${process.env.NEXT_PUBLIC_API_URL}${image}`
+    : defaultUserImage;
   return (
     <div className=" flex items-start mt-8 border-b border-gray-300 pb-8">
       <div className="flex-shrink-0 mr-5">
         <Image
           className="rounded-full w-15 h-15"
-          src={image ?? defaultUserImage}
+          src={imageUrl}
           height={80}
           width={80}
           alt={name}

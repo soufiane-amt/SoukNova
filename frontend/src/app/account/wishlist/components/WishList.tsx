@@ -23,12 +23,13 @@ function WishList() {
 
   useEffect(() => {
     const fetchWishlist = async () => {
-      const res = await fetch('/api/wishlist', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/wishlist`,
+        {
+          method: 'GET',
+          credentials: 'include',
         },
-      });
+      );
       const data = await res.json();
       setWishlist(data);
     };
@@ -37,9 +38,13 @@ function WishList() {
 
   const handleDeleteItem = async (productId: string) => {
     try {
-      const res = await fetch(`/api/wishlist/${productId}`, {
-        method: 'DELETE',
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/wishlist/${productId}`,
+        {
+          method: 'DELETE',
+          credentials: 'include',
+        },
+      );
       if (!res.ok) throw new Error('Failed to delete');
       setWishlist(wishlist.filter((item) => item.productId !== productId));
     } catch (err) {

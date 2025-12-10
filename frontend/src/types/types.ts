@@ -5,6 +5,6 @@ export interface Article {
   date: string;
 }
 
-export type priceType = [number, number];
+export type priceType = [number, number] | undefined;
 
 export type ShippingOption = 'free' | 'express' | 'pickup';

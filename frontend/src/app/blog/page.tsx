@@ -21,28 +21,24 @@ function BlogPage() {
       once: true,
     });
 
-    const fetchArticals = async () => {
+    const fetchArticles = async () => {
       try {
-        const response = await fetch('/api/articles');
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/article`);
 
         const data = await response.json();
         setArticles(data);
-      } catch (e:any) {
+      } catch (e: any) {
         setError(e);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchArticals();
+    fetchArticles();
   }, []);
 
   if (loading) {
-    return <Loader/>;
+    return <Loader />;
   }
   if (error) return <div>Error: {error}</div>;
 

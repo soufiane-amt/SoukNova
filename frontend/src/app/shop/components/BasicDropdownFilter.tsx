@@ -6,7 +6,7 @@ const subCategories = [
   { name: 'Bedroom' },
   { name: 'Kitchen' },
   { name: 'Bathroom' },
-  { name: 'Dinning' },
+  { name: 'Dining' },
   { name: 'Outdoor' },
 ];
 

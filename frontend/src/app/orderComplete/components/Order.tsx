@@ -24,9 +24,13 @@ function Order({ orderId, cartItems }: OrderProps) {
 
   useEffect(() => {
     const deleteCarts = async () => {
-      const res = await fetch(`/api/cart/reset`, {
-        method: 'DELETE',
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_SERVER}/api/cart/reset`,
+        {
+          method: 'DELETE',
+          credentials: 'include'
+        },
+      );
 
       if (!res.ok) {
         throw new Error(`Failed to delete carts: ${res.status}`);
@@ -34,9 +38,13 @@ function Order({ orderId, cartItems }: OrderProps) {
     };
     const fetchOrder = async () => {
       try {
-        const res = await fetch(`/api/order/${orderId}`, {
-          method: 'GET',
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/order/${orderId}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          },
+        );
 
         if (!res.ok) {
           throw new Error(`Failed to fetch order: ${res.status}`);
@@ -55,7 +63,7 @@ function Order({ orderId, cartItems }: OrderProps) {
       }
     };
     fetchOrder();
-  }, [orderId, resetCart]);
+  }, [orderId]);
 
   return (
     <div

@@ -1,13 +1,13 @@
 'use client';
 import * as React from 'react';
 import { useEffect } from 'react';
-import ArticleCard from './ArticalCard';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { poppins } from '@/layout';
 import { Article } from '../../../types/types';
 import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
 import { useShowMore } from '../../../hooks/useShowMore';
+import ArticleCard from './ArticalCard';
 
 interface BlogProps {
   articles: Article[];

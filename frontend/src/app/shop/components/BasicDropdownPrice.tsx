@@ -2,18 +2,19 @@ import { FormControl, MenuItem, Select } from '@mui/material';
 import { priceType } from '../../../types/types';
 
 export const sortOptions = [
-  { label: 'Rate_desc', value: 'Rate.desc' },
-  { label: 'Price_asc', value: 'Price.asc' },
-  { label: 'Price_desc', value: 'Price.desc' },
-  { label: 'Date_asc', value: 'Date.asc' },
-  { label: 'Date_desc', value: 'Date.desc' },
+  { label: 'Rate_asc', value: 'rate_asc' },
+  { label: 'Rate_desc', value: 'rate_desc' },
+  { label: 'Price_asc', value: 'price_asc' },
+  { label: 'Price_desc', value: 'price_desc' },
+  { label: 'Date_asc', value: 'date_asc' },
+  { label: 'Date_desc', value: 'date_desc' },
 ];
 export const priceFilter = {
   id: 'price',
   name: 'PRICE',
   options: [
     {
-      value: { minPrice: 0, maxPrice: Infinity },
+      value: undefined,
       label: 'All Price',
     },
     {
@@ -51,7 +52,7 @@ function BasicDropdownPrice({
     const [min, max] = event.target.value.split(',').map(Number);
 
     if (isNaN(min) || isNaN(max)) {
-      setPriceRange([0, Infinity]);
+      setPriceRange(undefined);
     } else {
       setPriceRange([min, max]);
     }
@@ -59,30 +60,30 @@ function BasicDropdownPrice({
 
   return (
     <FormControl fullWidth>
-      <div className='mb-1 text-md font-bold text-[var(--color-primary)]'>
+      <div className="mb-1 text-md font-bold text-[var(--color-primary)]">
         <p>CATEGORY</p>
       </div>
       <Select
         labelId="price-select-label"
-        value={priceRange ? priceRange.join(',') : '0,Infinity'}
+        value={priceRange ? priceRange.join(',') : "All Prices"}
         onChange={handlePriceChange}
         sx={{
           height: 45,
           borderRadius: 2,
           fontWeight: 'bold',
           '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'black', // border color
-            borderWidth: '2px', // border thickness
+            borderColor: 'black',
+            borderWidth: '2px',
           },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'black', // focus border color
+            borderColor: 'black',
           },
         }}
       >
         {priceFilter.options.map((el, index) => (
           <MenuItem
             key={index}
-            value={`${el.value.minPrice},${el.value.maxPrice}`}
+            value={el.value ? `${el.value.minPrice},${el.value.maxPrice}` : "All Prices"}
           >
             {el.label}
           </MenuItem>

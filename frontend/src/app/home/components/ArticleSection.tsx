@@ -4,12 +4,17 @@ import CustomButton from '../../../components/buttons/CustomButton';
 import { poppins } from '@/layout';
 import { useEffect, useState } from 'react';
 
-export function ArticleSection() {
+interface ArticleSectionProps {
+  articleId?: string;
+}
+export function ArticleSection({ articleId = "1" }: ArticleSectionProps) {
   const [articles, setArticles] = useState([]);
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch('/api/articles/random');
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/article/random/${articleId}`,
+        );
         if (!response.ok) throw new Error('Network response was not ok');
         setArticles(await response.json());
       } catch (e) {

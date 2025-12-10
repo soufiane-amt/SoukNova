@@ -10,7 +10,7 @@ interface ArticleCardProps {
 }
 
 function ArticleCard({ id, title, image, date }: ArticleCardProps) {
-  const formattedDate = date.slice(0, -5)
+  const formattedDate = date.slice(0, -5);
   return (
     <Link
       href={`/blog/${id}`}
@@ -20,7 +20,7 @@ function ArticleCard({ id, title, image, date }: ArticleCardProps) {
       <article>
         <div className="relative w-full h-[250px] overflow-hidden rounded-lg shadow-md group-hover:shadow-lg transition-shadow duration-300">
           <Image
-            src={image}
+            src={image ?? null}
             alt={title}
             fill
             sizes="(max-width: 768px) 100vw, 300px"
@@ -34,9 +34,7 @@ function ArticleCard({ id, title, image, date }: ArticleCardProps) {
             {title}
           </p>
           <div className="flex gap-4">
-            <p
-              className=" !font-inter !text-xs text-gray-400"
-            >
+            <p className=" !font-inter !text-xs text-gray-400">
               {formattedDate}
             </p>
           </div>

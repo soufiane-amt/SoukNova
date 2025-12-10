@@ -16,27 +16,39 @@ export default function ShopPage() {
   const [error, setError] = useState(null);
 
   const [selectedCategory, setSelectedCategory] = useState('All Rooms');
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, Infinity]);
-  const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
+  const [priceRange, setPriceRange] = useState<[number, number] | undefined>(
+    undefined,
+  );
+  const [selectedOrder, setSelectedOrder] = useState<string | null>(
+    'rate_desc',
+  );
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        let query = '';
-        if (selectedCategory !== 'All Rooms') {
-          query += `&categoriesText=ilike.%25${encodeURIComponent(
-            selectedCategory,
-          )}%25`;
+        const params = new URLSearchParams();
+
+        if (selectedCategory && selectedCategory !== 'All Rooms') {
+          params.append('category', selectedCategory);
         }
-        if (priceRange !== null) {
-          query += `&Price=gte.${priceRange[0]}`;
-          query += `&Price=lte.${priceRange[1]}`;
+
+        if (priceRange) {
+          params.append('minPrice', `${priceRange[0]}`);
+          params.append('maxPrice', `${priceRange[1]}`);
         }
-        if (selectedOrder !== null) {
-          query += `&order=${selectedOrder}`;
+
+        if (selectedOrder) {
+          params.append('order', selectedOrder);
         }
-        const res = await fetch(`/api/product?${query}`);
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/product?${params.toString()}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          },
+        );
         const data = await res.json();
         setProducts(data);
       } catch (e: any) {

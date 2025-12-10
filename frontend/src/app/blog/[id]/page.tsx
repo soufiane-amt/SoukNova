@@ -11,9 +11,9 @@ import ArticlMetaData from '../components/ArticlMetaData';
 import Loader from '../../../components/feedback/loader/Loader';
 import { ArticleSection } from '@/home/components/ArticleSection';
 
-function ArticalPage() {
+function ArticlePage() {
   const { id } = useParams();
-  const [articalData, setArticalData] = useState<any>(null);
+  const [articleData, setArticleData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,19 +25,18 @@ function ArticalPage() {
 
     if (!id) return;
 
-    const fetchArtical = async () => {
+    const fetchArticle = async () => {
       try {
-        const response = await fetch(`/api/articles/${id}`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/article/${id}`,
+        );
         if (!response.ok) {
           throw new Error('Failed to fetch product data.');
         }
 
         const data = await response.json();
-        if (data.length > 0) {
-          setArticalData(data[0]);
-        } else {
-          setArticalData(null);
-        }
+
+        setArticleData(data);
       } catch (err) {
         console.error(err);
         setError('Product not found or failed to load.');
@@ -46,7 +45,7 @@ function ArticalPage() {
       }
     };
 
-    fetchArtical();
+    fetchArticle();
   }, [id]);
 
   if (loading) {
@@ -64,7 +63,7 @@ function ArticalPage() {
             items={[
               { label: 'Home', href: '/' },
               { label: 'Blog', href: '/' },
-              { label: articalData.title },
+              { label: articleData.title },
             ]}
           />
         </div>
@@ -78,9 +77,9 @@ function ArticalPage() {
             data-aos-delay="500"
             className={`${poppins.className} text-[54px] font-medium leading-[58px] tracking-[-1px] max-sm:text-[26px] max-sm:leading-[34px]`}
           >
-            {articalData.title}
+            {articleData.title}
           </p>
-          <ArticlMetaData author={articalData.author} date={articalData.date} />
+          <ArticlMetaData author={articleData.author} date={articleData.date} />
         </div>
 
         <div className="my-10">
@@ -91,14 +90,15 @@ function ArticalPage() {
             <Image
               width={500}
               height={600}
-              src={articalData.images[0]}
-              alt={articalData.title}
+              src={articleData.images[0]}
+              alt={articleData.title}
               className="w-full max-sm:h-[320px] rounded-lg object-cover"
             />
           </div>
 
+
           <p data-aos="fade-up" className={`${poppins.className} my-5`}>
-            {articalData.article_paragraphs[0]}
+            {articleData.article_paragraphs[0]}
           </p>
 
           <div data-aos="fade-up" className="md:flex my-10 w-full gap-4">
@@ -108,8 +108,8 @@ function ArticalPage() {
               className="relative w-full md:w-1/2 h-[647px] max-sm:h-[320px] md:mb-0 mb-4"
             >
               <Image
-                src={articalData.images[1]}
-                alt={articalData.title}
+                src={articleData.images[1]}
+                alt={articleData.title}
                 fill
                 className="object-cover rounded-lg"
               />
@@ -120,25 +120,17 @@ function ArticalPage() {
               className="relative w-full md:w-1/2 h-[647px] max-sm:h-[320px]"
             >
               <Image
-                src={articalData.images[2]}
-                alt={articalData.title}
+                src={articleData.images[2]}
+                alt={articleData.title}
                 fill
                 className="object-cover rounded-lg"
               />
             </div>
           </div>
 
-          {articalData.article_paragraphs
-            .slice(1, 3)
-            .map((para: string, index: number) => (
-              <p
-                data-aos="fade-up"
-                key={index}
-                className={`${poppins.className} mb-2`}
-              >
-                {para}
-              </p>
-            ))}
+          <div data-aos="fade-up" className={`${poppins.className} mb-2`}>
+            <p>{articleData.article_paragraphs[1]}</p>
+          </div>
 
           <div
             data-aos="fade-up"
@@ -150,8 +142,8 @@ function ArticalPage() {
               className="relative md:w-2/3 w-full h-full rounded-lg overflow-hidden"
             >
               <Image
-                src={articalData.images[3]}
-                alt={articalData.title}
+                src={articleData.images[3]}
+                alt={articleData.title}
                 fill
                 className="object-cover"
               />
@@ -159,32 +151,22 @@ function ArticalPage() {
             <div
               data-aos="fade-right"
               data-aos-delay="200"
-              className="md:w-1/3 w-full flex items-center"
+              className={`md:w-1/3 w-full flex items-center ${poppins.className}`}
             >
-              <p className={`${poppins.className}`}>
-                {articalData.article_paragraphs[3]}
-              </p>
+              <p>{articleData.article_paragraphs[2]}</p>
             </div>
           </div>
 
-          {articalData.article_paragraphs
-            .slice(4, 10)
-            .map((para: string, index: number) => (
-              <p
-                data-aos="fade-up"
-                key={index}
-                className={`${poppins.className} mb-2`}
-              >
-                {para}
-              </p>
-            ))}
+          <div data-aos="fade-up" className={`${poppins.className} mb-2`}>
+            <p>{articleData.article_paragraphs[3]}</p>
+          </div>
         </div>
       </div>
-      <ArticleSection />
+      <ArticleSection articleId={id?.toString()}/>
 
       <SiteFooter />
     </main>
   );
 }
 
-export default ArticalPage;
+export default ArticlePage;

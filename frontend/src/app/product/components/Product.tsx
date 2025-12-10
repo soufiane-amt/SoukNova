@@ -26,7 +26,7 @@ import { useRouter } from 'next/navigation';
 function ProductTabs({ productData }: any) {
   const [activeTab, setActiveTab] = useState<'reviews' | 'info'>('reviews');
   const { visibleItems, setVisibleItems, handleShowMore, hasMore } =
-    useShowMore(productData.reviews, 5);
+    useShowMore(productData.comments, 5);
   const [reviewInput, setReviewInput] = useState('');
   const [ratingInput, setRatingInput] = useState<number | null>(1);
   const route = useRouter();
@@ -39,10 +39,17 @@ function ProductTabs({ productData }: any) {
   const handleAddReview = async () => {
     if (!reviewInput) return;
     try {
-      const res = await fetch(`/api/product/review/${productData.id}`, {
-        method: 'POST',
-        body: JSON.stringify({ content: reviewInput, rating: ratingInput }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/comment/${productData.id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ content: reviewInput, rating: ratingInput }),
+          credentials: 'include',
+        },
+      );
       if (res.status === 401) {
         route.push('/auth/signin');
         return;
@@ -51,7 +58,7 @@ function ProductTabs({ productData }: any) {
       const data = await res.json();
       const newReview = {
         ...data,
-        avatar: `${process.env.NEXT_PUBLIC_API_URL}${data.avatar}`,
+        avatar: data.avatar,
       };
       setVisibleItems([newReview, ...visibleItems]);
     } catch (err) {
@@ -104,7 +111,7 @@ function ProductTabs({ productData }: any) {
           <div className="flex space-x-4 mt-5" data-aos="fade-up">
             <RatingStars isStatic={true} defaultValue={productData.rate} />
             <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-              <span>{productData?.reviews?.length ?? 0}</span> Reviews
+              <span>{productData?.comments?.length ?? 0}</span> Reviews
             </Typography>
           </div>
           <div
@@ -166,7 +173,7 @@ function ProductTabs({ productData }: any) {
                 fontFamily: 'Poppins, sans-serif',
               }}
             >
-              <span>{productData?.reviews?.length ?? 0}</span> Reviews
+              <span>{productData?.comments?.length ?? 0}</span> Reviews
             </Typography>
             <ReviewsSort />
           </div>
@@ -257,14 +264,18 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const [activeImage, setActiveImage] = useState(
-    productData?.images?.[0]?.trim() || '',
+    productData?.images?.[0] || '',
   );
 
   const handleAddWishlist = async (productId: string) => {
     try {
-      const res = await fetchWithAuth(`/api/wishlist/${productId}`, {
-        method: 'POST',
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/wishlist/${productId}`,
+        {
+          method: 'POST',
+          credentials: 'include',
+        },
+      );
       setIsWishlisted((prev) => !prev);
       showToast('Product is added to wishlist!');
       if (!res?.ok) throw new Error('Failed to delete');
@@ -274,11 +285,11 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
   };
 
   useEffect(() => {
-    setActiveImage(productData?.images?.[0]?.trim() || '');
+    setActiveImage(productData?.images?.[0] || '');
   }, [productData]);
 
   const handleSelectImage = (image: string) => {
-    setActiveImage(image.trim());
+    setActiveImage(image);
   };
 
   return (
@@ -311,7 +322,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
             <div className="flex items-start space-x-2" data-aos="fade-up">
               <RatingStars isStatic={true} defaultValue={productData?.rate} />
               <Typography sx={{ fontSize: '0.675rem' }}>
-                <span>{productData?.reviews?.length ?? 0}</span> Reviews
+                <span>{productData?.comments?.length ?? 0}</span> Reviews
               </Typography>
             </div>
             <div data-aos="fade-up" data-aos-delay="100">

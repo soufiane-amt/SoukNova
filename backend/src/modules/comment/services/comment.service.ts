@@ -37,33 +37,4 @@ export class CommentService {
       content: review.content,
     };
   }
-
-  async getComments(productId: string) {
-    const comments = await this.prisma.comment.findMany({
-      where: { productId },
-      select: {
-        id: true,
-        content: true,
-        rating: true,
-        addedAt: true,
-        user: {
-          select: {
-            firstName: true,
-            lastName: true,
-            image: true,
-          },
-        },
-      },
-      orderBy: {
-        addedAt: 'desc',
-      },
-    });
-    return comments.map((comment) => ({
-      id: comment.id,
-      name: comment.user.firstName + ' ' + comment.user.lastName,
-      avatar: comment.user.image,
-      rate: comment.rating,
-      content: comment.content,  
-    }));
-  }
 }
