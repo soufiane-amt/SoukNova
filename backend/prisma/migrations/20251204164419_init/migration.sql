@@ -1,0 +1,31 @@
+-- CreateTable
+CREATE TABLE "Product" (
+    "id" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "brand" TEXT,
+    "price" DOUBLE PRECISION NOT NULL,
+    "availability" TEXT,
+    "categoriesText" TEXT,
+    "primary_image" TEXT,
+    "manufacturer" TEXT,
+    "item_model_number" TEXT,
+    "package_dimensions" TEXT,
+    "date" TEXT,
+    "country_of_origin" TEXT,
+    "color" TEXT,
+    "material" TEXT,
+    "style" TEXT,
+    "product_overview" TEXT,
+    "about_item" TEXT,
+    "description" TEXT,
+    "specifications" TEXT,
+    "rate" INTEGER,
+    "discount" TEXT,
+    "images" TEXT[],
+    "reviews" TEXT[],
+    "colors" TEXT[],
+    "categories" TEXT[],
+
+    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+);
