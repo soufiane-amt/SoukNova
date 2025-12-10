@@ -7,7 +7,6 @@
 generator client {
   provider = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -36,20 +35,24 @@ model Wishlist {
   productId String
 
   user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
   @@unique([userId, productId], name: "userId_productId")
 }
 
 model CartItem {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   userId    Int
-  productId String 
+  productId String
   quantity  Int      @default(1)
   addedAt   DateTime @default(now())
 
-  user      User   @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 
   @@unique([userId, productId]) 
 }
+
 
 model Order {
   id   Int   @id @default(autoincrement())
@@ -64,9 +67,53 @@ model Order {
 model Comment {
   id   Int   @id @default(autoincrement())
   userId  Int
+  productId String
   user      User   @relation(fields: [userId], references: [id])
-  productId String 
+  product   Product  @relation(fields: [productId], references: [id]) 
   content    String
   rating     Float
   addedAt   DateTime @default(now())
+}
+
+
+model Product {
+  id String @id @default(cuid())
+  url               String
+  title             String
+  brand             String?
+  price             Float
+  availability      String?
+  categoriesText    String?
+  primary_image     String
+  manufacturer      String?
+  item_model_number String?
+  package_dimensions String?
+  date              String?
+  country_of_origin String?
+  color             String?
+  material          String?
+  style             String?
+  product_overview  String?
+  about_item        String?
+  description       String?
+  specifications    String?
+  rate              Int?
+  discount          String?
+  images            String[]   // store as array
+  colors            String[]
+  categories        String[]
+
+  cartItems  CartItem[]
+  comments   Comment[]
+  wishlist   Wishlist[] 
+}
+
+
+model article {
+    id   Int   @id @default(autoincrement())
+    title String
+    author String
+    date String
+    images String[]
+    text String
 }
