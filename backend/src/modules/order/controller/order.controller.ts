@@ -1,16 +1,16 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 import { User } from 'src/modules/users/user.decorator';
-import { orderDto } from '../dto/order.dto';
 import { OrderService } from '../services/order.service';
+import { OrderDto } from '../dto/order.dto';
 
 @UseGuards(AuthGuard)
-@Controller('order')
+@Controller('api/order')
 export class OrderController {
   constructor(private orderService: OrderService) {}
 
   @Post()
-  async addOrder(@User('id') userId: number, @Body() orderData: orderDto) {
+  async addOrder(@User('id') userId: number, @Body() orderData: OrderDto) {
     return await this.orderService.createOrder(userId, orderData);
   }
 

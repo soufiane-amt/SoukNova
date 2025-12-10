@@ -11,7 +11,7 @@ import { WishlistService } from '../services/wishlist.service';
 import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 
 @UseGuards(AuthGuard)
-@Controller('wishlist')
+@Controller('api/wishlist')
 export class WishlistController {
   constructor(private readonly wishlistService: WishlistService) {}
 

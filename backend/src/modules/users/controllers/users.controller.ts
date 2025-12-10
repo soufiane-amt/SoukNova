@@ -17,7 +17,7 @@ import { extname } from 'path';
 import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 
 @UseGuards(AuthGuard)
-@Controller('user')
+@Controller('api/user')
 export class UsersController {
   constructor(private usersService: UsersService) {}
   @Put()

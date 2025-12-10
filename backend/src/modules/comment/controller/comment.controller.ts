@@ -4,7 +4,7 @@ import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 import { User } from 'src/modules/users/user.decorator';
 import { commentInfoDto } from '../dto/commentInfo.dto';
 
-@Controller('comment')
+@Controller('api/comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
@@ -13,19 +13,15 @@ export class CommentController {
   async createComment(
     @User('id') userId: number,
     @Param('productId') productId: string,
-    @Body() commentData: { content: string; rating: number },
+    @Body() body: { content: string; rating: number },
   ) {
     const comment: commentInfoDto = {
       userId: userId,
       productId: productId,
-      content: commentData.content,
-      rating: commentData.rating,
+      content: body.content,
+      rating: body.rating,
     };
     return await this.commentService.createComment(comment);
   }
 
-  @Get(':productId')
-  async getComments(@Param('productId') productId: string) {
-    return await this.commentService.getComments(productId);
-  }
 }
