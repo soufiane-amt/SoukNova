@@ -103,8 +103,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           credentials: 'include',
         });
         if (!res?.ok) {
-          const errorBody = await res?.json().catch(() => ({}));
-          throw new Error(errorBody.message || 'Failed to update profile');
+          return
         }
         const data = await res?.json();
         setCart(
