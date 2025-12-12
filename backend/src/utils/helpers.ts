@@ -31,3 +31,12 @@ export function splitTextIntoParagraphs(text: string | undefined, numParagraphs 
   console.log("paragraphs : ", paragraphs.length)
   return paragraphs;
 }
+
+export function getFirstTwoWords(title: string | undefined) {
+  if (!title || typeof title !== 'string') return '';
+  const words = title.split(' ');
+  if (words.length >= 2) {
+    return `${words[0]} ${words[1]}`;
+  }
+  return title;
+}
