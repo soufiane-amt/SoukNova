@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
-const MAX_LIST = 5
+const MAX_LIST = 5;
 interface SearchedItemsListProps {
   items: { id: string; title: string; image: string }[] | undefined;
   toggleSearch: () => void;
@@ -18,7 +18,7 @@ function SearchedItemsList({
 }: SearchedItemsListProps) {
   if (!items || items.length === 0) return null;
 
-  const len = items.length > MAX_LIST ? MAX_LIST :items.length 
+  const len = items.length > MAX_LIST ? MAX_LIST : items.length;
   const handleResetUI = () => {
     if (toggleDrawer) toggleDrawer(false)();
     else toggleSearch();
@@ -68,21 +68,22 @@ export default function SearchContainer({
   const [searchText, setSearchText] = useState('');
   const containerRef = useRef<any>(null);
 
-  useEffect (()=>{
-    const handleSearch = async()=>{
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
       if (!searchText.trim()) {
-      setListedProducts([]);
-      return;
+        setListedProducts([]);
+        return;
       }
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product/search?query=${searchText}`, 
-        {method: 'Get',}
-      )
-      const products = await res.json()
-      setListedProducts(products)
-    }
-    if (!searchText.trim()) return;
-    handleSearch();
-  }, [searchText])
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/product/search?query=${searchText}`,
+      );
+      const products = await res.json();
+      setListedProducts(products);
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [searchText]);
   const handleSearchTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
