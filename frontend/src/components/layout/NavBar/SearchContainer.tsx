@@ -2,8 +2,9 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
+const MAX_LIST = 5
 interface SearchedItemsListProps {
-  items: { id: string; title: string; image: string }[];
+  items: { id: string; title: string; image: string }[] | undefined;
   toggleSearch: () => void;
   isDesktop: boolean;
   toggleDrawer?: (state: boolean) => () => void;
@@ -17,6 +18,7 @@ function SearchedItemsList({
 }: SearchedItemsListProps) {
   if (!items || items.length === 0) return null;
 
+  const len = items.length > MAX_LIST ? MAX_LIST :items.length 
   const handleResetUI = () => {
     if (toggleDrawer) toggleDrawer(false)();
     else toggleSearch();
@@ -25,11 +27,11 @@ function SearchedItemsList({
     <div
       className={`${
         isDesktop ? 'top-23 right-0' : 'z-50'
-      } absolute   w-[280px] max-h-[500px] bg-white shadow-lg rounded-lg border border-gray-200 `}
+      } absolute  w-[280px] max-h-[500px] bg-white shadow-lg rounded-lg border border-gray-200 `}
     >
       <ul>
-        {items.slice(0, 15).map((item: any) => (
-          <Link key={item.title} href={`/product/${item.id}`}>
+        {items.slice(0, len).map((item: any) => (
+          <Link key={item.id} href={`/product/${item.id}`}>
             <li
               onClick={handleResetUI}
               className="py-4 hover:bg-gray-100 rounded-lg cursor-pointer  text-gray-800"
@@ -53,28 +55,37 @@ function SearchedItemsList({
 }
 
 interface SearchContainerProps {
-  products: any;
   toggleSearch: () => void;
   isDesktop: boolean;
   toggleDrawer?: (state: boolean) => () => void;
 }
 export default function SearchContainer({
-  products,
   toggleSearch,
   isDesktop,
   toggleDrawer,
 }: SearchContainerProps) {
+  const [listedProducts, setListedProducts] = useState<any>([]);
   const [searchText, setSearchText] = useState('');
   const containerRef = useRef<any>(null);
 
+  useEffect (()=>{
+    const handleSearch = async()=>{
+      if (!searchText.trim()) {
+      setListedProducts([]);
+      return;
+      }
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product/search?query=${searchText}`, 
+        {method: 'Get',}
+      )
+      const products = await res.json()
+      setListedProducts(products)
+    }
+    if (!searchText.trim()) return;
+    handleSearch();
+  }, [searchText])
   const handleSearchTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
-
-  const filteredItems = products.filter(
-    (item: any) =>
-      searchText && item.title.toLowerCase().includes(searchText.toLowerCase()),
-  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -102,7 +113,7 @@ export default function SearchContainer({
         onChange={handleSearchTyping}
       />
       <SearchedItemsList
-        items={filteredItems}
+        items={listedProducts}
         toggleSearch={toggleSearch}
         isDesktop={isDesktop}
         toggleDrawer={toggleDrawer}
