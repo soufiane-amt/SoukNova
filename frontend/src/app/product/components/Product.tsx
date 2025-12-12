@@ -330,7 +330,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
                 className={`text-[40px] font-medium`}
                 style={{ fontFamily: 'var(--font-poppins), sans-serif' }}
               >
-                {getFirstTwoWords(productData.title)}
+                {productData.title}
               </p>
               <p className=" w-full overflow-hidden text-ellipsis text-wrap font-inter leading-[26px] text-[var(--color-primary)] text-sm">
                 {productData.about_item}
