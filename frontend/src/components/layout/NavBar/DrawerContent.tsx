@@ -12,7 +12,6 @@ import { NAV_ITEMS } from '../../../constants/navItems';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import SearchContainer from './SearchContainer';
-import { useCart } from '../../../context/CartContext';
 
 interface DrawerItemProps {
   label: string;
