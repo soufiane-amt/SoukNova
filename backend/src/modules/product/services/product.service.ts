@@ -1,11 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProductQueryDto } from '../dto/product.dto';
+import { getFirstTwoWords } from 'src/utils/helpers';
 
 @Injectable()
 export class ProductService {
   constructor(private prismaService: PrismaService) {}
 
+async searchProduct(query: string) {
+  if (!query?.trim()) return [];
+
+  const rawQuery = query
+    .trim()
+    .replace(/[^a-zA-Z0-9\s]/g, '')
+    .split(/\s+/)
+    .map(word => `${word}:*`)
+    .join(' & ');
+  if (rawQuery === ":*")
+    return []
+  return this.prismaService.$queryRaw`
+    SELECT id, title, primary_image,
+      ts_rank(
+        setweight(to_tsvector('english', title), 'A'),
+        to_tsquery('english', ${rawQuery})
+      ) +
+      ts_rank(
+        setweight(to_tsvector('english', about_item), 'B'),
+        plainto_tsquery('english', ${query})
+      ) AS rank
+    FROM "Product"
+    WHERE
+      setweight(to_tsvector('english', title), 'A') @@ to_tsquery('english', ${rawQuery})
+      OR
+      setweight(to_tsvector('english', about_item), 'B') @@ plainto_tsquery('english', ${query})
+    ORDER BY rank DESC;
+  `;
+}
   async getAllProducts() {
     return this.prismaService.product.findMany();
   }
@@ -22,6 +52,7 @@ export class ProductService {
     });
     return {
       ...productData,
+      title: getFirstTwoWords(productData?.title),
       comments: productData?.comments.map((comment) => ({
         id: comment.id,
         name: `${comment.user.firstName} ${comment.user.lastName}`,
