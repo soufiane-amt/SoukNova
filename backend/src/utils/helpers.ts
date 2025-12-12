@@ -10,8 +10,10 @@ export const getFormatInDate = (date: string | Date) => {
   return today.toLocaleDateString('en-US', options);
 };
 
-
-export function splitTextIntoParagraphs(text: string | undefined, numParagraphs = 4): string[] {
+export function splitTextIntoParagraphs(
+  text: string | undefined,
+  numParagraphs = 4,
+): string[] {
   if (!text) return [];
 
   const words = text.split(/\s+/); // split text into words
@@ -28,7 +30,6 @@ export function splitTextIntoParagraphs(text: string | undefined, numParagraphs 
       paragraphs.push(paragraphWords.join(' '));
     }
   }
-  console.log("paragraphs : ", paragraphs.length)
   return paragraphs;
 }
 
