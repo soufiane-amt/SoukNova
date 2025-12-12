@@ -8,6 +8,7 @@ import { OrderModule } from '../order/order.module';
 import { CommentModule } from '../comment/comment.module';
 import { ProductModule } from '../product/product.module';
 import { ArticleModule } from '../article/article.module';
+import { RedisModule } from '../redis/redis.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { ArticleModule } from '../article/article.module';
     OrderModule,
     CommentModule,
     ProductModule,
-    ArticleModule
+    ArticleModule,
+    RedisModule
   ],
   controllers: [],
   providers: [],
