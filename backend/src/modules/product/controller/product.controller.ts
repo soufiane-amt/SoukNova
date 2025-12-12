@@ -12,10 +12,9 @@ export class ProductController {
     }
     return this.productService.getProducts(query);
   }
-  
+
   @Get('search')
-  async searchProduct(@Query('query') query:string) {
-    console.log('query : ', query);
+  async searchProduct(@Query('query') query: string) {
     return this.productService.searchProduct(query);
   }
 
