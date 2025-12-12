@@ -52,7 +52,6 @@ export function DrawerContent({
   isOpen,
 }: DrawerContentProps) {
   const pathname = usePathname();
-  const { products } = useCart();
   return (
     <Drawer anchor="left" open={isOpen} onClose={toggleDrawer(false)}>
       <div className="mx-3 my-2 flex flex-col h-full">
@@ -64,7 +63,6 @@ export function DrawerContent({
         </div>
         <div className="mb-4">
           <SearchContainer
-            products={products}
             isDesktop={false}
             toggleSearch={toggleSearch}
             toggleDrawer={toggleDrawer}
