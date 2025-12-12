@@ -1,15 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CartItemFullProps, CartItemProps } from '../dto/cart.dto';
+import { RedisService } from 'src/modules/redis/service/redis.service';
 
 @Injectable()
 export class CartService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly redisService: RedisService,
+  ) {}
 
   async addToCart(
     userId: number,
     productId: string,
   ): Promise<CartItemFullProps> {
+    const cacheKey = `cart:${userId}`;
     const updatedItem = await this.prisma.cartItem.upsert({
       where: { userId_productId: { userId, productId } },
       update: { quantity: { increment: 1 } },
@@ -36,52 +41,61 @@ export class CartService {
       quantity: updatedItem.quantity,
       discount: parseInt(updatedItem.product.discount ?? '0'),
     };
+    await this.redisService.getClient().del(cacheKey);
     return cartItem;
   }
 
   async decreaseFromCart(userId: number, productId: string) {
-    const item = await this.prisma.cartItem.findUnique({
-      where: { userId_productId: { userId, productId } },
-      select: { quantity: true },
-    });
-
-    if (!item) {
-      throw new Error('Cart item not found');
-    }
-
-    if (item.quantity > 1) {
-      return this.prisma.cartItem.update({
+    const cacheKey = `cart:${userId}`;
+    try {
+      const updated = await this.prisma.cartItem.update({
         where: { userId_productId: { userId, productId } },
-        data: {
-          quantity: { decrement: 1 },
-        },
+        data: { quantity: { decrement: 1 } },
+        select: { quantity: true },
       });
-    } else {
-      await this.prisma.cartItem.delete({
-        where: { userId_productId: { userId, productId } },
-      });
-      return { quantity: 0 };
+      if (updated.quantity <= 0) {
+        await this.prisma.cartItem.delete({
+          where: { userId_productId: { userId, productId } },
+        });
+        return { quantity: 0 };
+      }
+      await this.redisService.getClient().del(cacheKey);
+      return updated;
+    } catch {
+      throw new NotFoundException('Cart item not found');
     }
   }
 
   async removeFromCart(userId: number, productId: string) {
-    return this.prisma.cartItem.delete({
+    const cacheKey = `cart:${userId}`;
+    const updated = await this.prisma.cartItem.delete({
       where: { userId_productId: { userId, productId } },
     });
+    await this.redisService.getClient().del(cacheKey);
+    return updated;
   }
 
   async updateQuantity(userId: number, productId: string, quantity: number) {
+    const cacheKey = `cart:${userId}`;
     if (quantity <= 0) {
       return this.removeFromCart(userId, productId);
     }
 
-    return this.prisma.cartItem.update({
+    const updated = await this.prisma.cartItem.update({
       where: { userId_productId: { userId, productId } },
       data: { quantity },
     });
+    await this.redisService.getClient().del(cacheKey);
+    return updated;
   }
 
   async getCart(userId: number): Promise<CartItemFullProps[]> {
+    const cacheKey = `cart:${userId}`;
+
+    const redis = this.redisService.getClient();
+
+    const cached = await redis.get(cacheKey);
+    if (cached) return JSON.parse(cached);
     const cartProducts = await this.prisma.cartItem.findMany({
       where: { userId },
       select: {
@@ -106,6 +120,7 @@ export class CartService {
       quantity: item.quantity,
       discount: parseInt(item.product.discount ?? '0'),
     }));
+    await redis.set(cacheKey, JSON.stringify(cartList), 'EX', 60 * 5);
     return cartList;
   }
 
@@ -120,10 +135,14 @@ export class CartService {
   }
 
   async deleteCarts(userId: number) {
-    return this.prisma.cartItem.deleteMany({
+    const cacheKey = `cart:${userId}`;
+
+    const updated = await this.prisma.cartItem.deleteMany({
       where: {
         userId: userId,
       },
     });
+    await this.redisService.getClient().del(cacheKey);
+    return updated;
   }
 }
