@@ -59,7 +59,6 @@ export default function ProductPage() {
       <div className="md:mx-20 mx-10  mt-10 lg:mx-30 mb-10">
         <Product productData={productData} />
       </div>
-      <NewsLetterSub />
       <SiteFooter />
     </main>
   );
