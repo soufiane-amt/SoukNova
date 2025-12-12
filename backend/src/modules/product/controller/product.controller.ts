@@ -12,10 +12,15 @@ export class ProductController {
     }
     return this.productService.getProducts(query);
   }
+  
+  @Get('search')
+  async searchProduct(@Query('query') query:string) {
+    console.log('query : ', query);
+    return this.productService.searchProduct(query);
+  }
 
   @Get(':productId')
   async getProduct(@Param('productId') productId) {
-    console.log('productId : ', productId);
     return this.productService.getProduct(productId);
   }
 }
