@@ -49,7 +49,7 @@ export function DesktopNav({
 }: DesktopNavProps) {
   const [isOpen, setOpen] = useState(false);
   const pathname = usePathname();
-  const { cart, products } = useCart();
+  const { cart } = useCart();
 
   const toggleCartSideBar = () => {
     setOpen(!isOpen);
@@ -117,7 +117,6 @@ export function DesktopNav({
           </motion.button>
           {isSearchOpen && (
             <SearchContainer
-              products={products}
               toggleSearch={toggleSearch}
               isDesktop={true}
             />
