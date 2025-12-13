@@ -5,12 +5,10 @@ import { ProductQueryDto } from '../dto/product.dto';
 @Controller('api/product')
 export class ProductController {
   constructor(private productService: ProductService) {}
+
   @Get()
   async getProducts(@Query() query: ProductQueryDto) {
-    if (!Object.keys(query).length) {
-      return this.productService.getAllProducts();
-    }
-    return this.productService.getProducts(query);
+    return await this.productService.getProducts(query);
   }
 
   @Get('search')
