@@ -10,6 +10,46 @@ export class ArticleService {
     private redisService: RedisService,
   ) {}
 
+  async getArticlesPaginated(page: number, pageSize: number) {
+    const redis = this.redisService.getClient();
+    const key = `articles:page=${page}-pageSize=${pageSize}`;
+
+    const cached = await redis.get(key);
+    if (cached) {
+      return JSON.parse(cached);
+    }
+    const skip = (page - 1) * pageSize;
+    const [totalCount, articles] = await Promise.all([
+      await this.prismaService.article.count(),
+      await this.prismaService.article.findMany({
+        skip,
+        take: pageSize,
+        select: {
+          id: true,
+          title: true,
+          date: true,
+          images: true,
+        },
+      }),
+    ]);
+
+    const formatted = articles.map((article) => ({
+      id: article.id,
+      title: article.title,
+      date: article.date,
+      image: article.images?.[0] ?? null,
+    }));
+
+    const results = {
+      articles: formatted,
+      totalPages: Math.ceil(totalCount / pageSize),
+      currentPage: page,
+    };
+    await redis.set(key, JSON.stringify(results), 'EX', 300);
+
+    return results;
+  }
+
   async getArticles() {
     const redis = this.redisService.getClient();
     const key = 'articles:list';
