@@ -101,15 +101,21 @@ export class ProductService {
 
   async getProducts(query: ProductQueryDto) {
     const redis = this.redisService.getClient();
-    const cacheKey = `products:${JSON.stringify(query)}`;
+
+    const page = query.page;
+    const pageSize = query.pageSize;
+    const skip = (page - 1) * pageSize;
+
+    const cacheKey = `products:${JSON.stringify({
+      ...query,
+      page,
+      pageSize,
+    })}`;
 
     const cached = await redis.get(cacheKey);
-    if (cached) {
-      return JSON.parse(cached);
-    }
+    if (cached) return JSON.parse(cached);
 
     const filters: any = {};
-    let orderBy;
 
     if (query.category) {
       filters.categoriesText = {
@@ -118,44 +124,44 @@ export class ProductService {
       };
     }
 
-    if (query.minPrice !== null && query.maxPrice !== null) {
+    if (query.minPrice != null && query.maxPrice != null) {
       filters.price = {
         gte: query.minPrice,
         lte: query.maxPrice,
       };
     }
 
-    switch (query.order) {
-      case 'rate_asc':
-        orderBy = { rate: 'asc' };
-        break;
-      case 'rate_desc':
-        orderBy = { rate: 'desc' };
-        break;
-      case 'price_asc':
-        orderBy = { price: 'asc' };
-        break;
-      case 'price_desc':
-        orderBy = { price: 'desc' };
-        break;
-      case 'date_asc':
-        orderBy = { date: 'asc' };
-        break;
-      case 'date_desc':
-        orderBy = { date: 'desc' };
-        break;
-      default:
-        orderBy = { rate: 'desc' };
-        break;
-    }
+    const orderMap = {
+      rate_asc: { rate: 'asc' },
+      rate_desc: { rate: 'desc' },
+      price_asc: { price: 'asc' },
+      price_desc: { price: 'desc' },
+      date_asc: { date: 'asc' },
+      date_desc: { date: 'desc' },
+    };
 
-    const products = await this.prismaService.product.findMany({
-      where: filters,
-      orderBy: orderBy,
-    });
+    const orderBy =
+      query.order && orderMap[query.order]
+        ? orderMap[query.order]
+        : { rate: 'desc' };
 
-    await redis.set(cacheKey, JSON.stringify(products), 'EX', 3600);
+    const [totalCount, products] = await Promise.all([
+      this.prismaService.product.count({ where: filters }),
+      this.prismaService.product.findMany({
+        skip,
+        take: pageSize,
+        where: filters,
+        orderBy,
+      }),
+    ]);
 
-    return products;
+    const result = {
+      products: products,
+      totalPages: Math.ceil(totalCount / pageSize),
+    };
+
+    await redis.set(cacheKey, JSON.stringify(result), 'EX', 3600);
+
+    return result;
   }
 }
