@@ -7,46 +7,25 @@ import { poppins } from '@/layout';
 import { Article } from '../../../types/types';
 import ArticleCard from './ArticalCard';
 import { Box, Pagination } from '@mui/material';
+import CustomPagination from '../../../components/ui/CustomPagination';
 
-const PAGE_SIZE = 16;
 interface BlogProps {
-  articles: Article[];
+  itemsData: any;
+  page: number;
+  handlePageChange: (e: React.ChangeEvent<unknown>, v: number) => void;
 }
 
-export default function BlogCatalog({ articles }: BlogProps) {
-  const [itemsList, setItemsList] = useState<any>([]);
-  const [page, setPage] = useState(1);
-  const [pagesCount, setPagesCount] = useState(0);
+export default function BlogCatalog({
+  itemsData,
+  page,
+  handlePageChange,
+}: BlogProps) {
   useEffect(() => {
     AOS.init({
       duration: 800,
       once: true,
     });
   }, []);
-
-  useEffect(() => {
-    const fetchPageCatalog = async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/article?page=${page}&pageSize=${PAGE_SIZE}`,
-      );
-
-      const data = await response.json();
-      setPagesCount(data.totalPages);
-      setItemsList(data.articles);
-    };
-    fetchPageCatalog();
-  }, [page]);
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number,
-  ) => {
-    setPage(value);
-    window.scrollTo({ top: 50, behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    setPage(1);
-  }, [articles]);
 
   return (
     <div>
@@ -63,7 +42,7 @@ export default function BlogCatalog({ articles }: BlogProps) {
           Blogs
         </h2>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {itemsList.map((article: any, index: number) => (
+          {itemsData.articles.map((article: any, index: number) => (
             <div
               key={article.id}
               data-aos="fade-up"
@@ -79,18 +58,11 @@ export default function BlogCatalog({ articles }: BlogProps) {
             </div>
           ))}
         </div>
-
-        {pagesCount > 1 && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 2 }}>
-            <Pagination
-              count={pagesCount}
-              page={page}
-              onChange={handlePageChange}
-              color="primary"
-              shape="rounded"
-            />
-          </Box>
-        )}
+        <CustomPagination
+          pagesCount={itemsData.totalPages}
+          page={page}
+          handlePageChange={handlePageChange}
+        />
       </section>
     </div>
   );
