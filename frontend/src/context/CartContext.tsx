@@ -74,28 +74,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/product`,
-          {
-            method: 'GET',
-            credentials: 'include',
-          },
-        );
-
-        const data = await response.json();
-
-        setProducts(data.slice(0, 7));
-      } catch (e: any) {
-        console.error(e.message);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  useEffect(() => {
     const fetchCart = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
@@ -103,7 +81,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           credentials: 'include',
         });
         if (!res?.ok) {
-          return
+          return;
         }
         const data = await res?.json();
         setCart(
