@@ -9,11 +9,14 @@ import ShopFilter from './components/ShopFilter';
 import Loader from '../../components/feedback/loader/Loader';
 
 const imageUrl = '/images/shop/shopPage.png';
+const PAGE_SIZE = 12;
 
 export default function ShopPage() {
-  const [products, setProducts] = useState([]);
+  const [itemsData, setItemsData] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [pageIndex, setPage] = useState(1);
 
   const [selectedCategory, setSelectedCategory] = useState('All Rooms');
   const [priceRange, setPriceRange] = useState<[number, number] | undefined>(
@@ -41,6 +44,8 @@ export default function ShopPage() {
         if (selectedOrder) {
           params.append('order', selectedOrder);
         }
+        params.append('page', String(pageIndex));
+        params.append('pageSize', String(PAGE_SIZE));
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/product?${params.toString()}`,
@@ -50,7 +55,7 @@ export default function ShopPage() {
           },
         );
         const data = await res.json();
-        setProducts(data);
+        setItemsData(data);
       } catch (e: any) {
         setError(e.message);
       } finally {
@@ -59,7 +64,7 @@ export default function ShopPage() {
     };
 
     fetchProducts();
-  }, [priceRange, selectedCategory, selectedOrder]);
+  }, [priceRange, selectedCategory, selectedOrder, pageIndex]);
 
   if (loading) {
     return <Loader />;
@@ -75,7 +80,9 @@ export default function ShopPage() {
           desc="Let’s design the place you always imagined."
         />
         <ShopFilter
-          products={products}
+          itemsData={itemsData}
+          page={pageIndex}
+          setPage={setPage}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           setPriceRange={setPriceRange}
