@@ -20,21 +20,6 @@ function BlogPage() {
       duration: 800,
       once: true,
     });
-
-    const fetchArticles = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/article`);
-
-        const data = await response.json();
-        setArticles(data);
-      } catch (e: any) {
-        setError(e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArticles();
   }, []);
 
   if (loading) {
