@@ -1,26 +1,52 @@
 'use client';
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { poppins } from '@/layout';
 import { Article } from '../../../types/types';
-import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
-import { useShowMore } from '../../../hooks/useShowMore';
 import ArticleCard from './ArticalCard';
+import { Box, Pagination } from '@mui/material';
 
+const PAGE_SIZE = 16;
 interface BlogProps {
   articles: Article[];
 }
 
 export default function BlogCatalog({ articles }: BlogProps) {
+  const [itemsList, setItemsList] = useState<any>([]);
+  const [page, setPage] = useState(1);
+  const [pagesCount, setPagesCount] = useState(0);
   useEffect(() => {
     AOS.init({
       duration: 800,
       once: true,
     });
   }, []);
-  const { visibleItems, handleShowMore, hasMore } = useShowMore(articles, 12);
+
+  useEffect(() => {
+    const fetchPageCatalog = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/article?page=${page}&pageSize=${PAGE_SIZE}`,
+      );
+
+      const data = await response.json();
+      setPagesCount(data.totalPages);
+      setItemsList(data.articles);
+    };
+    fetchPageCatalog();
+  }, [page]);
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
+    setPage(value);
+    window.scrollTo({ top: 50, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    setPage(1);
+  }, [articles]);
 
   return (
     <div>
@@ -37,7 +63,7 @@ export default function BlogCatalog({ articles }: BlogProps) {
           Blogs
         </h2>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {visibleItems.map((article: any, index: number) => (
+          {itemsList.map((article: any, index: number) => (
             <div
               key={article.id}
               data-aos="fade-up"
@@ -53,7 +79,18 @@ export default function BlogCatalog({ articles }: BlogProps) {
             </div>
           ))}
         </div>
-        {hasMore && <ShowMoreButton handleShowMore={handleShowMore} />}
+
+        {pagesCount > 1 && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 2 }}>
+            <Pagination
+              count={pagesCount}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+              shape="rounded"
+            />
+          </Box>
+        )}
       </section>
     </div>
   );
