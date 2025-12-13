@@ -1,28 +1,32 @@
 'use client';
 import * as React from 'react';
 
-import { useState , useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { priceType } from '../../../types/types';
 import SidebarFilter from './SidebarFilter';
 import ProductGrid from './ProductGrid';
 import ViewModeSelector from './ViewModeSelector';
 
 interface ShopFilterProps {
-  products: any;
+  itemsData: any;
   selectedCategory: string;
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
   priceRange: priceType;
   setPriceRange: React.Dispatch<React.SetStateAction<priceType>>;
   setSelectedOrder: React.Dispatch<React.SetStateAction<string | null>>;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function ShopFilter({
-  products,
+  itemsData,
   setSelectedCategory,
   selectedCategory,
   setPriceRange,
   priceRange,
   setSelectedOrder,
+  page,
+  setPage,
 }: ShopFilterProps) {
   const [selectedShape, setSelectedShape] = useState(0);
 
@@ -65,7 +69,12 @@ export default function ShopFilter({
                 priceRange={priceRange}
               />
             )}
-            <ProductGrid products={products} selectedShape={selectedShape} />
+            <ProductGrid
+              itemsData={itemsData}
+              selectedShape={selectedShape}
+              page={page}
+              setPage={setPage}
+            />
           </div>
         </section>
       </main>
