@@ -1,12 +1,19 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { ArticleService } from '../service/article.service';
 
 @Controller('api/article')
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
+  // @Get()
+  // async getArticles() {
+  //   return this.articleService.getArticles();
+  // }
   @Get()
-  async getArticles() {
-    return this.articleService.getArticles();
+  async getArticlesPaginated(
+    @Query('page', ParseIntPipe) page: number,
+    @Query('pageSize', ParseIntPipe) pageSize: number,
+  ) {
+    return this.articleService.getArticlesPaginated(page, pageSize);
   }
 
   @Get(':articleId')
