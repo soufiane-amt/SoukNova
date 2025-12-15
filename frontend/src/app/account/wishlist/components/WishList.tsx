@@ -5,6 +5,9 @@ import 'aos/dist/aos.css';
 import { inter } from '@/layout';
 import WishItem from './WishItem';
 import EmptySectionMessage from '../../../../components/feedback/EmptySection';
+import CustomPagination from '../../../../components/ui/CustomPagination';
+
+const PAGE_SIZE = 5;
 
 interface WishItemType {
   productId: string;
@@ -13,7 +16,8 @@ interface WishItemType {
   price: number;
 }
 function WishList() {
-  const [wishlist, setWishlist] = useState<WishItemType[]>([]);
+  const [itemsData, setItemsData] = useState<any>();
+  const [page, setPage] = useState(1);
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -24,17 +28,17 @@ function WishList() {
   useEffect(() => {
     const fetchWishlist = async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/wishlist`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/wishlist?page=${page}&pageSize=${PAGE_SIZE}`,
         {
           method: 'GET',
           credentials: 'include',
         },
       );
       const data = await res.json();
-      setWishlist(data);
+      setItemsData(data);
     };
     fetchWishlist();
-  }, []);
+  }, [page]);
 
   const handleDeleteItem = async (productId: string) => {
     try {
@@ -45,12 +49,23 @@ function WishList() {
           credentials: 'include',
         },
       );
+      const data = await res.json();
+      setItemsData(data.items.filter((item) => item.productId !== productId));
+
       if (!res.ok) throw new Error('Failed to delete');
-      setWishlist(wishlist.filter((item) => item.productId !== productId));
     } catch (err) {
       console.error(err);
     }
   };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
+    setPage(value);
+    window.scrollTo({ top: 50, behavior: 'smooth' });
+  };
+
   return (
     <div className="w-full md:ml-25 md:mt-0 mt-5" data-aos="fade-up">
       <div className="mb-5 mt-10" data-aos="fade-up" data-aos-delay="100">
@@ -58,7 +73,7 @@ function WishList() {
           Your Wishlist
         </p>
       </div>
-      {wishlist.length > 0 ? (
+      {itemsData?.items?.length > 0 ? (
         <div>
           <div
             className="text-sm text-[var(--color-primary)] border-b border-gray-300 pb-2"
@@ -68,7 +83,7 @@ function WishList() {
             <p>Products</p>
           </div>
           <div data-aos="fade-right" data-aos-delay="300">
-            {wishlist.map((item) => (
+            {itemsData.items.map((item) => (
               <WishItem
                 key={item.productId}
                 productName={item.productName}
@@ -78,6 +93,11 @@ function WishList() {
               />
             ))}
           </div>
+          <CustomPagination
+            pagesCount={itemsData.totalPages}
+            page={page}
+            handlePageChange={handlePageChange}
+          />
         </div>
       ) : (
         <div className="mt-30">

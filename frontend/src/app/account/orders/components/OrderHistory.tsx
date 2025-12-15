@@ -4,9 +4,15 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { inter } from '@/layout';
 import OrderInfo from './OrderInfo';
+import CustomPagination from '../../../../components/ui/CustomPagination';
+import EmptySectionMessage from '../../../../components/feedback/EmptySection';
+
+const PAGE_SIZE = 5;
 
 function OrderHistory() {
-  const [orders, setOrders] = useState<any>([]);
+  const [itemsData, setItemsData] = useState<any>();
+  const [page, setPage] = useState(1);
+
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -14,11 +20,19 @@ function OrderHistory() {
     });
   }, []);
 
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
+    setPage(value);
+    window.scrollTo({ top: 50, behavior: 'smooth' });
+  };
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/order`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/order?page=${page}&pageSize=${PAGE_SIZE}`,
           {
             method: 'GET',
             credentials: 'include',
@@ -29,14 +43,14 @@ function OrderHistory() {
           throw new Error(`Failed to place order: ${res.status}`);
         }
 
-        const orderHistory = await res.json();
-        setOrders(orderHistory);
+        const data = await res.json();
+        setItemsData(data);
       } catch (e: any) {
         console.error(e.message);
       }
     };
     fetchOrders();
-  }, []);
+  }, [page]);
   return (
     <div className="w-full md:ml-10 md:mt-0 mt-5" data-aos="fade-left">
       <div className="mb-5" data-aos="fade-left" data-aos-delay="100">
@@ -44,25 +58,36 @@ function OrderHistory() {
           Orders History
         </p>
       </div>
-      <div className="overflow-y-auto">
-        {orders.map((order: any, idx: number) => (
-          <div
-            key={order.id}
-            data-aos="fade-left"
-            data-aos-delay={200 + idx * 100}
-          >
-            <OrderInfo
-              id={order.id}
-              date={order.date}
-              status={'PROGRESS'}
-              price={order.price}
+      <div className="overflow-y-auto custom-scrollbar">
+        {itemsData?.orders?.length > 0 ? (
+          <>
+            {itemsData.orders.map((order: any, idx: number) => (
+              <div
+                key={order.id}
+                data-aos="fade-left"
+                data-aos-delay={200 + idx * 100}
+              >
+                <OrderInfo
+                  id={order.id}
+                  date={order.date}
+                  status="PROGRESS"
+                  price={order.price}
+                />
+              </div>
+            ))}
+
+            <CustomPagination
+              pagesCount={itemsData.totalPages}
+              page={page}
+              handlePageChange={handlePageChange}
             />
+          </>
+        ) : (
+          <div className="mt-30">
+            <EmptySectionMessage message="Order history is empty" />
           </div>
-        ))}
+        )}
       </div>
-      {/* <div className="mt-30">
-        <EmptySectionMessage message="No Products In Order History" />
-      </div> */}
     </div>
   );
 }
