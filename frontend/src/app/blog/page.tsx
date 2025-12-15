@@ -15,7 +15,6 @@ function BlogPage() {
   const [itemsData, setItemsData] = useState<any>();
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     AOS.init({
