@@ -16,13 +16,6 @@ interface CartSummaryProps {
 function CartSummary({ subtotal, total }: CartSummaryProps) {
   const [shipping, setShipping] = useState<ShippingOption>('free');
 
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
-  }, []);
-
   const shippingCost =
     shipping === 'express' ? 15 : shipping === 'pickup' ? 21 : 0;
   return (

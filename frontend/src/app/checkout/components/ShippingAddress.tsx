@@ -8,13 +8,6 @@ const inputClass =
   'text-md border py-2 px-4 rounded-md border border-[#CBCBCB]';
 
 function ShippingAddress() {
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
-  }, []);
-
   return (
     <div className="p-5 border rounded" data-aos="fade-up">
       <div className="mb-5 mt-10" data-aos="fade-up" data-aos-delay="100">

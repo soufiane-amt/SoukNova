@@ -20,13 +20,6 @@ export default function BlogCatalog({
   page,
   handlePageChange,
 }: BlogProps) {
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
-  }, []);
-
   return (
     <div>
       <div className="flex items-baseline justify-between pt-24 pb-6">

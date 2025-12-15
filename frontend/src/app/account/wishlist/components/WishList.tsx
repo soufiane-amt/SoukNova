@@ -18,12 +18,6 @@ interface WishItemType {
 function WishList() {
   const [itemsData, setItemsData] = useState<any>();
   const [page, setPage] = useState(1);
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
-  }, []);
 
   useEffect(() => {
     const fetchWishlist = async () => {

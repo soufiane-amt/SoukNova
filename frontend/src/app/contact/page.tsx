@@ -13,13 +13,6 @@ import MessageInput from './components/MessageInput';
 import MapLocation from './components/MapLocation';
 
 function ContactPage() {
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
-  }, []);
-
   return (
     <main>
       <div className="mx-10 md:mx-15 lg:mx-30 pt-5">

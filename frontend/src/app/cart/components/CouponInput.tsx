@@ -4,13 +4,6 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 function CouponInput() {
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
-  }, []);
-
   return (
     <div className="mb-12 md:w-1/3 md:mt-20" data-aos="fade-up">
       <div data-aos="fade-up" data-aos-delay="100">

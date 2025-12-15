@@ -13,13 +13,6 @@ function OrderHistory() {
   const [itemsData, setItemsData] = useState<any>();
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
-  }, []);
-
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     value: number,

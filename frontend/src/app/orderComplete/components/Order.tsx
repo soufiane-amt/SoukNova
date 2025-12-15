@@ -15,12 +15,6 @@ function Order({ orderId, cartItems }: OrderProps) {
   const { resetCart } = useCart();
   const [cart] = useState(cartItems);
   const [orderInfo, setOrderInfo] = useState<any>();
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
-  }, []);
 
   useEffect(() => {
     const deleteCarts = async () => {
@@ -28,7 +22,7 @@ function Order({ orderId, cartItems }: OrderProps) {
         `${process.env.NEXT_PUBLIC_API_SERVER}/api/cart/reset`,
         {
           method: 'DELETE',
-          credentials: 'include'
+          credentials: 'include',
         },
       );
 

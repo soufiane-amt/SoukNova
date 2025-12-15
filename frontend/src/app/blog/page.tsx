@@ -17,13 +17,6 @@ function BlogPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
-  }, []);
-
-  useEffect(() => {
     const fetchPageCatalog = async () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/article?page=${page}&pageSize=${PAGE_SIZE}`,

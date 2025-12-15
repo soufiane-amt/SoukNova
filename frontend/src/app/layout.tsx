@@ -6,6 +6,7 @@ import { CartProvider } from '../context/CartContext';
 import { usePathname } from 'next/navigation';
 import NavBar from '../components/layout/NavBar/Navbar';
 import { useEffect } from 'react';
+import AOS from 'aos';
 
 export const poppins = Poppins({
   subsets: ['latin'],
@@ -19,7 +20,6 @@ export const inter = Inter({
   variable: '--font-inter',
 });
 
-
 export default function RootLayout({
   children,
 }: {
@@ -31,6 +31,13 @@ export default function RootLayout({
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+  }, []);
 
   return (
     <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
