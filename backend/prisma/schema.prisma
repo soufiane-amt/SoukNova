@@ -36,6 +36,7 @@ model Wishlist {
 
   user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
+  addedAt   DateTime @default(now())
 
   @@unique([userId, productId], name: "userId_productId")
 }
@@ -106,6 +107,7 @@ model Product {
   cartItems  CartItem[]
   comments   Comment[]
   wishlist   Wishlist[] 
+  addedAt   DateTime @default(now())
 }
 
 
@@ -116,4 +118,5 @@ model article {
     date String
     images String[]
     text String
+    addedAt   DateTime @default(now())
 }
