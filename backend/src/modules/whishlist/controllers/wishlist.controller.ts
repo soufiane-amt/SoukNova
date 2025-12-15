@@ -5,6 +5,8 @@ import {
   Get,
   Param,
   UseGuards,
+  ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { User } from 'src/modules/users/user.decorator';
 import { WishlistService } from '../services/wishlist.service';
@@ -32,7 +34,11 @@ export class WishlistController {
   }
 
   @Get()
-  async getWishlist(@User('id') userId: number) {
-    return this.wishlistService.getWishlist(userId);
+  async getWishlist(
+    @User('id') userId: number,
+    @Query('page', ParseIntPipe) page: number,
+    @Query('pageSize', ParseIntPipe) pageSize: number,
+  ) {
+    return this.wishlistService.getWishlist(userId, page, pageSize);
   }
 }

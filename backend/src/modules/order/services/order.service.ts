@@ -31,16 +31,29 @@ export class OrderService {
     return order;
   }
 
-  async getOrders(userId: number) {
+  async getOrders(userId: number, page: number, pageSize: number) {
     const redis = this.redisService.getClient();
-    const cacheKey = this.getCacheKey(userId);
+
+    const skip = (page - 1) * pageSize;
+
+    const cacheKey = `orders:user=${userId}:page=${page}:size=${pageSize}`;
 
     const cached = await redis.get(cacheKey);
     if (cached) return JSON.parse(cached);
 
-    const orders = await this.prisma.order.findMany({
-      where: { userId },
-    });
+    const [totalCount, orders] = await Promise.all([
+      this.prisma.order.count({
+        where: { userId },
+      }),
+      this.prisma.order.findMany({
+        where: { userId },
+        skip,
+        take: pageSize,
+        orderBy: {
+          addedAt: 'desc', 
+        },
+      }),
+    ]);
 
     const formattedOrders = orders.map((order) => ({
       ...order,
@@ -48,9 +61,14 @@ export class OrderService {
       date: getFormatInDate(order.addedAt),
     }));
 
-    await redis.set(cacheKey, JSON.stringify(formattedOrders), 'EX', 60 * 5);
+    const result = {
+      orders: formattedOrders,
+      totalPages: Math.ceil(totalCount / pageSize),
+    };
 
-    return formattedOrders;
+    await redis.set(cacheKey, JSON.stringify(result), 'EX', 60 * 5);
+
+    return result;
   }
 
   async getOrder(userId: number, orderId: string): Promise<Order> {

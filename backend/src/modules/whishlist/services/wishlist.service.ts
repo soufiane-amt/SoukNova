@@ -40,35 +40,58 @@ export class WishlistService {
     });
   }
 
-  async getWishlist(userId: number): Promise<WishItemType[]> {
+  async getWishlist(
+    userId: number,
+    page: number,
+    pageSize: number,
+  ): Promise<{
+    items: WishItemType[];
+    totalPages: number;
+  }> {
     const redis = this.redisService.getClient();
-    const cacheKey = this.getCacheKey(userId);
+
+    const skip = (page - 1) * pageSize;
+    const cacheKey = `wishlist:user:${userId}:page:${page}:size:${pageSize}`;
 
     const cached = await redis.get(cacheKey);
     if (cached) return JSON.parse(cached);
 
-    const wishListProducts = await this.prisma.wishlist.findMany({
-      where: { userId },
-      select: {
-        product: {
-          select: {
-            id: true,
-            title: true,
-            primary_image: true,
-            price: true,
+    const [totalCount, wishlistRows] = await Promise.all([
+      this.prisma.wishlist.count({
+        where: { userId },
+      }),
+      this.prisma.wishlist.findMany({
+        where: { userId },
+        skip,
+        take: pageSize,
+        orderBy: { addedAt: 'desc' },
+        select: {
+          product: {
+            select: {
+              id: true,
+              title: true,
+              primary_image: true,
+              price: true,
+            },
           },
         },
-      },
-    });
+      }),
+    ]);
 
-    const wishlist: WishItemType[] = wishListProducts.map((item) => ({
-      productId: item.product.id,
-      productName: item.product.title,
-      image: item.product.primary_image,
-      price: item.product.price,
+    const items: WishItemType[] = wishlistRows.map((row) => ({
+      productId: row.product.id,
+      productName: row.product.title,
+      image: row.product.primary_image,
+      price: row.product.price,
     }));
 
-    await redis.set(cacheKey, JSON.stringify(wishlist), 'EX', 60 * 5);
-    return wishlist;
+    const result = {
+      items,
+      totalPages: Math.ceil(totalCount / pageSize),
+    };
+
+    await redis.set(cacheKey, JSON.stringify(result), 'EX', 60 * 5);
+
+    return result;
   }
 }

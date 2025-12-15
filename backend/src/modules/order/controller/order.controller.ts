@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 import { User } from 'src/modules/users/user.decorator';
 import { OrderService } from '../services/order.service';
@@ -15,8 +24,12 @@ export class OrderController {
   }
 
   @Get()
-  async getOrders(@User('id') userId: number) {
-    return this.orderService.getOrders(userId);
+  async getOrders(
+    @User('id') userId: number,
+    @Query('page', ParseIntPipe) page: number,
+    @Query('pageSize', ParseIntPipe) pageSize: number,
+  ) {
+    return this.orderService.getOrders(userId, page, pageSize);
   }
 
   @Get(':id')
