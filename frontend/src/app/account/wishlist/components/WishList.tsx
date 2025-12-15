@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { inter } from '@/layout';
 import WishItem from './WishItem';
@@ -9,12 +8,6 @@ import CustomPagination from '../../../../components/ui/CustomPagination';
 
 const PAGE_SIZE = 5;
 
-interface WishItemType {
-  productId: string;
-  productName: string;
-  image: string;
-  price: number;
-}
 function WishList() {
   const [itemsData, setItemsData] = useState<any>();
   const [page, setPage] = useState(1);

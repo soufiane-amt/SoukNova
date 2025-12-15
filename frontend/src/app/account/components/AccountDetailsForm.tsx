@@ -1,6 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
-import AOS from 'aos';
+import { useState } from 'react';
 import 'aos/dist/aos.css';
 import { inter, poppins } from '@/layout';
 
@@ -19,10 +18,6 @@ function AccountDetailsForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
-  useEffect(() => {
-    AOS.init({ duration: 800, once: true });
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));

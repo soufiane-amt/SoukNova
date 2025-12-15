@@ -1,11 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Loader from '../../../components/feedback/loader/Loader';
 import Product from '../components/Product';
-import { NewsLetterSub } from '../../../components/layout/NewsLetterSub';
 import { SiteFooter } from '../../../components/layout/SiteFooter';
 
 export default function ProductPage() {
@@ -15,11 +13,6 @@ export default function ProductPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
-
     if (!id) return;
 
     const fetchProduct = async () => {

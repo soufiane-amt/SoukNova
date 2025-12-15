@@ -1,17 +1,11 @@
 'use client';
-import { useEffect } from 'react';
 import { PromoCardLarge } from './PromoCardLarge';
 import { PromoCardSmall } from './PromoCardSmall';
-import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { PROMO_IMAGES } from '../../../constants/promoImages';
 import { poppins } from '@/layout';
 
 export const PromoSection = () => {
-  useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
-  }, []);
-
   return (
     <section
       aria-labelledby="promotions"

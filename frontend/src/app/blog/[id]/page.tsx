@@ -1,7 +1,6 @@
 'use client';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Traversal from '../../../components/ui/Traversal';
 import { poppins } from '@/layout';
@@ -18,11 +17,6 @@ function ArticlePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
-
     if (!id) return;
 
     const fetchArticle = async () => {
@@ -96,7 +90,6 @@ function ArticlePage() {
             />
           </div>
 
-
           <p data-aos="fade-up" className={`${poppins.className} my-5`}>
             {articleData.article_paragraphs[0]}
           </p>
@@ -162,7 +155,7 @@ function ArticlePage() {
           </div>
         </div>
       </div>
-      <ArticleSection articleId={id?.toString()}/>
+      <ArticleSection articleId={id?.toString()} />
 
       <SiteFooter />
     </main>

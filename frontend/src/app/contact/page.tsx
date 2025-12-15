@@ -4,8 +4,6 @@ import Traversal from '../../components/ui/Traversal';
 import { inter, poppins } from '@/layout';
 import BenefitsDisplay from '@/home/components/BenefitsDisplay';
 import { SiteFooter } from '../../components/layout/SiteFooter';
-import { useEffect } from 'react';
-import AOS from 'aos';
 import 'aos/dist/aos.css';
 import AboutUsCard from './components/AboutUsCard';
 import ContactsInfo from './components/ContactsInfo';

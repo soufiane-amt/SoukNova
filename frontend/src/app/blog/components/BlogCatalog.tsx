@@ -1,12 +1,8 @@
 'use client';
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { poppins } from '@/layout';
-import { Article } from '../../../types/types';
 import ArticleCard from './ArticalCard';
-import { Box, Pagination } from '@mui/material';
 import CustomPagination from '../../../components/ui/CustomPagination';
 
 interface BlogProps {

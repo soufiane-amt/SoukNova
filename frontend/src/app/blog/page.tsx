@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import SectionShow from '../../components/ui/SectionShow';
 import BlogCatalog from './components/BlogCatalog';
-import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { SiteFooter } from '../../components/layout/SiteFooter';
 import Loader from '../../components/feedback/loader/Loader';
