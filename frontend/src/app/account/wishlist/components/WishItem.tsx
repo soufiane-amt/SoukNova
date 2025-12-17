@@ -1,6 +1,7 @@
 import { inter } from '@/layout';
 import Image from 'next/image';
 import { getFirstTwoWords } from '../../../../utils/helpers';
+import React from 'react';
 
 interface WishItemProps {
   productName: string;
@@ -52,12 +53,11 @@ function WishItem({
         </div>
         <div className="mt-5 md:mt-0 text-xs">
           <button className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold px-5">
-            Add <span className='md:hidden lg:block'>To Cart</span>
+            Add <span className="md:hidden lg:block">To Cart</span>
           </button>
         </div>
       </div>
     </div>
   );
 }
-
-export default WishItem;
+export default React.memo(WishItem);

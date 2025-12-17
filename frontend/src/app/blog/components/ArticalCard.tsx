@@ -1,6 +1,7 @@
 import { poppins } from '@/layout';
 import Image from 'next/image';
 import Link from 'next/link';
+import React from 'react';
 
 interface ArticleCardProps {
   id: string;
@@ -44,4 +45,4 @@ function ArticleCard({ id, title, image, date }: ArticleCardProps) {
   );
 }
 
-export default ArticleCard;
+export default React.memo(ArticleCard);

@@ -6,8 +6,7 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
-import { useState } from 'react';
-import { fetchWithAuth } from '../../../utils/helpers';
+import React, { useState } from 'react';
 
 function getFirstTwoWords(title: string) {
   const words = title.split(' ');
@@ -71,8 +70,6 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
   );
 };
 
-export default LikeButton;
-
 interface ProductCardProps {
   productId: string;
   productName: string;
@@ -84,7 +81,7 @@ interface ProductCardProps {
   date: string;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({
+const ProductCard: React.FC<ProductCardProps> = ({
   productId,
   productName,
   currentPrice,
@@ -164,3 +161,5 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     </div>
   );
 };
+
+export default React.memo(ProductCard);

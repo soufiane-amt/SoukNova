@@ -1,4 +1,5 @@
 import { inter } from '@/layout';
+import React from 'react';
 
 export type StatusType = 'DELIVERED' | 'PROGRESS';
 
@@ -36,5 +37,4 @@ function OrderInfo({ id, date, status, price }: OrderInfoProps) {
     </div>
   );
 }
-
-export default OrderInfo;
+export default React.memo(OrderInfo);
