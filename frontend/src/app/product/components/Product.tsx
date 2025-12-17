@@ -6,9 +6,7 @@ import Carousel from 'react-material-ui-carousel';
 import { Typography } from '@mui/material';
 import CountdownTimer from '../../../components/ui/CountDownTimer';
 import {
-  fetchWithAuth,
   getDiscountedPrice,
-  getFirstTwoWords,
   isProductNew,
 } from '../../../utils/helpers';
 import EastIcon from '@mui/icons-material/East';
@@ -22,8 +20,12 @@ import { poppins } from '@/layout';
 import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
 import { useShowMore } from '../../../hooks/useShowMore';
 import { useRouter } from 'next/navigation';
+import { ProductType } from '../../../types/product.dt';
 
-function ProductTabs({ productData }: any) {
+interface ProductTabsProps{
+  productData: ProductType
+}
+function ProductTabs({ productData }: ProductTabsProps) {
   const [activeTab, setActiveTab] = useState<'reviews' | 'info'>('reviews');
   const { visibleItems, setVisibleItems, handleShowMore, hasMore } =
     useShowMore(productData.comments, 5);
@@ -256,7 +258,7 @@ function ProductTabs({ productData }: any) {
 }
 
 interface ProductProps {
-  productData: any;
+  productData: ProductType;
 }
 
 const Product: React.FC<ProductProps> = ({ productData }) => {

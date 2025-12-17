@@ -7,16 +7,20 @@ import SectionShow from '../../components/ui/SectionShow';
 import { inter } from '@/layout';
 import ShopFilter from './components/ShopFilter';
 import Loader from '../../components/feedback/loader/Loader';
+import { usePagination } from '../../hooks/usePagination';
+import { ProductType } from '../../types/product.dt';
 
 const imageUrl = '/images/shop/shopPage.png';
 const PAGE_SIZE = 12;
 
 export default function ShopPage() {
-  const [itemsData, setItemsData] = useState<any>();
-  const [loading, setLoading] = useState(true);
+  const [itemsData, setItemsData] = useState<{
+    products: ProductType[];
+    totalPages: number;
+  }>();
   const [error, setError] = useState(null);
 
-  const [pageIndex, setPage] = useState(1);
+  const { page, handlePageChange } = usePagination();
 
   const [selectedCategory, setSelectedCategory] = useState('All Rooms');
   const [priceRange, setPriceRange] = useState<[number, number] | undefined>(
@@ -28,7 +32,6 @@ export default function ShopPage() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true);
       try {
         const params = new URLSearchParams();
 
@@ -44,7 +47,7 @@ export default function ShopPage() {
         if (selectedOrder) {
           params.append('order', selectedOrder);
         }
-        params.append('page', String(pageIndex));
+        params.append('page', String(page));
         params.append('pageSize', String(PAGE_SIZE));
 
         const res = await fetch(
@@ -58,15 +61,13 @@ export default function ShopPage() {
         setItemsData(data);
       } catch (e: any) {
         setError(e.message);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchProducts();
-  }, [priceRange, selectedCategory, selectedOrder, pageIndex]);
+  }, [priceRange, selectedCategory, selectedOrder, page]);
 
-  if (loading) {
+  if (!itemsData) {
     return <Loader />;
   }
   if (error) return <div>Error: {error}</div>;
@@ -81,8 +82,8 @@ export default function ShopPage() {
         />
         <ShopFilter
           itemsData={itemsData}
-          page={pageIndex}
-          setPage={setPage}
+          page={page}
+          handlePageChange={handlePageChange}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           setPriceRange={setPriceRange}

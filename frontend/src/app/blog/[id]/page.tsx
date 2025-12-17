@@ -9,11 +9,11 @@ import { SiteFooter } from '../../../components/layout/SiteFooter';
 import ArticlMetaData from '../components/ArticlMetaData';
 import Loader from '../../../components/feedback/loader/Loader';
 import { ArticleSection } from '@/home/components/ArticleSection';
+import { ArticleType } from '../../../types/article.dt';
 
 function ArticlePage() {
   const { id } = useParams();
-  const [articleData, setArticleData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [articleData, setArticleData] = useState<ArticleType | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,15 +34,13 @@ function ArticlePage() {
       } catch (err) {
         console.error(err);
         setError('Product not found or failed to load.');
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchArticle();
   }, [id]);
 
-  if (loading) {
+  if (!articleData) {
     return <Loader />;
   }
   if (error) {
@@ -67,8 +65,6 @@ function ArticlePage() {
             <p className="text-xs font-semibold">ARTICLE</p>
           </div>
           <p
-            data-aos="fade-up"
-            data-aos-delay="500"
             className={`${poppins.className} text-[54px] font-medium leading-[58px] tracking-[-1px] max-sm:text-[26px] max-sm:leading-[34px]`}
           >
             {articleData.title}
@@ -78,20 +74,21 @@ function ArticlePage() {
 
         <div className="my-10">
           <div
-            data-aos="fade-in"
+            data-aos="fade-up"
+            data-aos-delay="600"
             className="h-[647px] w-full overflow-hidden max-sm:h-[320px]"
           >
             <Image
               width={500}
               height={600}
-              src={articleData.images[0]}
+              src={articleData?.images[0]}
               alt={articleData.title}
               className="w-full max-sm:h-[320px] rounded-lg object-cover"
             />
           </div>
 
           <p data-aos="fade-up" className={`${poppins.className} my-5`}>
-            {articleData.article_paragraphs[0]}
+            {articleData?.article_paragraphs[0]}
           </p>
 
           <div data-aos="fade-up" className="md:flex my-10 w-full gap-4">
@@ -101,7 +98,7 @@ function ArticlePage() {
               className="relative w-full md:w-1/2 h-[647px] max-sm:h-[320px] md:mb-0 mb-4"
             >
               <Image
-                src={articleData.images[1]}
+                src={articleData?.images[1]}
                 alt={articleData.title}
                 fill
                 className="object-cover rounded-lg"
@@ -113,7 +110,7 @@ function ArticlePage() {
               className="relative w-full md:w-1/2 h-[647px] max-sm:h-[320px]"
             >
               <Image
-                src={articleData.images[2]}
+                src={articleData?.images[2]}
                 alt={articleData.title}
                 fill
                 className="object-cover rounded-lg"
@@ -122,7 +119,7 @@ function ArticlePage() {
           </div>
 
           <div data-aos="fade-up" className={`${poppins.className} mb-2`}>
-            <p>{articleData.article_paragraphs[1]}</p>
+            <p>{articleData?.article_paragraphs[1]}</p>
           </div>
 
           <div
@@ -135,7 +132,7 @@ function ArticlePage() {
               className="relative md:w-2/3 w-full h-full rounded-lg overflow-hidden"
             >
               <Image
-                src={articleData.images[3]}
+                src={articleData?.images[3]}
                 alt={articleData.title}
                 fill
                 className="object-cover"
@@ -146,12 +143,12 @@ function ArticlePage() {
               data-aos-delay="200"
               className={`md:w-1/3 w-full flex items-center ${poppins.className}`}
             >
-              <p>{articleData.article_paragraphs[2]}</p>
+              <p>{articleData?.article_paragraphs[2]}</p>
             </div>
           </div>
 
           <div data-aos="fade-up" className={`${poppins.className} mb-2`}>
-            <p>{articleData.article_paragraphs[3]}</p>
+            <p>{articleData?.article_paragraphs[3]}</p>
           </div>
         </div>
       </div>

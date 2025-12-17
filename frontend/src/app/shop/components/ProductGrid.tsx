@@ -1,30 +1,25 @@
-import { useState, useEffect } from 'react';
-import { Grid, Pagination, Box } from '@mui/material';
-import { ProductCard } from '../../../components/cards/ProductCard/ProductCard';
+import { Grid } from '@mui/material';
 import EmptySectionMessage from '../../../components/feedback/EmptySection';
 import CustomPagination from '../../../components/ui/CustomPagination';
+import ProductCard from '../../../components/cards/ProductCard/ProductCard';
+import { ProductType } from '../../../types/product.dt';
 
 interface ProductGridProps {
-  itemsData: any;
+  itemsData: {
+    products: ProductType[];
+    totalPages: number;
+  };
   selectedShape: number;
   page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  handlePageChange: (e: React.ChangeEvent<unknown>, v: number) => void;
 }
 
 function ProductGrid({
   itemsData,
   selectedShape,
   page,
-  setPage,
+  handlePageChange,
 }: ProductGridProps) {
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number,
-  ) => {
-    setPage(value);
-    window.scrollTo({ top: 50, behavior: 'smooth' });
-  };
-
   return (
     <div
       className={`${selectedShape === 0 ? 'lg:col-span-3' : 'lg:col-span-4'}`}
@@ -55,7 +50,7 @@ function ProductGrid({
                   discountPercentage={item.discount}
                   rating={item.rate}
                   image={item.primary_image}
-                  date={item.Date}
+                  date={item.date}
                 />
               </div>
             ))}
