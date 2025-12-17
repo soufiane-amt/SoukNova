@@ -152,16 +152,54 @@ export class ProductService {
         take: pageSize,
         where: filters,
         orderBy,
+        select: {
+          id: true,
+          title: true,
+          price: true,
+          discount: true,
+          rate: true,
+          primary_image: true,
+          date: true,
+        },
       }),
     ]);
 
     const result = {
-      products: products,
+      products: products.map((product) => {
+        const hasDiscount = product.discount !== "";
+
+        return {
+          ...product,
+          price:
+            product.price -
+            (product.price * parseInt(product.discount || '0')) / 100,
+          ...(hasDiscount && { originalPrice: product.price }),
+        };
+      }),
       totalPages: Math.ceil(totalCount / pageSize),
     };
 
     await redis.set(cacheKey, JSON.stringify(result), 'EX', 3600);
 
     return result;
+  }
+
+  async getRecentProducts() {
+    const recentProducts = await this.prismaService.product.findMany({
+      take: 10,
+      orderBy: {
+        addedAt: 'desc',
+      },
+    });
+    return recentProducts.map((product) => ({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      originalPrice: product.price,
+      discount: product.discount,
+      rate: product.rate,
+      primary_image: product.primary_image,
+      date: product.addedAt,
+    }));
   }
 }
