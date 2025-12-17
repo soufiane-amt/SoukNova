@@ -8,7 +8,12 @@ export class ProductController {
 
   @Get()
   async getProducts(@Query() query: ProductQueryDto) {
-    return await this.productService.getProducts(query);
+    return this.productService.getProducts(query);
+  }
+
+  @Get('recent')
+  async getRecentProducts() {
+    return this.productService.getRecentProducts();
   }
 
   @Get('search')
