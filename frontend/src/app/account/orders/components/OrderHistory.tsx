@@ -5,20 +5,13 @@ import { inter } from '@/layout';
 import OrderInfo from './OrderInfo';
 import CustomPagination from '../../../../components/ui/CustomPagination';
 import EmptySectionMessage from '../../../../components/feedback/EmptySection';
+import { usePagination } from '../../../../hooks/usePagination';
 
 const PAGE_SIZE = 5;
 
 function OrderHistory() {
   const [itemsData, setItemsData] = useState<any>();
-  const [page, setPage] = useState(1);
-
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number,
-  ) => {
-    setPage(value);
-    window.scrollTo({ top: 50, behavior: 'smooth' });
-  };
+  const { page, handlePageChange } = usePagination();
 
   useEffect(() => {
     const fetchOrders = async () => {

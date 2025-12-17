@@ -5,12 +5,13 @@ import { inter } from '@/layout';
 import WishItem from './WishItem';
 import EmptySectionMessage from '../../../../components/feedback/EmptySection';
 import CustomPagination from '../../../../components/ui/CustomPagination';
+import { usePagination } from '../../../../hooks/usePagination';
 
 const PAGE_SIZE = 5;
 
 function WishList() {
   const [itemsData, setItemsData] = useState<any>();
-  const [page, setPage] = useState(1);
+  const { page, handlePageChange } = usePagination();
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -43,14 +44,6 @@ function WishList() {
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number,
-  ) => {
-    setPage(value);
-    window.scrollTo({ top: 50, behavior: 'smooth' });
   };
 
   return (
