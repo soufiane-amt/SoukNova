@@ -5,8 +5,10 @@ import {
   useState,
   ReactNode,
   useEffect,
+  useCallback,
+  useMemo,
 } from 'react';
-import { fetchWithAuth, getFirstTwoWords } from '../utils/helpers';
+import { getFirstTwoWords } from '../utils/helpers';
 import Toast from '../components/ui/Toast';
 
 const calculateSubtotalCart = (cart: CartItemType[]) => {
@@ -37,12 +39,9 @@ interface CartContextType {
   cart: CartItemType[];
   subtotal: number;
   total: number;
-  products: any[];
   addToCart: (productId: string, quantity?: number) => Promise<void>;
   removeFromCart: (productId: string) => Promise<void>;
   decreaseFromCart: (productId: string) => Promise<void>;
-  setSubtotal: (items: number) => void;
-  setTotal: (items: number) => void;
   resetCart: () => void;
   showToast: (msg: string) => void;
 }
@@ -57,84 +56,79 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItemType[]>([]);
-  const [products, setProducts] = useState<[]>([]);
-  const [subtotal, setSubtotal] = useState<number>(0);
-  const [total, setTotal] = useState<number>(0);
   const [toast, setToast] = useState<string | null>(null);
 
-  const showToast = (msg: string) => {
+  const showToast = useCallback((msg: string) => {
     setToast(msg);
-    setTimeout(() => setToast(null), 3000);
-  };
+    const timer = setTimeout(() => setToast(null), 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
-  const resetCart = () => {
+  const resetCart = useCallback(() => {
     setCart([]);
-    setSubtotal(0);
-    setTotal(0);
-  };
+  }, []);
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
-          method: 'GET',
-          credentials: 'include',
-        });
-        if (!res?.ok) {
-          return;
-        }
-        const data = await res?.json();
-        setCart(
-          data.map((product: any) => ({
-            ...product,
-            productName: getFirstTwoWords(product.productName),
-          })),
-        );
-      } catch (err: any) {
-        console.error(err);
+  const fetchCart = useCallback(async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (!res?.ok) {
+        return;
       }
-    };
-    fetchCart();
+      const data = await res?.json();
+      setCart(
+        data.map((product: any) => ({
+          ...product,
+          productName: getFirstTwoWords(product.productName),
+        })),
+      );
+    } catch (err: any) {
+      console.error(err);
+    }
   }, []);
 
   useEffect(() => {
-    const subtotal = calculateSubtotalCart(cart);
-    const total = calculateTotalCart(cart);
+    fetchCart();
+  }, [fetchCart]);
 
-    setSubtotal(subtotal);
-    setTotal(total);
-  }, [cart]);
+  const subtotal = useMemo(() => calculateSubtotalCart(cart), [cart]);
+  const total = useMemo(() => calculateTotalCart(cart), [cart]);
 
-  const addToCart = async (productId: string, quantity: number = 1) => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${productId}`,
-        {
-          method: 'POST',
-          credentials: 'include',
-        },
-      );
-      if (!res?.ok) throw new Error('Failed to add to cart');
-      const item: CartItemType = await res?.json();
+  const addToCart = useCallback(
+    async (productId: string, quantity: number = 1) => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${productId}`,
+          {
+            method: 'POST',
+            credentials: 'include',
+          },
+        );
+        if (!res?.ok) throw new Error('Failed to add to cart');
+        const item: CartItemType = await res?.json();
 
-      setCart((prev) => {
-        const existing = prev.find((i) => i.productId === productId);
-        if (existing) {
-          return prev.map((i) =>
-            i.productId === productId
-              ? { ...i, quantity: i.quantity + quantity }
-              : i,
-          );
-        }
-        return [...prev, { ...item, quantity }];
-      });
-      showToast('Item added to cart!');
-    } catch (err) {
-      console.error(err);
-    }
-  };
+        setCart((prev) => {
+          const existing = prev.find((i) => i.productId === productId);
+          if (existing) {
+            return prev.map((i) =>
+              i.productId === productId
+                ? { ...i, quantity: i.quantity + quantity }
+                : i,
+            );
+          }
+          return [...prev, { ...item, quantity }];
+        });
+        showToast('Item added to cart!');
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [showToast],
+  );
 
-  const removeFromCart = async (productId: string) => {
+  const removeFromCart = useCallback(async (productId: string) => {
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${productId}`,
@@ -146,9 +140,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, []);
 
-  const decreaseFromCart = async (productId: string) => {
+  const decreaseFromCart = useCallback(async (productId: string) => {
     const quantity =
       cart.find((item) => item.productId === productId)?.quantity || 0;
     if (quantity < 1) return;
@@ -172,7 +166,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, []);
 
   return (
     <CartContext.Provider
@@ -180,12 +174,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         cart,
         subtotal,
         total,
-        products,
         addToCart,
         removeFromCart,
         decreaseFromCart,
-        setSubtotal,
-        setTotal,
         resetCart,
         showToast,
       }}
