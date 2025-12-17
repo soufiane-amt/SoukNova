@@ -13,7 +13,7 @@ import { useCart } from '../../context/CartContext';
 
 function CartPage() {
   const loading = useLoader(1500);
-  const { cart, subtotal, total, setSubtotal, setTotal } = useCart();
+  const { cart, subtotal, total } = useCart();
 
   if (loading) return <Loader />;
 
@@ -33,13 +33,7 @@ function CartPage() {
               <div className="xl:hidden">
                 <CouponInput />
               </div>
-              <CartSummary
-                cart={cart}
-                subtotal={subtotal}
-                total={total}
-                setSubtotal={setSubtotal}
-                setTotal={setTotal}
-              />
+              <CartSummary subtotal={subtotal} total={total} />
             </div>
             <div className="hidden xl:flex w-full">
               <CouponInput />
