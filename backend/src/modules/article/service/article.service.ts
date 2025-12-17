@@ -85,7 +85,6 @@ export class ArticleService {
 
     const cached = await redis.get(key);
     if (cached) {
-      console.log('Found article in cache:', key);
       return JSON.parse(cached);
     }
 
