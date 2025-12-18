@@ -6,14 +6,18 @@ import BlogCatalog from './components/BlogCatalog';
 import 'aos/dist/aos.css';
 import { SiteFooter } from '../../components/layout/SiteFooter';
 import Loader from '../../components/feedback/loader/Loader';
+import { usePagination } from '../../hooks/usePagination';
+import { ArticleType } from '../../types/article.dt';
 
 const imageUrl = '/images/blog/ourBlogPage.png';
 const PAGE_SIZE = 16;
 
 function BlogPage() {
-  const [itemsData, setItemsData] = useState<any>();
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [itemsData, setItemsData] = useState<{
+    articles: ArticleType[];
+    totalPages: number;
+  } | null>();
+  const { page, handlePageChange } = usePagination();
 
   useEffect(() => {
     const fetchPageCatalog = async () => {
@@ -23,20 +27,11 @@ function BlogPage() {
 
       const data = await response.json();
       setItemsData(data);
-      setLoading(false);
     };
     fetchPageCatalog();
   }, [page]);
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number,
-  ) => {
-    setPage(value);
-    window.scrollTo({ top: 50, behavior: 'smooth' });
-  };
-
-  if (loading) {
+  if (!itemsData) {
     return <Loader />;
   }
 
