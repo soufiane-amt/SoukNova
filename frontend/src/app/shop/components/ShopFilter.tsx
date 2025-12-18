@@ -6,16 +6,20 @@ import { priceType } from '../../../types/types';
 import SidebarFilter from './SidebarFilter';
 import ProductGrid from './ProductGrid';
 import ViewModeSelector from './ViewModeSelector';
+import { ProductType } from '../../../types/product.dt';
 
 interface ShopFilterProps {
-  itemsData: any;
+  itemsData: {
+    products: ProductType[];
+    totalPages: number;
+  };
   selectedCategory: string;
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
   priceRange: priceType;
   setPriceRange: React.Dispatch<React.SetStateAction<priceType>>;
   setSelectedOrder: React.Dispatch<React.SetStateAction<string | null>>;
   page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  handlePageChange: (e: React.ChangeEvent<unknown>, v: number) => void;
 }
 
 export default function ShopFilter({
@@ -26,7 +30,7 @@ export default function ShopFilter({
   priceRange,
   setSelectedOrder,
   page,
-  setPage,
+  handlePageChange,
 }: ShopFilterProps) {
   const [selectedShape, setSelectedShape] = useState(0);
 
@@ -73,7 +77,7 @@ export default function ShopFilter({
               itemsData={itemsData}
               selectedShape={selectedShape}
               page={page}
-              setPage={setPage}
+              handlePageChange={handlePageChange}
             />
           </div>
         </section>
