@@ -1,4 +1,5 @@
 import { Box, Pagination } from '@mui/material';
+import React from 'react';
 
 interface CustomPaginationProps {
   pagesCount: number;
@@ -35,4 +36,4 @@ function CustomPagination({
   );
 }
 
-export default CustomPagination;
+export default React.memo(CustomPagination);
