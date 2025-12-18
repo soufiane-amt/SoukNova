@@ -143,8 +143,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const decreaseFromCart = useCallback(async (productId: string) => {
+      console.log("cart : ", cart)
+    
     const quantity =
       cart.find((item) => item.productId === productId)?.quantity || 0;
+      console.log("quantity : ", quantity)
+      console.log("productId : ", productId)
     if (quantity < 1) return;
     try {
       const res = await fetch(
@@ -166,7 +170,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  }, [cart]);
 
   return (
     <CartContext.Provider
