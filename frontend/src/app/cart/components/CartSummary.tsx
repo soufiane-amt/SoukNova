@@ -6,11 +6,8 @@ import Link from 'next/link';
 import { ShippingOption } from '../../../types/types';
 
 interface CartSummaryProps {
-  cart: CartItemType[];
   subtotal: number;
   total: number;
-  setSubtotal: (items: number) => void;
-  setTotal: (items: number) => void;
 }
 function CartSummary({ subtotal, total }: CartSummaryProps) {
   const [shipping, setShipping] = useState<ShippingOption>('free');
