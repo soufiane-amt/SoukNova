@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import 'aos/dist/aos.css';
-import { CartItemType } from '../../../context/CartContext';
 import Link from 'next/link';
 import { ShippingOption } from '../../../types/types';
 

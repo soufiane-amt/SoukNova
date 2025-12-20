@@ -19,7 +19,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('verify-token')
-  verifyToken() {   
+  verifyToken() {
     return { valid: true };
   }
 

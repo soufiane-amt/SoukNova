@@ -22,7 +22,7 @@ export function ArticleSection({ articleId = "1" }: ArticleSectionProps) {
       }
     };
     fetchArticles();
-  }, []);
+  }, [articleId]);
   return (
     <section className="flex flex-col justify-center px-4 md:px-12 lg:px-25 max-w-screen-2xl mx-auto my-12">
       <div className="flex justify-between w-full items-center mb-7">

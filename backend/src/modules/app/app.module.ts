@@ -23,7 +23,7 @@ import { RedisModule } from '../redis/redis.module';
     CommentModule,
     ProductModule,
     ArticleModule,
-    RedisModule
+    RedisModule,
   ],
   controllers: [],
   providers: [],

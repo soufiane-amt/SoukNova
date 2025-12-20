@@ -81,7 +81,6 @@ export class ProductService {
         },
       },
     });
-
     if (!productData) return null;
 
     const result = {
@@ -166,7 +165,7 @@ export class ProductService {
 
     const result = {
       products: products.map((product) => {
-        const hasDiscount = product.discount !== "";
+        const hasDiscount = product.discount !== '';
 
         return {
           ...product,

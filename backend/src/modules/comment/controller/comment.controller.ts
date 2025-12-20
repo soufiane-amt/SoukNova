@@ -23,5 +23,4 @@ export class CommentController {
     };
     return await this.commentService.createComment(comment);
   }
-
 }

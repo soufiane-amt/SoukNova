@@ -23,8 +23,6 @@ export class OrderService {
         price: orderData.orderTotal,
       },
     });
-
-    // Invalidate cache
     const redis = this.redisService.getClient();
     await redis.del(this.getCacheKey(userId));
 
@@ -50,7 +48,7 @@ export class OrderService {
         skip,
         take: pageSize,
         orderBy: {
-          addedAt: 'desc', 
+          addedAt: 'desc',
         },
       }),
     ]);
@@ -72,7 +70,6 @@ export class OrderService {
   }
 
   async getOrder(userId: number, orderId: string): Promise<Order> {
-    // Optionally, we can try to get this order from cache too
     const redis = this.redisService.getClient();
     const cacheKey = `order:${userId}:${orderId}`;
 
