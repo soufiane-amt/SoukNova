@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 interface ThumbnailListProps {
-  images: string[];
+  images: string[] | undefined;
   activeImage: string;
   onSelectImage: (image: string) => void;
 }
@@ -11,6 +11,7 @@ const ThumbnailList: React.FC<ThumbnailListProps> = ({
   activeImage,
   onSelectImage,
 }) => {
+  if (!images) return <></>;
   return (
     <div className="flex justify-center mt-4 space-x-2" data-aos="fade-up">
       {images.map((image, index) => {
@@ -20,9 +21,7 @@ const ThumbnailList: React.FC<ThumbnailListProps> = ({
           <div
             key={img + index}
             className={`cursor-pointer border-2 p-1 rounded-md ${
-              activeImage === img
-                ? 'border-blue-500'
-                : 'border-transparent'
+              activeImage === img ? 'border-blue-500' : 'border-transparent'
             }`}
             onClick={() => onSelectImage(img)}
           >

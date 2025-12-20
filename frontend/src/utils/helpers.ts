@@ -1,4 +1,5 @@
-export function isProductNew(productDateString: string) {
+export function isProductNew(productDateString: string | undefined) {
+  if (!productDateString) return false;
   const today = new Date();
   const productDate = new Date(productDateString);
   const differenceInTime = today.getTime() - productDate.getTime();
