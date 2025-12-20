@@ -11,6 +11,19 @@ services:
     networks:
       - souknova-net
 
+  redis:
+    image: redis:7-alpine
+    container_name: souknova-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    env_file:
+      - ./backend/.env
+    command: ["redis-server", "--appendonly", "yes"]
+    networks:
+      - souknova-net
+
   backend:
     build: ./backend
     container_name: souknova-backend
@@ -18,6 +31,7 @@ services:
       - ./backend/.env
     depends_on:
       - postgres
+      - redis
     ports:
       - "3001:3001"
     volumes:
@@ -48,3 +62,4 @@ volumes:
   backend_node_modules:
   frontend_node_modules:
   pgdata:
+  redisdata:
