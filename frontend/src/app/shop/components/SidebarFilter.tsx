@@ -34,7 +34,7 @@ function SidebarFilter({
         className="space-y-3 pb-6 text-sm font-medium text-gray-900"
       >
         {subCategories.map((category) => (
-          <li key={category.name} >
+          <li key={category.name}>
             <button
               type="button"
               className={`text-[var(--color-primary)] text-sm cursor-pointer ${
@@ -76,13 +76,15 @@ function SidebarFilter({
                         id={`-${optionIdx}`}
                         name={`${priceFilter.id}[]`}
                         defaultChecked={
-                          priceRange && option.value&&
+                          priceRange &&
+                          option.value &&
                           priceRange[0] === option.value.minPrice &&
                           priceRange[1] === option.value.maxPrice
                         }
                         type="radio"
                         className="p-2 col-start-1 row-start-1 appearance-none rounded-sm border border-primary bg-white checked:border-black checked:bg-black indeterminate:border-black "
                         onClick={() =>
+                          option.value &&
                           setPriceRange([
                             option.value.minPrice,
                             option.value.maxPrice,

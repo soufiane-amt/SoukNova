@@ -4,17 +4,20 @@ import CustomButton from '../../../components/buttons/CustomButton';
 import Link from 'next/link';
 import ProductCard from '../../../components/cards/ProductCard/ProductCard';
 import { useEffect, useState } from 'react';
+import { ProductType } from '../../../types/product.dt';
 
 export default function NewArrivalSection() {
-  const [recentProducts, setRecentProducts] = useState([])
-  useEffect(()=>{
-    const fetchRecentProduct = async()=>{
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product/recent`);
-      const data = await res.json()
-      setRecentProducts(data)
-    }
-    fetchRecentProduct()
-  }, [])
+  const [recentProducts, setRecentProducts] = useState<ProductType[]>([]);
+  useEffect(() => {
+    const fetchRecentProduct = async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/product/recent`,
+      );
+      const data = await res.json();
+      setRecentProducts(data);
+    };
+    fetchRecentProduct();
+  }, []);
   return (
     <section aria-labelledby="new-arrivals" className="my-12">
       <div className="flex justify-between" data-aos="fade-up">
@@ -37,9 +40,9 @@ export default function NewArrivalSection() {
                 currentPrice={item.price}
                 originalPrice={item.price}
                 discountPercentage={item.discount}
-                rating={item.rate}
+                rating={item.rate ?? 5}
                 image={item.primary_image}
-                date={item.date}
+                date={item.date ?? ''}
               />
             </Link>
           </div>
