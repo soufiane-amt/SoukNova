@@ -29,7 +29,6 @@ function ArticlePage() {
         }
 
         const data = await response.json();
-
         setArticleData(data);
       } catch (err) {
         console.error(err);
@@ -78,17 +77,20 @@ function ArticlePage() {
             data-aos-delay="600"
             className="h-[647px] w-full overflow-hidden max-sm:h-[320px]"
           >
-            <Image
-              width={500}
-              height={600}
-              src={articleData?.images[0]}
-              alt={articleData.title}
-              className="w-full max-sm:h-[320px] rounded-lg object-cover"
-            />
+            {articleData.images?.[0] && (
+              <Image
+                src={articleData.images[0]}
+                alt={articleData.title}
+                width={500}
+                height={600}
+                className="w-full max-sm:h-[320px] rounded-lg object-cover"
+              />
+            )}
           </div>
 
           <p data-aos="fade-up" className={`${poppins.className} my-5`}>
-            {articleData?.article_paragraphs[0]}
+            {articleData.article_paragraphs?.[0] &&
+              articleData?.article_paragraphs[0]}
           </p>
 
           <div data-aos="fade-up" className="md:flex my-10 w-full gap-4">
@@ -97,29 +99,36 @@ function ArticlePage() {
               data-aos-delay="200"
               className="relative w-full md:w-1/2 h-[647px] max-sm:h-[320px] md:mb-0 mb-4"
             >
-              <Image
-                src={articleData?.images[1]}
-                alt={articleData.title}
-                fill
-                className="object-cover rounded-lg"
-              />
+              {articleData.images?.[1] && (
+                <Image
+                  src={articleData?.images[1]}
+                  alt={articleData.title}
+                  fill
+                  className="object-cover rounded-lg"
+                />
+              )}
             </div>
             <div
               data-aos="fade-left"
               data-aos-delay="200"
               className="relative w-full md:w-1/2 h-[647px] max-sm:h-[320px]"
             >
-              <Image
-                src={articleData?.images[2]}
-                alt={articleData.title}
-                fill
-                className="object-cover rounded-lg"
-              />
+              {articleData?.images?.[2] && (
+                <Image
+                  src={articleData?.images[2]}
+                  alt={articleData.title}
+                  fill
+                  className="object-cover rounded-lg"
+                />
+              )}
             </div>
           </div>
 
           <div data-aos="fade-up" className={`${poppins.className} mb-2`}>
-            <p>{articleData?.article_paragraphs[1]}</p>
+            <p>
+              {articleData.article_paragraphs?.[1] &&
+                articleData?.article_paragraphs[1]}
+            </p>
           </div>
 
           <div
@@ -131,24 +140,32 @@ function ArticlePage() {
               data-aos-delay="200"
               className="relative md:w-2/3 w-full h-full rounded-lg overflow-hidden"
             >
-              <Image
-                src={articleData?.images[3]}
-                alt={articleData.title}
-                fill
-                className="object-cover"
-              />
+              {articleData?.images?.[3] && (
+                <Image
+                  src={articleData?.images[3]}
+                  alt={articleData.title}
+                  fill
+                  className="object-cover rounded-lg"
+                />
+              )}
             </div>
             <div
               data-aos="fade-right"
               data-aos-delay="200"
               className={`md:w-1/3 w-full flex items-center ${poppins.className}`}
             >
-              <p>{articleData?.article_paragraphs[2]}</p>
+              <p>
+                {articleData.article_paragraphs?.[2] &&
+                  articleData?.article_paragraphs[2]}
+              </p>
             </div>
           </div>
 
           <div data-aos="fade-up" className={`${poppins.className} mb-2`}>
-            <p>{articleData?.article_paragraphs[3]}</p>
+            <p>
+              {articleData.article_paragraphs?.[3] &&
+                articleData?.article_paragraphs[3]}
+            </p>
           </div>
         </div>
       </div>

@@ -38,7 +38,7 @@ function WishList() {
         },
       );
       const data = await res.json();
-      setItemsData(data.items.filter((item) => item.productId !== productId));
+      setItemsData(data.items.filter((item:any) => item.productId !== productId));
 
       if (!res.ok) throw new Error('Failed to delete');
     } catch (err) {
@@ -63,7 +63,7 @@ function WishList() {
             <p>Products</p>
           </div>
           <div data-aos="fade-right" data-aos-delay="300">
-            {itemsData.items.map((item) => (
+            {itemsData.items.map((item:any) => (
               <WishItem
                 key={item.productId}
                 productName={item.productName}

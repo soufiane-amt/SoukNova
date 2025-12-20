@@ -77,7 +77,7 @@ interface ProductCardProps {
   originalPrice?: number;
   discountPercentage?: number;
   rating: number;
-  image: string;
+  image: string | undefined;
   date: string;
 }
 
@@ -96,6 +96,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   productName = getFirstTwoWords(productName);
   const isNew = isProductNew(date);
   const route = useRouter();
+  if (!image)
+    return <></>
   const handleClickProduct = () => {
     route.push(`/product/${productId}`);
   };
