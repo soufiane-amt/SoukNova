@@ -79,7 +79,6 @@ model Comment {
 
 model Product {
   id String @id @default(cuid())
-  url               String
   title             String
   brand             String?
   price             Float
