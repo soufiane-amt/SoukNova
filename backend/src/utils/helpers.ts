@@ -41,3 +41,4 @@ export function getFirstTwoWords(title: string | undefined) {
   }
   return title;
 }
+
