@@ -69,6 +69,13 @@ describe('CommentService', () => {
       content: 'Great product',
       rating: 5,
     };
+    prismaMock.comment.create.mockResolvedValueOnce({
+      id: 1,
+      content: 'Great product',
+      rating: 5,
+      addedAt: new Date(),
+      user: { firstName: 'John', lastName: 'Doe', image: 'avatar.png' },
+    });
 
     const result = await service.createComment(dto);
 
@@ -93,25 +100,25 @@ describe('CommentService', () => {
     });
   });
 
+  
   it('should handle different user name and avatar values', async () => {
-    (prismaMock.comment.create as jest.Mock).mockResolvedValueOnce({
+    prismaMock.comment.create.mockResolvedValueOnce({
       id: 2,
       content: 'Nice',
       rating: 4,
       addedAt: new Date(),
       user: { firstName: 'Jane', lastName: '', image: null },
     });
-
+    
     const dto: commentInfoDto = {
       userId: 2,
       productId: 'p2',
       content: 'Nice',
       rating: 4,
     };
-
-    const result = await service.createComment(dto);
-
-    expect(result).toMatchObject({
+    
+    const res = await service.createComment(dto);
+    expect(res).toEqual({
       id: 2,
       name: 'Jane ',
       avatar: null,
@@ -120,3 +127,4 @@ describe('CommentService', () => {
     });
   });
 });
+
