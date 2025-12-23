@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { OrderDto } from '../dto/order.dto';
-import { getFormatInDate } from 'src/utils/helpers';
 import { Order } from '@prisma/client';
+import { getFormatInDate } from 'src/utils/helpers';
 import { RedisService } from 'src/modules/redis/service/redis.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class OrderService {
@@ -24,7 +24,6 @@ export class OrderService {
       },
     });
 
-    // Invalidate cache
     const redis = this.redisService.getClient();
     await redis.del(this.getCacheKey(userId));
 
@@ -50,7 +49,7 @@ export class OrderService {
         skip,
         take: pageSize,
         orderBy: {
-          addedAt: 'desc', 
+          addedAt: 'desc',
         },
       }),
     ]);
