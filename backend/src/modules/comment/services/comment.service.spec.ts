@@ -7,13 +7,7 @@ describe('CommentService', () => {
   let service: CommentService;
   const prismaMock = {
     comment: {
-      create: jest.fn().mockResolvedValue({
-        id: 1,
-        content: 'Nice product',
-        rating: 5,
-        addedAt: new Date(),
-        user: { firstName: 'John', lastName: 'Doe', image: 'avatar.png' },
-      }),
+      create: jest.fn(),
     },
   } as any;
 
@@ -38,6 +32,13 @@ describe('CommentService', () => {
       rating: 5,
     };
 
+    prismaMock.comment.create.mockResolvedValueOnce({
+      id: 1,
+      content: 'Nice product',
+      rating: 5,
+      addedAt: new Date(),
+      user: { firstName: 'John', lastName: 'Doe', image: 'avatar.png' },
+    });
     const res = await service.createComment(dto);
 
     expect(prismaMock.comment.create).toHaveBeenCalledWith(
