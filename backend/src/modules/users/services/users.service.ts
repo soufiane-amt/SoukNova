@@ -86,9 +86,10 @@ export class UsersService {
   }
 
   async updateUserProfileImage(userId: number, image: string) {
-    await this.prisma.user.update({
+    return this.prisma.user.update({
       where: { id: userId },
       data: { image: image },
+      select: { image: true },
     });
   }
 
@@ -98,7 +99,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
     return user.image;
