@@ -7,8 +7,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import api from '../../../utils/axios';
-
-const defaultUserImage = '/images/myAccount/default-user.png';
+import { DEFAULT_USER_IMAGE } from '../../../constants/assets';
 
 const Dropdown = () => {
   const router = useRouter();
@@ -151,7 +150,7 @@ function ProfilePictureEditor({
         height={80}
         width={80}
         alt="Profile Picture"
-        src={imageUrl || defaultUserImage}
+        src={imageUrl || DEFAULT_USER_IMAGE}
         className="w-full h-full rounded-full object-cover"
       />
       <button
@@ -195,7 +194,7 @@ function AccountNavigator() {
 
         const imageUrl = data.imageUrl
           ? `${process.env.NEXT_PUBLIC_API_SERVER}${data.imageUrl}`
-          : defaultUserImage;
+          : DEFAULT_USER_IMAGE;
         setProfileImage(imageUrl);
       } catch (err) {
         console.error(err);

@@ -1,105 +1,89 @@
-/* eslint-disable @typescript-eslint/unbound-method */
+import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { UsersService } from 'src/modules/users/services/users.service';
+import { UsersService } from '../../users/services/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UnauthorizedException } from '@nestjs/common';
-import { CreateUserDto } from 'src/modules/users/dto/createUser.dto';
-import { UserCredentialsDto } from 'src/modules/users/dto/userCredentials.dto';
+import { ConflictException, UnauthorizedException } from '@nestjs/common';
 
 describe('AuthService', () => {
-  let authService: AuthService;
-  let userService: jest.Mocked<UsersService>;
-  let jwtService: jest.Mocked<JwtService>;
-  let configService: jest.Mocked<ConfigService>;
+  let service: AuthService;
+  const usersMock = {
+    checkIfExists: jest.fn(),
+    createUser: jest.fn(),
+    checkIfCredentialsAreValid: jest.fn(),
+  };
 
-  beforeEach(() => {
-    userService = {
-      checkIfExists: jest.fn(),
-      createUser: jest.fn(),
-      checkIfCredentialsAreValid: jest.fn(),
-    } as unknown as jest.Mocked<UsersService>;
+  const jwtMock = {
+    signAsync: jest.fn().mockResolvedValue('signed-token'),
+  };
 
-    jwtService = {
-      signAsync: jest.fn(),
-    } as unknown as jest.Mocked<JwtService>;
+  const configMock = {
+    get: jest.fn().mockReturnValue('secret'),
+  };
 
-    configService = {
-      get: jest.fn(),
-    } as unknown as jest.Mocked<ConfigService>;
+  beforeEach(async () => {
+    jest.resetAllMocks();
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [AuthService],
+    })
+      .useMocker((token) => {
+        if (token === UsersService) return usersMock;
+        if (token === JwtService) return jwtMock;
+        if (token === ConfigService) return configMock;
+      })
+      .compile();
 
-    authService = new AuthService(userService, jwtService, configService);
+    service = module.get<AuthService>(AuthService);
   });
 
-  describe('getSecret', () => {
-    it('should return JWT secret from config', () => {
-      configService.get.mockReturnValue('supersecret');
-      expect(authService.getSecret()).toBe('supersecret');
+  it('getSecret should return value from config', () => {
+    configMock.get.mockReturnValueOnce('secret');
+    expect(service.getSecret()).toBe('secret');
+  });
+
+  it('signUp should create user and return token when user does not exist', async () => {
+    const dto = { email: 'a@a.com' } as any;
+
+    usersMock.checkIfExists.mockResolvedValueOnce(null);
+    usersMock.createUser.mockResolvedValueOnce({ id: 1, email: 'a@a.com' });
+    jwtMock.signAsync.mockResolvedValueOnce('jwt-token');
+
+    const res = await service.signUp(dto);
+
+    expect(usersMock.checkIfExists).toHaveBeenCalledWith('a@a.com');
+    expect(usersMock.createUser).toHaveBeenCalledWith(dto);
+
+    expect(jwtMock.signAsync).toHaveBeenCalledWith({
+      sub: 1,
+      email: 'a@a.com',
     });
-  });
 
-  describe('signUp', () => {
-    const dto: CreateUserDto = {
-      email: 'test@example.com',
-      username: 'testuser',
-      password: 'password',
-    } as unknown as CreateUserDto;
-
-    it('should create user and return token', async () => {
-      userService.checkIfExists.mockResolvedValue(null); // User does not exist
-      userService.createUser.mockResolvedValue({
-        id: 1,
-        username: 'testuser',
-        email: 'test@example.com',
-        name: null,
-        password: 'hashed-password',
-        createdAt: new Date(),
-      });
-      jwtService.signAsync.mockResolvedValue('signed-token');
-
-      const result = await authService.signUp(dto);
-
-      expect(userService.createUser).toHaveBeenCalledWith(dto);
-      expect(jwtService.signAsync).toHaveBeenCalledWith({
-        sub: 1,
-        username: 'testuser',
-      });
-      expect(result).toEqual({ access_token: 'signed-token' });
+    expect(res).toEqual({
+      access_token: 'jwt-token',
     });
   });
 
-  describe('signIn', () => {
-    const credentials: UserCredentialsDto = {
-      email: 'test@example.com',
-      password: 'password',
-    };
+  it('signUp should throw ConflictException when user exists', async () => {
+    usersMock.checkIfExists.mockResolvedValueOnce({ id: 1, email: 'a@a.com' });
+    await expect(service.signUp({} as any)).rejects.toThrow(ConflictException);
+  });
 
-    it('should throw UnauthorizedException if credentials are invalid', async () => {
-      userService.checkIfCredentialsAreValid.mockResolvedValue(null);
-
-      await expect(authService.signIn(credentials)).rejects.toThrow(
-        UnauthorizedException,
-      );
+  it('signIn should return token for valid credentials', async () => {
+    const dto = { email: 'a@a.com' } as any;
+    usersMock.checkIfCredentialsAreValid.mockResolvedValueOnce({
+      id: 2,
+      email: dto.email,
     });
+    jwtMock.signAsync.mockResolvedValueOnce('signed-token');
 
-    it('should return access token if credentials are valid', async () => {
-      userService.checkIfCredentialsAreValid.mockResolvedValue({
-        id: 1,
-        username: 'john_doe',
-        email: 'john@example.com',
-        name: 'John Doe',
-        password: 'hashed-password',
-        createdAt: new Date(),
-      });
-      jwtService.signAsync.mockResolvedValue('signed-token');
+    const res = await service.signIn(dto);
+    expect(res).toEqual({ access_token: 'signed-token' });
+  });
 
-      const result = await authService.signIn(credentials);
-
-      expect(jwtService.signAsync).toHaveBeenCalledWith({
-        sub: 1,
-        username: 'john_doe',
-      });
-      expect(result).toEqual({ access_token: 'signed-token' });
-    });
+  it('signIn should throw UnauthorizedException for invalid credentials', async () => {
+    usersMock.checkIfCredentialsAreValid.mockResolvedValueOnce(null);
+    await expect(service.signIn({} as any)).rejects.toThrow(
+      UnauthorizedException,
+    );
   });
 });

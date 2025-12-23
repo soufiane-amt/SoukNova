@@ -3,8 +3,7 @@
 import Image from 'next/image';
 import { TypeAnimation } from 'react-type-animation';
 import { motion } from 'framer-motion';
-
-const imageUrl = '/images/backgrounds/auth_back_image.png';
+import { AUTH_BACKGROUND_IMAGE } from '../../../constants/assets';
 
 export default function AuthSidePanel() {
   return (
@@ -25,7 +24,7 @@ export default function AuthSidePanel() {
       >
         <Image
           className="w-[200px] md:w-[60%] object-cover z-[-1]"
-          src={imageUrl}
+          src={AUTH_BACKGROUND_IMAGE}
           alt="Side visual"
           width={600}
           height={400}
