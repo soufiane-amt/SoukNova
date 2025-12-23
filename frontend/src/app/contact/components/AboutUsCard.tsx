@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { poppins } from '@/layout';
+import { PROMO_HIGHLIGHT_IMAGE } from '../../../constants/assets';
 
-const promoHighlightImage = '/images/home/fourniture.png';
 
 function AboutUsCard() {
   return (
@@ -12,7 +12,7 @@ function AboutUsCard() {
     >
       <div className="md:w-1/2 h-full" data-aos="fade-right">
         <Image
-          src={promoHighlightImage}
+          src={PROMO_HIGHLIGHT_IMAGE}
           alt="Highlight promotion"
           width={600}
           height={400}

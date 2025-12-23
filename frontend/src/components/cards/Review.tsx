@@ -1,8 +1,7 @@
 import { Typography } from '@mui/material';
 import Image from 'next/image';
 import RatingStars from '../inputs/RatingStars';
-
-const defaultUserImage = '/images/myAccount/default-user.png';
+import { DEFAULT_USER_IMAGE } from '../../constants/assets';
 
 interface ReviewProps {
   name: string;
@@ -14,7 +13,7 @@ interface ReviewProps {
 export const Review = ({ name, image, rate, comment }: ReviewProps) => {
   const imageUrl = image
     ? `${process.env.NEXT_PUBLIC_API_URL}${image}`
-    : defaultUserImage;
+    : DEFAULT_USER_IMAGE;
   return (
     <div className=" flex items-start mt-8 border-b border-gray-300 pb-8">
       <div className="flex-shrink-0 mr-5">

@@ -2,8 +2,7 @@ import { poppins } from '@/layout';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { Typography } from '@mui/material';
 import Image from 'next/image';
-
-const promoHighlightImage = '/images/home/fourniture.png';
+import promoHighlightImage from '@/public/images/home/fourniture.png';
 
 export function PromoHighlightSection() {
   return (

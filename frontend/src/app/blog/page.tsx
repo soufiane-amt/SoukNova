@@ -8,8 +8,8 @@ import { SiteFooter } from '../../components/layout/SiteFooter';
 import Loader from '../../components/feedback/loader/Loader';
 import { usePagination } from '../../hooks/usePagination';
 import { ArticleType } from '../../types/article.dt';
+import { BLOG_PAGE_IMAGE } from '../../constants/assets';
 
-const imageUrl = '/images/blog/ourBlogPage.png';
 const PAGE_SIZE = 16;
 
 function BlogPage() {
@@ -40,7 +40,7 @@ function BlogPage() {
       <div className="mx-10 md:mx-20">
         <div data-aos="fade-up">
           <SectionShow
-            imageUrl={imageUrl}
+            imageUrl={BLOG_PAGE_IMAGE}
             head="Blog"
             desc="Home ideas and design inspiration"
           />

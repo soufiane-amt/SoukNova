@@ -9,8 +9,8 @@ import ShopFilter from './components/ShopFilter';
 import Loader from '../../components/feedback/loader/Loader';
 import { usePagination } from '../../hooks/usePagination';
 import { ProductType } from '../../types/product.dt';
+import { SHOP_PAGE_IMAGE } from '../../constants/assets';
 
-const imageUrl = '/images/shop/shopPage.png';
 const PAGE_SIZE = 12;
 
 export default function ShopPage() {
@@ -76,7 +76,7 @@ export default function ShopPage() {
     <div>
       <div className={`mx-10 md:mx-20 ${inter.className}`}>
         <SectionShow
-          imageUrl={imageUrl}
+          imageUrl={SHOP_PAGE_IMAGE}
           head="Shop"
           desc="Let’s design the place you always imagined."
         />

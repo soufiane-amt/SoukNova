@@ -1,5 +1,5 @@
 import Image from 'next/image';
-const imageMap = '/images/contact/map.png';
+import { MAP_LOCATION_IMAGE } from '../../../constants/assets';
 
 function MapLocation() {
   return (
@@ -9,7 +9,7 @@ function MapLocation() {
       data-aos-delay="200"
     >
       <Image
-        src={imageMap}
+        src={MAP_LOCATION_IMAGE}
         alt="Company location"
         width={500}
         height={500}
