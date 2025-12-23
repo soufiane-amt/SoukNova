@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from '../dto/createUser.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { User } from '@prisma/client';
@@ -41,7 +41,7 @@ export class UsersService {
   async updateUserData(userId: number, updateUserDto: UpdateUserDto) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
     const { firstName, lastName, email, oldPassword, newPassword } =
@@ -65,7 +65,7 @@ export class UsersService {
       updateData.password = await this.hashPassword(newPassword);
     }
 
-    await this.prisma.user.update({
+    return this.prisma.user.update({
       where: {
         id: userId,
       },
@@ -86,9 +86,10 @@ export class UsersService {
   }
 
   async updateUserProfileImage(userId: number, image: string) {
-    await this.prisma.user.update({
+    return this.prisma.user.update({
       where: { id: userId },
       data: { image: image },
+      select: { image: true },
     });
   }
 
@@ -98,7 +99,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
     return user.image;
