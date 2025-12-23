@@ -58,7 +58,12 @@ describe('ProductService', () => {
       const res = await service.searchProduct('chair');
 
       expect(prismaMock.$queryRaw).toHaveBeenCalled();
-      expect(redisClient.set).toHaveBeenCalledWith('search:chair', expect.any(String), 'EX', 300);
+      expect(redisClient.set).toHaveBeenCalledWith(
+        'search:chair',
+        expect.any(String),
+        'EX',
+        300,
+      );
       expect(res).toEqual([{ id: 'p1', title: 'T' }]);
     });
   });
@@ -77,7 +82,12 @@ describe('ProductService', () => {
       prismaMock.product.findMany.mockResolvedValueOnce([{ id: 'p2' }]);
       const res = await service.getAllProducts();
       expect(prismaMock.product.findMany).toHaveBeenCalled();
-      expect(redisClient.set).toHaveBeenCalledWith('product:all', expect.any(String), 'EX', 3600);
+      expect(redisClient.set).toHaveBeenCalledWith(
+        'product:all',
+        expect.any(String),
+        'EX',
+        3600,
+      );
       expect(res).toEqual([{ id: 'p2' }]);
     });
   });
@@ -105,16 +115,35 @@ describe('ProductService', () => {
         title: 'Hello World Product',
         primary_image: 'img.png',
         comments: [
-          { id: 1, content: 'c', rating: 5, user: { firstName: 'A', lastName: 'B', image: 'av.png' } },
+          {
+            id: 1,
+            content: 'c',
+            rating: 5,
+            user: { firstName: 'A', lastName: 'B', image: 'av.png' },
+          },
         ],
       } as any;
       prismaMock.product.findUnique.mockResolvedValueOnce(productDb);
 
       const res = await service.getProduct('p1');
-      expect(prismaMock.product.findUnique).toHaveBeenCalledWith({ where: { id: 'p1' }, include: { comments: { include: { user: true } } } });
-      expect(redisClient.set).toHaveBeenCalledWith('product:p1', expect.any(String), 'EX', 3600);
+      expect(prismaMock.product.findUnique).toHaveBeenCalledWith({
+        where: { id: 'p1' },
+        include: { comments: { include: { user: true } } },
+      });
+      expect(redisClient.set).toHaveBeenCalledWith(
+        'product:p1',
+        expect.any(String),
+        'EX',
+        3600,
+      );
       expect(res.title).toBe('Hello World');
-      expect(res.comments[0]).toEqual({ id: 1, name: 'A B', avatar: 'av.png', rate: 5, content: 'c' });
+      expect(res.comments[0]).toEqual({
+        id: 1,
+        name: 'A B',
+        avatar: 'av.png',
+        rate: 5,
+        content: 'c',
+      });
     });
   });
 
@@ -132,7 +161,15 @@ describe('ProductService', () => {
       redisClient.get.mockResolvedValueOnce(null);
       prismaMock.product.count.mockResolvedValueOnce(3);
       prismaMock.product.findMany.mockResolvedValueOnce([
-        { id: 'p1', price: 100, discount: '10', title: 'T', rate: 4, primary_image: 'i', date: now },
+        {
+          id: 'p1',
+          price: 100,
+          discount: '10',
+          title: 'T',
+          rate: 4,
+          primary_image: 'i',
+          date: now,
+        },
       ] as any);
 
       const query = { page: 1, pageSize: 10 } as any;
@@ -149,11 +186,22 @@ describe('ProductService', () => {
   describe('getRecentProducts', () => {
     it('returns transformed recent products', async () => {
       prismaMock.product.findMany.mockResolvedValueOnce([
-        { id: 'r1', title: 'X', price: 5, addedAt: now, discount: '', rate: 4, primary_image: 'img' },
+        {
+          id: 'r1',
+          title: 'X',
+          price: 5,
+          addedAt: now,
+          discount: '',
+          rate: 4,
+          primary_image: 'img',
+        },
       ] as any);
 
       const res = await service.getRecentProducts();
-      expect(prismaMock.product.findMany).toHaveBeenCalledWith({ take: 10, orderBy: { addedAt: 'desc' } });
+      expect(prismaMock.product.findMany).toHaveBeenCalledWith({
+        take: 10,
+        orderBy: { addedAt: 'desc' },
+      });
       expect(res[0]).toHaveProperty('id', 'r1');
       expect(res[0]).toHaveProperty('date', now);
     });

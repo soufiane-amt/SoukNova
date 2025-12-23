@@ -53,7 +53,9 @@ describe('WishlistService', () => {
     prismaMock.wishlist.findUnique.mockResolvedValueOnce(existing);
 
     const res = await service.addToWishlist(1, 'p1');
-    expect(prismaMock.wishlist.findUnique).toHaveBeenCalledWith({ where: { userId_productId: { userId: 1, productId: 'p1' } } });
+    expect(prismaMock.wishlist.findUnique).toHaveBeenCalledWith({
+      where: { userId_productId: { userId: 1, productId: 'p1' } },
+    });
     expect(res).toBe(existing);
   });
 
@@ -64,7 +66,9 @@ describe('WishlistService', () => {
 
     const res = await service.addToWishlist(1, 'p2');
 
-    expect(prismaMock.wishlist.create).toHaveBeenCalledWith({ data: { userId: 1, productId: 'p2' } });
+    expect(prismaMock.wishlist.create).toHaveBeenCalledWith({
+      data: { userId: 1, productId: 'p2' },
+    });
     expect(redisClient.del).toHaveBeenCalledWith('wishlist:1');
     expect(res).toBe(created);
   });
@@ -74,7 +78,9 @@ describe('WishlistService', () => {
 
     const res = await service.removeFromWishlist(1, 'p3');
 
-    expect(prismaMock.wishlist.delete).toHaveBeenCalledWith({ where: { userId_productId: { userId: 1, productId: 'p3' } } });
+    expect(prismaMock.wishlist.delete).toHaveBeenCalledWith({
+      where: { userId_productId: { userId: 1, productId: 'p3' } },
+    });
     expect(redisClient.del).toHaveBeenCalledWith('wishlist:1');
     expect(res).toEqual({ id: 3 });
   });
@@ -84,7 +90,9 @@ describe('WishlistService', () => {
     redisClient.get.mockResolvedValueOnce(JSON.stringify(cached));
 
     const res = await service.getWishlist(1, 2, 10);
-    expect(redisClient.get).toHaveBeenCalledWith('wishlist:user:1:page:2:size:10');
+    expect(redisClient.get).toHaveBeenCalledWith(
+      'wishlist:user:1:page:2:size:10',
+    );
     expect(res).toEqual(cached);
   });
 
@@ -92,16 +100,45 @@ describe('WishlistService', () => {
     redisClient.get.mockResolvedValueOnce(null);
     prismaMock.wishlist.count.mockResolvedValueOnce(5);
     prismaMock.wishlist.findMany.mockResolvedValueOnce([
-      { product: { id: 'p9', title: 'P9', primary_image: 'img.png', price: 7.5 } },
+      {
+        product: {
+          id: 'p9',
+          title: 'P9',
+          primary_image: 'img.png',
+          price: 7.5,
+        },
+      },
     ]);
 
     const res = await service.getWishlist(1, 1, 2);
 
-    expect(prismaMock.wishlist.count).toHaveBeenCalledWith({ where: { userId: 1 } });
-    expect(prismaMock.wishlist.findMany).toHaveBeenCalledWith({ where: { userId: 1 }, skip: 0, take: 2, orderBy: { addedAt: 'desc' }, select: { product: { select: { id: true, title: true, primary_image: true, price: true } } } });
+    expect(prismaMock.wishlist.count).toHaveBeenCalledWith({
+      where: { userId: 1 },
+    });
+    expect(prismaMock.wishlist.findMany).toHaveBeenCalledWith({
+      where: { userId: 1 },
+      skip: 0,
+      take: 2,
+      orderBy: { addedAt: 'desc' },
+      select: {
+        product: {
+          select: { id: true, title: true, primary_image: true, price: true },
+        },
+      },
+    });
 
-    expect(res.items[0]).toEqual({ productId: 'p9', productName: 'P9', image: 'img.png', price: 7.5 });
+    expect(res.items[0]).toEqual({
+      productId: 'p9',
+      productName: 'P9',
+      image: 'img.png',
+      price: 7.5,
+    });
     expect(res.totalPages).toBe(Math.ceil(5 / 2));
-    expect(redisClient.set).toHaveBeenCalledWith('wishlist:user:1:page:1:size:2', expect.any(String), 'EX', 60 * 5);
+    expect(redisClient.set).toHaveBeenCalledWith(
+      'wishlist:user:1:page:1:size:2',
+      expect.any(String),
+      'EX',
+      60 * 5,
+    );
   });
 });

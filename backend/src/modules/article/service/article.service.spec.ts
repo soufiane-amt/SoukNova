@@ -89,10 +89,19 @@ describe('ArticleService', () => {
 
   it('getArticle should fetch, split paragraphs and cache when not cached', async () => {
     redisClient.get.mockResolvedValueOnce(null);
-    prismaMock.article.findUnique.mockResolvedValueOnce({ id: 3, title: 'T', author: 'A', date: new Date(), images: ['i'], text: 'one two three four five' });
+    prismaMock.article.findUnique.mockResolvedValueOnce({
+      id: 3,
+      title: 'T',
+      author: 'A',
+      date: new Date(),
+      images: ['i'],
+      text: 'one two three four five',
+    });
 
     const res = await service.getArticle(3);
-    expect(prismaMock.article.findUnique).toHaveBeenCalledWith({ where: { id: 3 } });
+    expect(prismaMock.article.findUnique).toHaveBeenCalledWith({
+      where: { id: 3 },
+    });
     expect(res.article_paragraphs.length).toBeGreaterThan(0);
     expect(redisClient.set).toHaveBeenCalled();
   });

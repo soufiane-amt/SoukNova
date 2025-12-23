@@ -31,20 +31,33 @@ describe('CommentService', () => {
   });
 
   it('createComment should call prisma.create and return formatted result', async () => {
-    const dto: commentInfoDto = { userId: 1, productId: 'p1', content: 'Nice product', rating: 5 };
+    const dto: commentInfoDto = {
+      userId: 1,
+      productId: 'p1',
+      content: 'Nice product',
+      rating: 5,
+    };
 
     const res = await service.createComment(dto);
 
-    expect(prismaMock.comment.create).toHaveBeenCalledWith(expect.objectContaining({
-      data: {
-        userId: dto.userId,
-        productId: dto.productId,
-        content: dto.content,
-        rating: dto.rating,
-      },
-      select: expect.any(Object),
-    }));
+    expect(prismaMock.comment.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: {
+          userId: dto.userId,
+          productId: dto.productId,
+          content: dto.content,
+          rating: dto.rating,
+        },
+        select: expect.any(Object),
+      }),
+    );
 
-    expect(res).toEqual({ id: 1, name: 'John Doe', avatar: 'avatar.png', rate: 5, content: 'Nice product' });
+    expect(res).toEqual({
+      id: 1,
+      name: 'John Doe',
+      avatar: 'avatar.png',
+      rate: 5,
+      content: 'Nice product',
+    });
   });
 });
