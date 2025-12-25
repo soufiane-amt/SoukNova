@@ -2,14 +2,14 @@ import { poppins } from '@/layout';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { Typography } from '@mui/material';
 import Image from 'next/image';
-import promoHighlightImage from '@/public/images/home/fourniture.png';
+import { PROMO_HIGHLIGHT_IMAGE } from '../../../constants/assets';
 
 export function PromoHighlightSection() {
   return (
     <section className="w-full md:flex md:h-[532px] mt-10">
       <div className="flex-1" data-aos="fade-left" data-aos-duration="1000">
         <Image
-          src={promoHighlightImage}
+          src={PROMO_HIGHLIGHT_IMAGE}
           alt="Highlight promotion"
           width={600}
           height={400}
