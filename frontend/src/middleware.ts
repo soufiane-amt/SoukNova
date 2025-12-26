@@ -22,6 +22,7 @@ export async function middleware(req: NextRequest) {
       method: 'GET',
       headers,
     });
+    console.log('====> response : ', res)
     if (res.ok) {
       return NextResponse.next();
     } else {
