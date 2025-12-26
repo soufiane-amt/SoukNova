@@ -28,7 +28,8 @@ async function bootstrap() {
         return callback(null, true);
       }
 
-      callback(new Error('Not allowed by CORS'));
+      // explicitly deny
+      return callback(null, false); // ✅ must be null, not new Error
     },
     credentials: true,
   });
