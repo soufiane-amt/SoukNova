@@ -33,7 +33,8 @@ export class AuthController {
       res.cookie('jwt', token.access_token, {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 240,
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
       });
       return { message: 'Signup is successful' };
     } catch (e) {
@@ -55,7 +56,8 @@ export class AuthController {
     res.cookie('jwt', token.access_token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
     });
     return { message: 'Login successful' };
   }
