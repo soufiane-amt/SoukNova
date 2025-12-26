@@ -27,6 +27,11 @@ const nextConfig: NextConfig = {
         port: '3001',
         pathname: '/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'spirited-warmth-production.up.railway.app',
+        pathname: '/uploads/**',
+      },
     ],
   },
 };
