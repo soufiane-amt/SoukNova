@@ -142,35 +142,36 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const decreaseFromCart = useCallback(async (productId: string) => {
-      console.log("cart : ", cart)
-    
-    const quantity =
-      cart.find((item) => item.productId === productId)?.quantity || 0;
-      console.log("quantity : ", quantity)
-      console.log("productId : ", productId)
-    if (quantity < 1) return;
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${productId}`,
-        {
-          method: 'PATCH',
-          credentials: 'include',
-        },
-      );
-      if (!res?.ok) throw new Error('Failed to update cart');
-
-      if (quantity > 1)
-        setCart((prev) =>
-          prev.map((i) =>
-            i.productId === productId ? { ...i, quantity: i.quantity - 1 } : i,
-          ),
+  const decreaseFromCart = useCallback(
+    async (productId: string) => {
+      const quantity =
+        cart.find((item) => item.productId === productId)?.quantity || 0;
+      if (quantity < 1) return;
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${productId}`,
+          {
+            method: 'PATCH',
+            credentials: 'include',
+          },
         );
-      else setCart((prev) => prev.filter((i) => i.productId !== productId));
-    } catch (err) {
-      console.error(err);
-    }
-  }, [cart]);
+        if (!res?.ok) throw new Error('Failed to update cart');
+
+        if (quantity > 1)
+          setCart((prev) =>
+            prev.map((i) =>
+              i.productId === productId
+                ? { ...i, quantity: i.quantity - 1 }
+                : i,
+            ),
+          );
+        else setCart((prev) => prev.filter((i) => i.productId !== productId));
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [cart],
+  );
 
   return (
     <CartContext.Provider
