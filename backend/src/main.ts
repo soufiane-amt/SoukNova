@@ -17,10 +17,19 @@ async function bootstrap() {
   );
 
   const configService = app.get(ConfigService);
-  const frontendUrl = configService.get<string>('FRONTEND_URL');
+  let allowedPrefix = configService.get<string>('FRONTEND_URL_PREFIX');
 
   app.enableCors({
-    origin: frontendUrl,
+    origin: (origin, callback) => {
+      // allow server-to-server or tools like Postman
+      if (!origin) return callback(null, true);
+
+      if (allowedPrefix && origin.startsWith(allowedPrefix)) {
+        return callback(null, true);
+      }
+
+      callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
   });
   app.use(cookieParser());
