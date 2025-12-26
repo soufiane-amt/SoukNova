@@ -18,11 +18,13 @@ export async function middleware(req: NextRequest) {
   if (token) headers.cookie = `jwt=${token}`;
 
   try {
+    console.log('====> token : ', token);
+    console.log('====> headers.cookie : ', headers.cookie);
     const res = await fetch(verifyUrl, {
       method: 'GET',
       headers,
     });
-    console.log('====> response : ', res)
+    console.log('====> response : ', res);
     if (res.ok) {
       return NextResponse.next();
     } else {
