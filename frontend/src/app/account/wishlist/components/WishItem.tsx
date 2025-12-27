@@ -1,13 +1,14 @@
 import { inter } from '@/layout';
 import Image from 'next/image';
 import { getFirstTwoWords } from '../../../../utils/helpers';
-import React from 'react';
+import React, { useState } from 'react';
+import { CircularProgress } from '@mui/material';
 
 interface WishItemProps {
   productName: string;
   productImage: string;
   price: number;
-  onDelete: () => void;
+  onDelete: () => Promise<void> | void;
 }
 
 function WishItem({
@@ -17,16 +18,31 @@ function WishItem({
   onDelete,
 }: WishItemProps) {
   const shortendProductName = getFirstTwoWords(productName);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeleteClick = async () => {
+    if (deleting) return;
+    try {
+      setDeleting(true);
+      await onDelete?.();
+    } catch (e) {
+      console.error('Failed to delete wishlist item', e);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
     <div className="mt-5 border-b border-gray-300 py-5">
       <div className="md:flex md:justify-between md:items-center">
         <div className="flex ">
           <button
-            onClick={onDelete}
-            className="p-2 md:py-0 rounded-full cursor-pointer text-xl text-black-shade-4 px-4"
+            onClick={handleDeleteClick}
+            className="p-2 md:py-0 rounded-full cursor-pointer text-xl text-black-shade-4 px-4 disabled:opacity-50"
             aria-label={`Remove ${shortendProductName} from wishlist`}
+            disabled={deleting}
           >
-            &#x2715;
+            {deleting ? <CircularProgress size={18} color="inherit" /> : '✕'}
           </button>
           <div className="bg-[#f4f4f4] mr-3 h-[60px] min-w-[60px] relative">
             <Image

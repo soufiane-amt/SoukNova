@@ -6,6 +6,7 @@ import WishItem from './WishItem';
 import EmptySectionMessage from '../../../../components/feedback/EmptySection';
 import CustomPagination from '../../../../components/ui/CustomPagination';
 import { usePagination } from '../../../../hooks/usePagination';
+import Loader from '../../../../components/feedback/loader/Loader';
 
 const PAGE_SIZE = 5;
 
@@ -71,7 +72,7 @@ function WishList() {
       </div>
 
       {loading ? (
-        <div className="py-8 flex items-center justify-center">Loading...</div>
+        <Loader />
       ) : itemsData?.items?.length > 0 ? (
         <div>
           <div
