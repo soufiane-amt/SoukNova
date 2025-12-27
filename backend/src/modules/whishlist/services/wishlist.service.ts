@@ -14,6 +14,15 @@ export class WishlistService {
     return `wishlist:${userId}`;
   }
 
+  async clearWishlistCache(userId: number) {
+    const redis = this.redisService.getClient();
+    const pattern = `wishlist:user:${userId}:*`;
+    const stream = redis.scanStream({ match: pattern, count: 100 });
+    const keys: string[] = [];
+    for await (const arr of stream) keys.push(...arr);
+    if (keys.length) await redis.unlink(...keys); // unlink is non-blocking; use del if unavailable
+  }
+
   async addToWishlist(userId: number, productId: string) {
     const existing = await this.prisma.wishlist.findUnique({
       where: { userId_productId: { userId, productId } },
@@ -25,15 +34,12 @@ export class WishlistService {
       data: { userId, productId },
     });
 
-    const redis = this.redisService.getClient();
-    await redis.del(this.getCacheKey(userId));
-
+    await this.clearWishlistCache(userId);
     return created;
   }
 
   async removeFromWishlist(userId: number, productId: string) {
-    const redis = this.redisService.getClient();
-    await redis.del(this.getCacheKey(userId));
+    await this.clearWishlistCache(userId);
 
     return this.prisma.wishlist.delete({
       where: { userId_productId: { userId, productId } },
