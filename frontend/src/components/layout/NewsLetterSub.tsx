@@ -9,7 +9,8 @@ import { NEWSLETTER_BACKGROUND_IMAGE } from '../../constants/assets';
 export function NewsLetterSub() {
   return (
     <section
-      className={`w-full h-[360px] bg-[url(${NEWSLETTER_BACKGROUND_IMAGE})] bg-cover bg-center bg-no-repeat flex items-center justify-center px-6 `}
+      style={{ backgroundImage: `url(${NEWSLETTER_BACKGROUND_IMAGE})` }}
+      className={`w-full h-[360px] bg-cover bg-center bg-no-repeat flex items-center justify-center px-6 `}
     >
       <div
         className={`flex flex-col items-center text-center md:w-1/4 sm:w-1/3 ${poppins.className}`}
