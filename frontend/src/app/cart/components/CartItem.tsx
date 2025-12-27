@@ -1,8 +1,9 @@
 'use client';
+import React, { useMemo, useState } from 'react';
 import { inter } from '@/layout';
 import Image from 'next/image';
-import { useMemo } from 'react';
 import { useCart } from '../../../context/CartContext';
+import { CircularProgress } from '@mui/material';
 
 interface CartItemProps {
   productId: string;
@@ -17,6 +18,8 @@ export function CartItem({
   price,
 }: CartItemProps) {
   const { cart, addToCart, removeFromCart, decreaseFromCart } = useCart();
+  const [removing, setRemoving] = useState(false);
+
   const productQuantityMap = useMemo(() => {
     const map: Record<string, number> = {};
     cart.forEach((item) => {
@@ -24,6 +27,18 @@ export function CartItem({
     });
     return map;
   }, [cart]);
+
+  const handleRemove = async () => {
+    if (removing) return;
+    try {
+      setRemoving(true);
+      await removeFromCart(productId);
+    } catch (e) {
+      console.error('Failed to remove from cart', e);
+    } finally {
+      setRemoving(false);
+    }
+  };
 
   return (
     <div className="w-full flex py-3 border-b border-gray-200">
@@ -52,11 +67,18 @@ export function CartItem({
             </div>
             <div className="hidden md:block">
               <button
-                className="flex space-x-2 rounded-full cursor-pointer text-xl text-gray-500 px-4 text-end font-bold"
-                onClick={() => removeFromCart(productId)}
+                className="flex items-center space-x-2 rounded-full cursor-pointer text-xl text-gray-500 px-4 text-end font-bold disabled:opacity-50"
+                onClick={handleRemove}
+                disabled={removing}
               >
-                <p className="text-sm">&#x2715;</p>
-                <p className="text-sm">Remove</p>
+                {removing ? (
+                  <CircularProgress size={18} color="inherit" />
+                ) : (
+                  <>
+                    <p className="text-sm">&#x2715;</p>
+                    <p className="text-xs">Remove</p>
+                  </>
+                )}
               </button>
             </div>
             <div className="flex justify-around items-center font-bold rounded border h-7 w-20 border border-gray-500 md:hidden">
@@ -98,8 +120,16 @@ export function CartItem({
 
         <div className="flex flex-col justify-start">
           <p className=" text-[15px] md:text-[18px]">${price}</p>
-          <button className="block md:hidden rounded-full hover:bg-gray-200 text-xl text-gray-500 px-4 text-end font-bold">
-            <span>&#x2715;</span>
+          <button
+            className="block md:hidden rounded-full hover:bg-gray-200 text-xl text-gray-500 px-4 text-end font-bold"
+            onClick={handleRemove}
+            disabled={removing}
+          >
+            {removing ? (
+              <CircularProgress size={18} color="inherit" />
+            ) : (
+              <span>&#x2715;</span>
+            )}
           </button>
           <div></div>
         </div>

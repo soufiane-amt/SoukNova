@@ -7,6 +7,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
 import React, { useState } from 'react';
+import { CircularProgress } from '@mui/material';
 
 function getFirstTwoWords(title: string) {
   const words = title.split(' ');
@@ -30,9 +31,13 @@ interface LikeButtonProps {
 }
 const LikeButton = ({ productId }: LikeButtonProps) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { showToast } = useCart();
 
   const handleAddWishlist = async (productId: string) => {
+    // optimistic UI: toggle immediately
+    setIsWishlisted(true);
+    setLoading(true);
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/wishlist/${productId}`,
@@ -42,17 +47,26 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
         },
       );
 
-      if (!res?.ok) throw new Error('Failed to Add to wishlist');
+      if (!res?.ok) {
+        // revert optimistic update
+        setIsWishlisted(false);
+        showToast('Failed to add to wishlist');
+        return;
+      }
 
-      setIsWishlisted((prev) => !prev);
       showToast('Item added to wishlist!');
     } catch (err) {
+      setIsWishlisted(false);
       console.error(err);
+      showToast('Failed to add to wishlist');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (loading) return;
     handleAddWishlist(productId);
   };
 
@@ -60,8 +74,18 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
     <button
       className="rounded-full bg-white p-1 shadow-lg cursor-pointer"
       onClick={handleClick}
+      aria-pressed={isWishlisted}
+      aria-disabled={loading}
     >
-      {isWishlisted ? (
+      {loading ? (
+        <div className={isWishlisted ? 'text-red-500' : 'text-black'}>
+          <CircularProgress
+            size={15}
+            color="inherit"
+            sx={{ paddingInline: 1.5 }}
+          />
+        </div>
+      ) : isWishlisted ? (
         <FavoriteIcon className="text-red-500" />
       ) : (
         <FavoriteBorderOutlinedIcon />
@@ -96,8 +120,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   productName = getFirstTwoWords(productName);
   const isNew = isProductNew(date);
   const route = useRouter();
-  if (!image)
-    return <></>
+  if (!image) return <></>;
   const handleClickProduct = () => {
     route.push(`/product/${productId}`);
   };
