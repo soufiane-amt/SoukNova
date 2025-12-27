@@ -66,27 +66,41 @@ export class ProductService {
     const redis = this.redisService.getClient();
     const cacheKey = `product:${productId}`;
 
-    const cached = await redis.get(cacheKey);
-    if (cached) {
-      return JSON.parse(cached);
+    const cachedProduct = await redis.get(cacheKey);
+
+    let productData;
+
+    if (cachedProduct) {
+      productData = JSON.parse(cachedProduct);
+    } else {
+      productData = await this.prismaService.product.findUnique({
+        where: { id: productId },
+      });
+
+      if (!productData) return null;
+
+      await redis.set(
+        cacheKey,
+        JSON.stringify(productData),
+        'EX',
+        60 * 5, // 5 minutes
+      );
     }
 
-    const productData = await this.prismaService.product.findUnique({
-      where: { id: productId },
+    const comments = await this.prismaService.comment.findMany({
+      where: { productId },
       include: {
-        comments: {
-          include: {
-            user: true,
-          },
-        },
+        user: true,
+      },
+      orderBy: {
+        addedAt: 'desc',
       },
     });
-    if (!productData) return null;
 
-    const result = {
+    return {
       ...productData,
       title: getFirstTwoWords(productData.title),
-      comments: productData.comments.map((comment) => ({
+      comments: comments.map((comment) => ({
         id: comment.id,
         name: `${comment.user.firstName} ${comment.user.lastName}`,
         avatar: comment.user.image,
@@ -94,8 +108,6 @@ export class ProductService {
         content: comment.content,
       })),
     };
-    await redis.set(cacheKey, JSON.stringify(result), 'EX', 3600);
-    return result;
   }
 
   async getProducts(query: ProductQueryDto) {
