@@ -49,15 +49,30 @@ function WishList() {
       );
       if (!res.ok) throw new Error('Failed to delete');
 
-      setItemsData((prev: any) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          items: (prev.items || []).filter(
-            (item: any) => item.productId !== productId,
-          ),
-        };
-      });
+      try {
+        const pageRes = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/wishlist?page=${page}&pageSize=${PAGE_SIZE}`,
+          { method: 'GET', credentials: 'include' },
+        );
+        const pageData = await pageRes.json();
+
+        if ((pageData.items?.length || 0) === 0 && page > 1) {
+          handlePageChange({} as any, page - 1);
+        } else {
+          setItemsData(pageData);
+        }
+      } catch (err) {
+        console.error('Failed to refetch wishlist page', err);
+        setItemsData((prev: any) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            items: (prev.items || []).filter(
+              (item: any) => item.productId !== productId,
+            ),
+          };
+        });
+      }
     } catch (err) {
       console.error(err);
     }
@@ -86,6 +101,7 @@ function WishList() {
             {itemsData.items.map((item: any) => (
               <WishItem
                 key={item.productId}
+                productId={item.productId}
                 productName={item.productName}
                 productImage={item.image}
                 price={item.price}
