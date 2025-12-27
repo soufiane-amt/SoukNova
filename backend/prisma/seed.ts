@@ -7,6 +7,13 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Start seeding ...');
 
+  const count = await prisma.product.count();
+
+  if (count > 0) {
+    console.log('DB not empty, skipping seed');
+    process.exit(0);
+  }
+
   const productData = products.map((product) => ({
     ...product,
     images: product.images || [],
