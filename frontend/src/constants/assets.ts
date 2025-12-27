@@ -1,4 +1,4 @@
-export const DEFAULT_USER_IMAGE = '/images/defaultUserImage.png';
+export const DEFAULT_USER_IMAGE = '/images/myAccount/default-user.png';
 export const AUTH_BACKGROUND_IMAGE = '/images/backgrounds/auth_back_image.png';
 export const PROMO_HIGHLIGHT_IMAGE = '/images/home/fourniture.png';
 export const BLOG_PAGE_IMAGE = '/images/blog/ourBlogPage.png';
