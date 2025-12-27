@@ -1,6 +1,5 @@
 'use client';
 
-import Loader from '../../components/feedback/loader/Loader';
 import SettingsNavigator from '../../components/ui/Settings/SettingsWrap';
 import { useAuthGuard } from '../../hooks/useAuthGuard';
 import { useLoader } from '../../hooks/useLoader';
