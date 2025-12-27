@@ -10,10 +10,12 @@ import { useLoader } from '../../hooks/useLoader';
 import Loader from '../../components/feedback/loader/Loader';
 import EmptySectionMessage from '../../components/feedback/EmptySection';
 import { useCart } from '../../context/CartContext';
+import { useAuthGuard } from '../../hooks/useAuthGuard';
 
 function CartPage() {
   const loading = useLoader(1500);
   const { cart, subtotal, total } = useCart();
+  useAuthGuard();
 
   if (loading) return <Loader />;
 

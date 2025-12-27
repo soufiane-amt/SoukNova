@@ -11,11 +11,13 @@ import { useLoader } from '../../hooks/useLoader';
 import Loader from '../../components/feedback/loader/Loader';
 import { useCart } from '../../context/CartContext';
 import { useRouter } from 'next/navigation';
+import { useAuthGuard } from '../../hooks/useAuthGuard';
 
 function CheckoutPage() {
   const { total } = useCart();
   const loading = useLoader(1500);
   const router = useRouter();
+  useAuthGuard();
 
   const placeOrder = async () => {
     try {
