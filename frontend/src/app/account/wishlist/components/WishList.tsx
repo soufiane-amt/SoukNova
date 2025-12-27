@@ -11,19 +11,28 @@ const PAGE_SIZE = 5;
 
 function WishList() {
   const [itemsData, setItemsData] = useState<any>();
+  const [loading, setLoading] = useState(true);
   const { page, handlePageChange } = usePagination();
 
   useEffect(() => {
     const fetchWishlist = async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/wishlist?page=${page}&pageSize=${PAGE_SIZE}`,
-        {
-          method: 'GET',
-          credentials: 'include',
-        },
-      );
-      const data = await res.json();
-      setItemsData(data);
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/wishlist?page=${page}&pageSize=${PAGE_SIZE}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          },
+        );
+        const data = await res.json();
+        setItemsData(data);
+      } catch (err) {
+        console.error(err);
+        setItemsData({ items: [], totalPages: 0 });
+      } finally {
+        setLoading(false);
+      }
     };
     fetchWishlist();
   }, [page]);
@@ -52,6 +61,7 @@ function WishList() {
       console.error(err);
     }
   };
+
   return (
     <div className="w-full md:ml-25 md:mt-0 mt-5" data-aos="fade-up">
       <div className="mb-5 mt-10" data-aos="fade-up" data-aos-delay="100">
@@ -59,7 +69,10 @@ function WishList() {
           Your Wishlist
         </p>
       </div>
-      {itemsData?.items?.length > 0 ? (
+
+      {loading ? (
+        <div className="py-8 flex items-center justify-center">Loading...</div>
+      ) : itemsData?.items?.length > 0 ? (
         <div>
           <div
             className="text-sm text-[var(--color-primary)] border-b border-gray-300 pb-2"
