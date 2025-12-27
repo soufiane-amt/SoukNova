@@ -6,15 +6,18 @@ import OrderInfo from './OrderInfo';
 import CustomPagination from '../../../../components/ui/CustomPagination';
 import EmptySectionMessage from '../../../../components/feedback/EmptySection';
 import { usePagination } from '../../../../hooks/usePagination';
+import Loader from '../../../../components/feedback/loader/Loader';
 
 const PAGE_SIZE = 5;
 
 function OrderHistory() {
   const [itemsData, setItemsData] = useState<any>();
+  const [loading, setLoading] = useState(true);
   const { page, handlePageChange } = usePagination();
 
   useEffect(() => {
     const fetchOrders = async () => {
+      setLoading(true);
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/order?page=${page}&pageSize=${PAGE_SIZE}`,
@@ -32,6 +35,9 @@ function OrderHistory() {
         setItemsData(data);
       } catch (e: any) {
         console.error(e.message);
+        setItemsData({ orders: [], totalPages: 0 });
+      } finally {
+        setLoading(false);
       }
     };
     fetchOrders();
@@ -44,7 +50,9 @@ function OrderHistory() {
         </p>
       </div>
       <div className="overflow-y-auto custom-scrollbar">
-        {itemsData?.orders?.length > 0 ? (
+        {loading ? (
+          <Loader />
+        ) : itemsData?.orders?.length > 0 ? (
           <>
             {itemsData.orders.map((order: any, idx: number) => (
               <div
