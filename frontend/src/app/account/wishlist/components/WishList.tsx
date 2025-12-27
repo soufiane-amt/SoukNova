@@ -37,15 +37,21 @@ function WishList() {
           credentials: 'include',
         },
       );
-      const data = await res.json();
-      setItemsData(data.items.filter((item:any) => item.productId !== productId));
-
       if (!res.ok) throw new Error('Failed to delete');
+
+      setItemsData((prev: any) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          items: (prev.items || []).filter(
+            (item: any) => item.productId !== productId,
+          ),
+        };
+      });
     } catch (err) {
       console.error(err);
     }
   };
-
   return (
     <div className="w-full md:ml-25 md:mt-0 mt-5" data-aos="fade-up">
       <div className="mb-5 mt-10" data-aos="fade-up" data-aos-delay="100">
@@ -63,7 +69,7 @@ function WishList() {
             <p>Products</p>
           </div>
           <div data-aos="fade-right" data-aos-delay="300">
-            {itemsData.items.map((item:any) => (
+            {itemsData.items.map((item: any) => (
               <WishItem
                 key={item.productId}
                 productName={item.productName}
