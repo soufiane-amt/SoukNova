@@ -10,7 +10,7 @@ function MyAccountPage() {
   const loading = useLoader(1500);
   useAuthGuard();
   
-  if (loading) return <Loader />;
+  if (loading) return <div></div>;
 
   return (
     <SettingsNavigator>
