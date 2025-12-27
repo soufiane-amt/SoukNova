@@ -154,7 +154,7 @@ function ProductTabs({ productData }: ProductTabsProps) {
                     },
                   }}
                 />
-                <span className="md:inline hidden">Write review</span>
+                <span className="md:inline hidden md:text-sm lg:text-md">Write review</span>
               </button>
             </div>
           </div>
