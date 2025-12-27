@@ -3,8 +3,10 @@ import Image from 'next/image';
 import { getFirstTwoWords } from '../../../../utils/helpers';
 import React, { useState } from 'react';
 import { CircularProgress } from '@mui/material';
+import { useCart } from '../../../../context/CartContext';
 
 interface WishItemProps {
+  productId: string;
   productName: string;
   productImage: string;
   price: number;
@@ -12,6 +14,7 @@ interface WishItemProps {
 }
 
 function WishItem({
+  productId,
   productName,
   productImage,
   price,
@@ -19,6 +22,8 @@ function WishItem({
 }: WishItemProps) {
   const shortendProductName = getFirstTwoWords(productName);
   const [deleting, setDeleting] = useState(false);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const { addToCart } = useCart();
 
   const handleDeleteClick = async () => {
     if (deleting) return;
@@ -29,6 +34,18 @@ function WishItem({
       console.error('Failed to delete wishlist item', e);
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (addingToCart) return;
+    try {
+      setAddingToCart(true);
+      await addToCart(productId);
+    } catch (err) {
+      console.error('Failed to add to cart', err);
+    } finally {
+      setAddingToCart(false);
     }
   };
 
@@ -68,8 +85,18 @@ function WishItem({
           <p>${price}</p>
         </div>
         <div className="mt-5 md:mt-0 text-xs">
-          <button className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold px-5">
-            Add <span className="md:hidden lg:block">To Cart</span>
+          <button
+            className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold px-5 disabled:opacity-60"
+            onClick={handleAddToCart}
+            disabled={addingToCart}
+          >
+            {addingToCart ? (
+              <CircularProgress size={20} color="inherit" />
+            ) : (
+              <>
+                Add <span className="md:hidden lg:block">To Cart</span>
+              </>
+            )}
           </button>
         </div>
       </div>
