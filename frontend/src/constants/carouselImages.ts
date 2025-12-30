@@ -16,4 +16,8 @@ export const CAROUSEL_IMAGES = [
     src: '/images/home/carousel/carousel_img4.jpg',
     alt: 'Slide 4',
   },
+  {
+    src: '/images/home/carousel/carousel_img5.jpg',
+    alt: 'Slide 5',
+  },
 ];
