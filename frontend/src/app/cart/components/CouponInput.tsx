@@ -1,7 +1,23 @@
 'use client';
 import 'aos/dist/aos.css';
+import { useState } from 'react';
 
 function CouponInput() {
+  const MAX_LENGTH = 10;
+  const [code, setCode] = useState('');
+  const [invalid, setInvalid] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.toUpperCase();
+    if (val.length > MAX_LENGTH) return; // enforce max length
+    setCode(val);
+    setInvalid(false);
+  };
+
+  const handleApply = () => {
+    setInvalid(true);
+  };
+
   return (
     <div className="mb-12 md:w-1/3 md:mt-20" data-aos="fade-up">
       <div data-aos="fade-up" data-aos-delay="100">
@@ -13,9 +29,9 @@ function CouponInput() {
         </div>
       </div>
       <div
-        className="flex items-center border overflow-hidden w-full"
-        data-aos="fade-up"
-        data-aos-delay="200"
+        className={`flex items-center border overflow-hidden w-full ${
+          invalid ? 'border-red-500' : ''
+        }`}
       >
         <div className="flex-shrink-0 px-3 text-gray-500">
           <svg
@@ -34,11 +50,27 @@ function CouponInput() {
 
         <input
           type="text"
+          value={code}
+          onChange={handleChange}
+          maxLength={MAX_LENGTH}
+          aria-invalid={invalid}
           className="flex-grow py-3 px-2 text-[16px] outline-none"
           placeholder="Coupon code"
         />
 
-        <button className="pr-5 py-2 text-md font-medium ">Apply</button>
+        <button
+          onClick={handleApply}
+          className="pr-5 py-2 text-md font-medium"
+          disabled={!code || code.length === 0}
+        >
+          Apply
+        </button>
+      </div>
+      <div className="mt-2 text-sm">
+        <span className="text-gray-500">
+          {code.length}/{MAX_LENGTH}
+        </span>
+        {invalid && <div className="text-red-500 mt-1">Coupon is invalid</div>}
       </div>
     </div>
   );
