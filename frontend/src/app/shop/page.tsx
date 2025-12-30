@@ -10,8 +10,8 @@ import Loader from '../../components/feedback/loader/Loader';
 import { usePagination } from '../../hooks/usePagination';
 import { ProductType } from '../../types/product.dt';
 import { SHOP_PAGE_IMAGE } from '../../constants/assets';
+import usePageResizer from '../../hooks/usePageResizer';
 
-const PAGE_SIZE = 12;
 
 export default function ShopPage() {
   const [itemsData, setItemsData] = useState<{
@@ -21,6 +21,7 @@ export default function ShopPage() {
   const [error, setError] = useState(null);
 
   const { page, handlePageChange } = usePagination();
+  const { pageSize } = usePageResizer(handlePageChange);
 
   const [selectedCategory, setSelectedCategory] = useState('All Rooms');
   const [priceRange, setPriceRange] = useState<[number, number] | undefined>(
@@ -48,7 +49,7 @@ export default function ShopPage() {
           params.append('order', selectedOrder);
         }
         params.append('page', String(page));
-        params.append('pageSize', String(PAGE_SIZE));
+        params.append('pageSize', String(pageSize));
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/product?${params.toString()}`,
@@ -65,7 +66,7 @@ export default function ShopPage() {
     };
 
     fetchProducts();
-  }, [priceRange, selectedCategory, selectedOrder, page]);
+  }, [priceRange, selectedCategory, selectedOrder, page, pageSize]);
 
   if (!itemsData) {
     return <Loader />;
@@ -83,6 +84,7 @@ export default function ShopPage() {
         <ShopFilter
           itemsData={itemsData}
           page={page}
+          pageSize={pageSize}
           handlePageChange={handlePageChange}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}

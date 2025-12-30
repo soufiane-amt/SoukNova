@@ -9,8 +9,7 @@ import Loader from '../../components/feedback/loader/Loader';
 import { usePagination } from '../../hooks/usePagination';
 import { ArticleType } from '../../types/article.dt';
 import { BLOG_PAGE_IMAGE } from '../../constants/assets';
-
-const PAGE_SIZE = 16;
+import usePageResizer from '../../hooks/usePageResizer';
 
 function BlogPage() {
   const [itemsData, setItemsData] = useState<{
@@ -18,18 +17,19 @@ function BlogPage() {
     totalPages: number;
   } | null>();
   const { page, handlePageChange } = usePagination();
+  const { pageSize } = usePageResizer(handlePageChange);
 
   useEffect(() => {
     const fetchPageCatalog = async () => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/article?page=${page}&pageSize=${PAGE_SIZE}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/article?page=${page}&pageSize=${pageSize}`,
       );
 
       const data = await response.json();
       setItemsData(data);
     };
     fetchPageCatalog();
-  }, [page]);
+  }, [page, pageSize]);
 
   if (!itemsData) {
     return <Loader />;
@@ -48,6 +48,7 @@ function BlogPage() {
         <BlogCatalog
           itemsData={itemsData}
           page={page}
+          pageSize={pageSize}
           handlePageChange={handlePageChange}
         />
       </div>
