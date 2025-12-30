@@ -100,6 +100,9 @@ export class ProductService {
     return {
       ...productData,
       title: getFirstTwoWords(productData.title),
+      rate:
+        comments.map((comment) => comment.rating).reduce((a, b) => a + b, 0) /
+        (comments.length || 1),
       comments: comments.map((comment) => ({
         id: comment.id,
         name: `${comment.user.firstName} ${comment.user.lastName}`,
@@ -113,8 +116,8 @@ export class ProductService {
   async getProducts(query: ProductQueryDto) {
     const redis = this.redisService.getClient();
 
-    const page = query.page;
-    const pageSize = query.pageSize;
+    const page = Number(query.page) || 1;
+    const pageSize = Number(query.pageSize) || 12;
     const skip = (page - 1) * pageSize;
 
     const cacheKey = `products:${JSON.stringify({
@@ -143,18 +146,18 @@ export class ProductService {
     }
 
     const orderMap = {
-      rate_asc: { rate: 'asc' },
-      rate_desc: { rate: 'desc' },
-      price_asc: { price: 'asc' },
-      price_desc: { price: 'desc' },
-      date_asc: { date: 'asc' },
-      date_desc: { date: 'desc' },
+      rate_asc: [{ rate: 'asc' }, { id: 'asc' }],
+      rate_desc: [{ rate: 'desc' }, { id: 'asc' }],
+      price_asc: [{ price: 'asc' }, { id: 'asc' }],
+      price_desc: [{ price: 'desc' }, { id: 'asc' }],
+      date_asc: [{ date: 'asc' }, { id: 'asc' }],
+      date_desc: [{ date: 'desc' }, { id: 'asc' }],
     };
 
-    const orderBy =
-      query.order && orderMap[query.order]
-        ? orderMap[query.order]
-        : { rate: 'desc' };
+    const orderBy = (query.order && orderMap[query.order]) ?? [
+      { rate: 'desc' },
+      { id: 'asc' },
+    ];
 
     const [totalCount, products] = await Promise.all([
       this.prismaService.product.count({ where: filters }),
