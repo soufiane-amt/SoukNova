@@ -46,3 +46,18 @@ export const getFormatInDate = (date: string | Date) => {
 
   return today.toLocaleDateString('en-US', options);
 };
+
+
+export function getColumns(width: number) {
+  if (width >= 1536) return 6; // 2xl
+  if (width >= 1024) return 4; // lg
+  if (width >= 640) return 2;  // sm
+  return 1;
+}
+
+export function getPageSize() {
+  const ROWS = 4;
+  const width = window.innerWidth;
+  const cols = getColumns(width);
+  return cols * ROWS;
+}
