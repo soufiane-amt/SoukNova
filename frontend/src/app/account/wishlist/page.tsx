@@ -10,11 +10,7 @@ function WishPage() {
 
   if (loading) return <Loader />;
 
-  return (
-    <SettingsNavigator>
-      <WishList />
-    </SettingsNavigator>
-  );
+  return <WishList />;
 }
 
 export default WishPage;
