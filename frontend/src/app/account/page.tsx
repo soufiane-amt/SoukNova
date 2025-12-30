@@ -11,11 +11,7 @@ function MyAccountPage() {
   
   if (loading) return <div></div>;
 
-  return (
-    <SettingsNavigator>
-      <AccountDetailsForm />
-    </SettingsNavigator>
-  );
+  return <AccountDetailsForm />;
 }
 
 export default MyAccountPage;

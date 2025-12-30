@@ -10,11 +10,7 @@ function OrderPage() {
 
   if (loading) return <Loader />;
 
-  return (
-    <SettingsNavigator>
-      <OrderHistory />
-    </SettingsNavigator>
-  );
+  return <OrderHistory />;
 }
 
 export default OrderPage;
