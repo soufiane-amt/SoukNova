@@ -7,15 +7,16 @@ import ShippingAddress from './components/ShippingAddress';
 import OrderSummary from './components/OrderSummaryCheckout';
 import CartNavigator from '../../components/ui/Cart/CartNavigator';
 import { SiteFooter } from '../../components/layout/SiteFooter';
-import { useLoader } from '../../hooks/useLoader';
 import Loader from '../../components/feedback/loader/Loader';
 import { useCart } from '../../context/CartContext';
 import { useRouter } from 'next/navigation';
 import { useAuthGuard } from '../../hooks/useAuthGuard';
+import { useState } from 'react';
+import { CircularProgress } from '@mui/material';
 
 function CheckoutPage() {
   const { total } = useCart();
-  const loading = useLoader(1500);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   useAuthGuard();
 
@@ -26,8 +27,8 @@ function CheckoutPage() {
         body: JSON.stringify({
           orderTotal: total,
         }),
-        headers:{
-          'content-type': 'application/json'
+        headers: {
+          'content-type': 'application/json',
         },
         credentials: 'include',
       });
@@ -37,6 +38,7 @@ function CheckoutPage() {
       }
 
       const data = await res.json();
+      setLoading(true);
       router.push(`/orderComplete?orderId=${data.id}`);
     } catch (e: any) {
       console.error(e.message);
@@ -69,9 +71,10 @@ function CheckoutPage() {
                   e.preventDefault();
                   placeOrder();
                 }}
+                disabled={loading}
                 className="w-full bg-black text-white rounded-lg py-2 cursor-pointer md:px-5 font-semibold"
               >
-                Place Order
+                {loading ? <CircularProgress size={18} color="inherit" /> : 'Place Order'}
               </button>
             </div>
           </div>

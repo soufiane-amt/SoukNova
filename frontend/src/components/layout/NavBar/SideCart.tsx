@@ -4,18 +4,42 @@ import { poppins } from '@/layout';
 import CheckoutCartItem from '@/checkout/components/CheckoutCartItem';
 import { useCart } from '../../../context/CartContext';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { CircularProgress } from '@mui/material';
 
 interface SideCartProps {
   isOpen: boolean;
+  toggleCartSideBar: () => void;
 }
-function SideCart({ isOpen }: SideCartProps) {
+function SideCart({ isOpen, toggleCartSideBar  }: SideCartProps) {
   const { cart, subtotal, total } = useCart();
   const route = useRouter();
-  const navigateCart = () => {
-    if (cart.length > 0) route.push('/cart');
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
+  const [loadingCart, setLoadingCart] = useState(false);
+  const navigateCart = async () => {
+    if (cart.length === 0) return;
+    try {
+      setLoadingCart(true);
+      toggleCartSideBar();
+      await route.push('/cart');
+    } catch (e) {
+      console.error('Navigation to cart failed', e);
+    } finally {
+      setLoadingCart(false);
+    }
   };
-  const navigateCheckout = () => {
-    if (cart.length > 0) route.push('/checkout?shipping=free');
+
+  const navigateCheckout = async () => {
+    if (cart.length === 0) return;
+    try {
+      setLoadingCheckout(true);
+      toggleCartSideBar();
+      await route.push('/checkout?shipping=free');
+    } catch (e) {
+      console.error('Navigation to checkout failed', e);
+    } finally {
+      setLoadingCheckout(false);
+    }
   };
   return (
     <AnimatePresence>
@@ -65,14 +89,26 @@ function SideCart({ isOpen }: SideCartProps) {
               <button
                 className="w-full bg-black text-white rounded-lg py-3 cursor-pointer font-medium"
                 onClick={navigateCheckout}
+                disabled={loadingCheckout}
+                aria-disabled={loadingCheckout}
               >
-                Checkout
+                {loadingCheckout ? (
+                  <CircularProgress size={18} sx={{ color: 'white' }} />
+                ) : (
+                  'Checkout'
+                )}
               </button>
               <button
                 className="cursor-pointer text-sm font-semibold border-b w-20 mt-4"
                 onClick={navigateCart}
+                disabled={loadingCart}
+                aria-disabled={loadingCart}
               >
-                View Cart
+                {loadingCart ? (
+                  <CircularProgress size={14} sx={{ color: 'currentColor' }} />
+                ) : (
+                  'View Cart'
+                )}
               </button>
             </div>
           </div>

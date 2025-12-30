@@ -35,7 +35,7 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
   const { showToast } = useCart();
 
   const handleAddWishlist = async (productId: string) => {
-    // optimistic UI: toggle immediately
+    if (loading) return;
     setIsWishlisted(true);
     setLoading(true);
     try {
@@ -48,7 +48,6 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
       );
 
       if (!res?.ok) {
-        // revert optimistic update
         setIsWishlisted(false);
         showToast('Failed to add to wishlist');
         return;
@@ -66,7 +65,6 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (loading) return;
     handleAddWishlist(productId);
   };
 
@@ -75,14 +73,13 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
       className="rounded-full bg-white p-1 shadow-lg cursor-pointer"
       onClick={handleClick}
       aria-pressed={isWishlisted}
-      aria-disabled={loading}
+      disabled={loading}
     >
       {loading ? (
-        <div className={isWishlisted ? 'text-red-500' : 'text-black'}>
+        <div className="px-0.5">
           <CircularProgress
-            size={15}
-            color="inherit"
-            sx={{ paddingInline: 1.5 }}
+            size={20}
+            sx={{ color: isWishlisted ? 'red' : 'black' }}
           />
         </div>
       ) : isWishlisted ? (
@@ -124,6 +121,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const handleClickProduct = () => {
     route.push(`/product/${productId}`);
   };
+
+  const [adding, setAdding] = useState(false);
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (adding) return;
+    try {
+      setAdding(true);
+      await addToCart(productId);
+    } catch (err) {
+      console.error('Add to cart failed', err);
+    } finally {
+      setAdding(false);
+    }
+  };
+
   return (
     <div
       className="w-[300px] flex-shrink-0 cursor-pointer mb-5"
@@ -155,15 +168,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
         <div className="absolute bottom-4 w-[90%] opacity-0 cursor-pointer group-hover:opacity-100 transition-all duration-500">
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              addToCart(productId);
-            }}
-            className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold"
+            onClick={handleAddToCart}
+            className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold flex items-center justify-center"
             data-aos="zoom-in"
             data-aos-delay="500"
+            disabled={adding}
           >
-            Add To Cart
+            {adding ? (
+              <CircularProgress size={25} sx={{ color: 'white' }} />
+            ) : (
+              'Add To Cart'
+            )}
           </button>
         </div>
       </div>

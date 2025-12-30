@@ -4,7 +4,8 @@ import 'aos/dist/aos.css';
 import { inter, poppins } from '@/layout';
 import OrderedItem from './OrderedItem';
 import { CartItemType, useCart } from '../../../context/CartContext';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { CircularProgress } from '@mui/material';
 
 interface OrderProps {
   orderId: string | null;
@@ -14,6 +15,8 @@ function Order({ orderId, cartItems }: OrderProps) {
   const { resetCart } = useCart();
   const [cart] = useState(cartItems);
   const [orderInfo, setOrderInfo] = useState<any>();
+  const [loadingNav, setLoadingNav] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const deleteCarts = async () => {
@@ -134,11 +137,27 @@ function Order({ orderId, cartItems }: OrderProps) {
         data-aos="fade-up"
         data-aos-delay="500"
       >
-        <Link href={'/account/orders'}>
-          <button className="w-full bg-black text-white rounded-lg py-3 cursor-pointer font-semibold">
-            Purchase history
-          </button>
-        </Link>
+        <button
+          onClick={async () => {
+            if (loadingNav) return;
+            setLoadingNav(true);
+            try {
+              await router.push('/account/orders');
+            } catch (e) {
+              console.error('Navigation failed', e);
+            } finally {
+              setLoadingNav(false);
+            }
+          }}
+          disabled={loadingNav}
+          className="w-full bg-black text-white rounded-lg py-3 cursor-pointer font-semibold disabled:opacity-60"
+        >
+          {loadingNav ? (
+            <CircularProgress size={18} color="inherit" />
+          ) : (
+            'Purchase history'
+          )}
+        </button>
       </div>
     </div>
   );
