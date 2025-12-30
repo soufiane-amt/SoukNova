@@ -3,6 +3,7 @@ import { poppins } from '@/layout';
 import CustomButton from '../../../components/buttons/CustomButton';
 import Link from 'next/link';
 import ProductCard from '../../../components/cards/ProductCard/ProductCard';
+import ProductCarouselSkeleton from './ProductCarouselSkeleton';
 import { useEffect, useState } from 'react';
 import { ProductType } from '../../../types/product.dt';
 
@@ -30,24 +31,28 @@ export default function NewArrivalSection() {
           <CustomButton label="More products" href="/shop" />
         </div>
       </div>
-      <div className="flex overflow-x-auto overflow-y-hidden space-x-6 py-10 custom-scrollbar">
-        {recentProducts.map((item, index) => (
-          <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
-            <Link href={`/product/${item.id}`}>
-              <ProductCard
-                productId={item.id}
-                productName={item.title}
-                currentPrice={item.price}
-                originalPrice={item.price}
-                discountPercentage={item.discount}
-                rating={item.rate ?? 5}
-                image={item.primary_image}
-                date={item.date ?? ''}
-              />
-            </Link>
-          </div>
-        ))}
-      </div>
+      {recentProducts.length > 0 ? (
+        <div className="flex overflow-x-auto overflow-y-hidden space-x-6 py-10 custom-scrollbar">
+          {recentProducts.map((item, index) => (
+            <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
+              <Link href={`/product/${item.id}`}>
+                <ProductCard
+                  productId={item.id}
+                  productName={item.title}
+                  currentPrice={item.price}
+                  originalPrice={item.price}
+                  discountPercentage={item.discount}
+                  rating={item.rate ?? 5}
+                  image={item.primary_image}
+                  date={item.date ?? ''}
+                />
+              </Link>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <ProductCarouselSkeleton />
+      )}
     </section>
   );
 }
