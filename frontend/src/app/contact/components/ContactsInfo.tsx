@@ -12,7 +12,7 @@ interface ContactData {
 const contacts: ContactData[] = [
   {
     title: 'ADDRESS',
-    value: '234 Hai Trieu, Ho Chi Minh City, Viet Nam',
+    value: '1 Bd de l\'Océan, Casablanca 20180, Morocco',
     icon: <BusinessOutlinedIcon sx={{ fontSize: 30 }} />,
   },
   {

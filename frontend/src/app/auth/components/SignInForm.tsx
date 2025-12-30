@@ -87,7 +87,7 @@ export default function SignInForm() {
           <p className="text-red-500 text-xs">{errors.password?.message}</p>
         </div>
 
-        <div className="flex justify-center">
+        <div className={`flex justify-center ${poppins.className}`}>
           <button
             className="w-[90%] md:w-full py-3 bg-[#141718] text-white rounded-md hover:bg-[#47555a] cursor-pointer transition-colors duration-300"
             type="submit"

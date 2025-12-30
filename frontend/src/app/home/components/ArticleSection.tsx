@@ -30,9 +30,9 @@ export function ArticleSection({ articleId = "1" }: ArticleSectionProps) {
         <CustomButton label="More articles" href="/blog" />
       </div>
 
-      <div className=" flex flex-col xl:flex-row items-center justify-between gap-x-5">
+      <div className=" flex flex-col xl:flex-row items-center justify-between gap-x-5 lg:gap-x-15 mx-auto">
         {articles.map((item: any, index: number) => (
-          <div key={item.id} data-aos="fade-up" data-aos-delay={index * 150}>
+          <div key={item.id} data-aos="fade-up" className='h-full w-full' data-aos-delay={index * 150}>
             <ArticleCard id={item.id} title={item.title} image={item.image} />
           </div>
         ))}
