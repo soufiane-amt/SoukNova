@@ -202,7 +202,6 @@ function AccountDetailsForm() {
         </button>
       </div>
 
-      {/* Feedback messages */}
       {error && <p className="text-red-600 font-semibold mt-4">{error}</p>}
       {success && (
         <p className="text-green-600 font-semibold mt-4">{success}</p>

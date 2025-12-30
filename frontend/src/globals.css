@@ -47,7 +47,7 @@ body {
 
 .swiper-button-next::after,
 .swiper-button-prev::after {
-  color: rgba(0, 0, 0, 0.5) !important;
+  color: rgba(0, 97, 214, 0.5) !important;
   font-size: clamp(20px, 3vw, 35px) !important;
 }
 
@@ -75,4 +75,41 @@ body {
 .swiper-button-next.swiper-button-black::after,
 .swiper-button-prev.swiper-button-black::after {
   color: #fff !important;
+}
+
+/* Smaller nav buttons */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: clamp(16px, 2.5vw, 28px) !important;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  width: clamp(30px, 4vw, 48px) !important;
+  height: clamp(30px, 4vw, 48px) !important;
+}
+
+/* Slightly less prominent background */
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+@media (min-width: 1640px) {
+  .swiper {
+    max-height: 260px;
+  }
+  .swiper-slide img,
+  .swiper-slide picture {
+    max-height: 220px;
+  }
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 18px !important;
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 36px !important;
+    height: 36px !important;
+  }
 }

@@ -17,7 +17,7 @@ function ContactPage() {
         <div>
           <div
             className="flex mt-4 space-x-2"
-            data-aos="fade-down"
+            data-aos="fade-up"
             data-aos-delay="200"
           >
             <Traversal
