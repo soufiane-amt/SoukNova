@@ -10,11 +10,7 @@ function MyAccountPage() {
 
   if (loading) return <Loader />;
 
-  return (
-    <SettingsNavigator>
-      <AccountDetailsForm />
-    </SettingsNavigator>
-  );
+  return <AccountDetailsForm />;
 }
 
 export default MyAccountPage;

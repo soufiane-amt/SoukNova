@@ -21,7 +21,7 @@ const Dropdown = () => {
   const items = ['Account', 'Orders', 'Wishlist'];
 
   const current =
-    items.find((item) => pathname === `/${item.toLowerCase()}`) || 'Account';
+    items.find((item) => pathname.endsWith(item.toLowerCase())) || 'Account';
 
   const handleSignOut = async () => {
     await api.post('/auth/signout');
@@ -97,7 +97,7 @@ const Dropdown = () => {
               key={item}
               href={`/account/${item.toLowerCase()}`}
               className={`text-gray-700 block py-2 text-md mb-2 hover:bg-gray-100 cursor-pointer ${
-                current === item ? 'font-bold border-b' : 'font-medium'
+                current === item ? 'font-bold' : 'font-medium'
               } ${inter.className}`}
               role="menuitem"
             >
