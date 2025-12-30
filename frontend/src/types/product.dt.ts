@@ -18,7 +18,7 @@ export interface ProductType {
   package_dimensions?: string;
   originalPrice?: number;
   primary_image?: string;
-  categoriesText?: string;
+  categories?: string[];
   item_model_number?: string;
   about_item?: string;
   images?: string[];
