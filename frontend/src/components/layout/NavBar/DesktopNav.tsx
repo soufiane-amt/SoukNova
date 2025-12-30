@@ -116,10 +116,7 @@ export function DesktopNav({
             <Search className="w-6 h-6 text-gray-800" />
           </motion.button>
           {isSearchOpen && (
-            <SearchContainer
-              toggleSearch={toggleSearch}
-              isDesktop={true}
-            />
+            <SearchContainer toggleSearch={toggleSearch} isDesktop={true} />
           )}
         </div>
         <div>
@@ -147,7 +144,7 @@ export function DesktopNav({
           </motion.button>
         </div>
       </motion.div>
-      <SideCart isOpen={isOpen} />
+      <SideCart isOpen={isOpen} toggleCartSideBar={toggleCartSideBar} />
       {isOpen && (
         <div
           className="fixed inset-0 bg-[#00000052] z-10"
