@@ -1,7 +1,8 @@
 'use client';
 import { useState } from 'react';
 import 'aos/dist/aos.css';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { CircularProgress } from '@mui/material';
 import { ShippingOption } from '../../../types/types';
 
 interface CartSummaryProps {
@@ -10,6 +11,8 @@ interface CartSummaryProps {
 }
 function CartSummary({ subtotal, total }: CartSummaryProps) {
   const [shipping, setShipping] = useState<ShippingOption>('free');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const shippingCost =
     shipping === 'express' ? 15 : shipping === 'pickup' ? 21 : 0;
@@ -62,11 +65,27 @@ function CartSummary({ subtotal, total }: CartSummaryProps) {
         </div>
       </div>
       <div className="mt-5 md:mt-0" data-aos="fade-up" data-aos-delay="700">
-        <Link href={`/checkout?shipping=${shipping}`}>
-          <button className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold md:px-5">
-            Checkout
-          </button>
-        </Link>
+        <button
+          onClick={async () => {
+            if (loading) return;
+            setLoading(true);
+            try {
+              await router.push(`/checkout?shipping=${shipping}`);
+            } catch (e) {
+              console.error('Failed to navigate to checkout', e);
+            } finally {
+              setLoading(false);
+            }
+          }}
+          disabled={loading}
+          className="w-full bg-black text-white rounded-lg py-2 cursor-pointer font-semibold md:px-5 disabled:opacity-60"
+        >
+          {loading ? (
+            <CircularProgress size={18} color="inherit" />
+          ) : (
+            'Checkout'
+          )}
+        </button>
       </div>
     </div>
   );
