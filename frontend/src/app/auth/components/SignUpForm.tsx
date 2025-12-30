@@ -9,23 +9,30 @@ import { useRouter } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
 import { CircularProgress } from '@mui/material';
 import { poppins } from '@/layout';
+import TermsModal from './TermsOfUsage';
 
-const inputClass =
-  `w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base ${poppins.className}`
+const inputClass = `w-full pb-2 border-b border-b-[#E8ECEF] focus:outline-none text-sm text-color-primary md:text-base ${poppins.className}`;
 
 export default function SignUpForm() {
   const router = useRouter();
   const { showToast } = useCart();
   const [loading, setLoading] = useState(false);
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<SignUpInput>({
     resolver: zodResolver(SignUpSchema),
   });
   const [serverMessage, setServerMessage] = useState('');
+
+  const handleAccept = () => {
+    setValue('acceptTerms', true, { shouldValidate: true });
+    setIsTermsOpen(false);
+  };
 
   const onSubmit = async (data: SignUpInput) => {
     setLoading(true);
@@ -37,9 +44,8 @@ export default function SignUpForm() {
     } catch (error: any) {
       const msg = error.response?.data?.message || 'Signup failed';
       setServerMessage(msg);
-    }
-    finally{
-        setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,16 +56,20 @@ export default function SignUpForm() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 1, ease: 'easeOut' }}
     >
+      <TermsModal onAccept={handleAccept} isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
       <div className=" md:my-8 my-4">
         <div className="md:my-6">
           <h1 className="text-[#141718] text-2xl md:text-4xl font-bold ">
-            {loading ? <CircularProgress size={20} color="inherit"/> : 'Sign Up'}
+            Sign Up
           </h1>
         </div>
         <div>
           <label className="text-color-primary text-sm md:text-base ">
             Already have an account?&nbsp;
-            <a className="font-bold text-black text-orange-500 hover:border-b" href="/auth/signin">
+            <a
+              className="font-bold text-black text-orange-500 hover:border-b"
+              href="/auth/signin"
+            >
               Sign in
             </a>
           </label>
@@ -112,21 +122,32 @@ export default function SignUpForm() {
           />
           <label className="text-color-primary text-xs md:text-sm">
             I agree with&nbsp;
-            <a className="font-bold text-black hover:underline cursor-pointer">
+            {/* 3. Add onClick handlers */}
+            <a
+              onClick={() => setIsTermsOpen(true)}
+              className="font-bold text-black hover:underline cursor-pointer"
+            >
               Privacy Policy
             </a>
             &nbsp;and&nbsp;
-            <a className="font-bold text-black hover:underline cursor-pointer">
+            <a
+              onClick={() => setIsTermsOpen(true)}
+              className="font-bold text-black hover:underline cursor-pointer"
+            >
               Terms of Use
             </a>
-          </label>
+          </label>{' '}
         </div>
-        <div className="flex justify-center">
+        <div className={`flex justify-center ${poppins.className}`}>
           <button
             className="w-[90%] md:w-full py-3 bg-[#141718] text-white rounded-md hover:bg-[#47555a] cursor-pointer transition-colors duration-300"
             type="submit"
           >
-            Sign Up
+            {loading ? (
+              <CircularProgress size={20} color="inherit" />
+            ) : (
+              'Sign Up'
+            )}
           </button>
         </div>
         <div className="flex justify-center">
