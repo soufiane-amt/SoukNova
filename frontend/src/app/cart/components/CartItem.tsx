@@ -56,9 +56,9 @@ export function CartItem({
         <div
           className={`h-full text-sm flex flex-col justify-between md:flex-row  ${inter.className}`}
         >
-          <div className="flex flex-col justify-around h-full">
-            <div>
-              <p className="font-semibold">{productName}</p>
+          <div className="flex flex-col justify-around h-full flex-1 min-w-0">
+            <div className=" w-30">
+              <p className="font-semibold text-ellipsis">{productName}</p>
             </div>
             <div>
               <p className="text-[var(--color-primary)] text-xs md:m-0">
@@ -119,7 +119,7 @@ export function CartItem({
         </div>
 
         <div className="flex flex-col justify-start">
-          <p className=" text-[15px] md:text-[18px]">${price}</p>
+          <p className="text-[14px] md:text-[16px]">${price}</p>
           <button
             className="block md:hidden rounded-full hover:bg-gray-200 text-xl text-gray-500 px-4 text-end font-bold"
             onClick={handleRemove}
@@ -134,7 +134,7 @@ export function CartItem({
           <div></div>
         </div>
         <div className="hidden md:block">
-          <p className=" font-semibold text-[15px] md:text-[18px]">
+          <p className=" font-semibold text-[14px] md:text-[16px]">
             ${((productQuantityMap[productId] || 0) * price).toFixed(2)}
           </p>
         </div>
