@@ -1,7 +1,6 @@
 'use client';
 
 import Loader from '../../../components/feedback/loader/Loader';
-import SettingsNavigator from '../../../components/ui/Settings/SettingsWrap';
 import { useLoader } from '../../../hooks/useLoader';
 import WishList from './components/WishList';
 

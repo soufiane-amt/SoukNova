@@ -1,3 +1,5 @@
+'use client';
+
 import { Grid } from '@mui/material';
 import EmptySectionMessage from '../../../components/feedback/EmptySection';
 import CustomPagination from '../../../components/ui/CustomPagination';

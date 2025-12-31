@@ -48,7 +48,7 @@ function MessageInput() {
       setSuccess(true);
       setForm({ firstName: '', lastName: '', message: '' });
     } catch (err) {
-      setErrors({ message: 'Failed to send message, try again later' });
+      setErrors({ message: 'Failed to send message, try again later ' + err });
     } finally {
       setLoading(false);
     }

@@ -326,7 +326,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
       showToast('Product is added to wishlist!');
     } catch (err) {
       console.error(err);
-      showToast('Failed to add to wishlist', 'error');
+      showToast('Failed to add to wishlist');
     } finally {
       setWishlistLoading(false);
     }

@@ -31,7 +31,7 @@ export function NewsLetterSub() {
       setSuccess(true);
       setEmail('');
     } catch (e) {
-      setError('Something went wrong. Please try again.');
+      setError('Something went wrong. Please try again : ' + e);
     } finally {
       setLoading(false);
     }
