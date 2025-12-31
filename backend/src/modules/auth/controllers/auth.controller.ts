@@ -72,7 +72,12 @@ export class AuthController {
 
   @Post('signout')
   signOut(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('jwt');
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/',
+    });
     return { message: 'Signed out successfully' };
   }
 }
