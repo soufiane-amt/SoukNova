@@ -178,6 +178,8 @@ function AccountNavigator() {
     undefined,
   );
 
+  const [userFirstName, setUserFirstName] = useState<string>('');
+
   useEffect(() => {
     async function fetchProfile() {
       try {
@@ -191,7 +193,7 @@ function AccountNavigator() {
         if (!res.ok) throw new Error('Failed to fetch profile');
 
         const data = await res.json();
-
+        setUserFirstName(data.firstName);
         const imageUrl = data.imageUrl
           ? `${process.env.NEXT_PUBLIC_API_SERVER}${data.imageUrl}`
           : DEFAULT_USER_IMAGE;
@@ -234,7 +236,9 @@ function AccountNavigator() {
           imageUrl={profileImage}
           onImageSelect={handleImageSelect}
         />
-        <p className="text-center font-semibold text-lg my-3">Soufiane</p>
+        <p className="text-center font-semibold text-lg my-3">
+          {userFirstName}
+        </p>
       </div>
       <Dropdown />
     </div>

@@ -93,7 +93,7 @@ export class UsersService {
     });
   }
 
-  async getUserProfileImage(userId: number): Promise<string | null> {
+  async getUserProfileImage(userId: number) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -102,6 +102,6 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    return user.image;
+    return { firstName: user.firstName, imageUrl: user.image };
   }
 }
