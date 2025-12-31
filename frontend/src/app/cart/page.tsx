@@ -6,48 +6,43 @@ import { SiteFooter } from '../../components/layout/SiteFooter';
 import CartItemsTable from './components/CartItemsTable';
 import CartSummary from './components/CartSummary';
 import CouponInput from './components/CouponInput';
-import { useLoader } from '../../hooks/useLoader';
-import Loader from '../../components/feedback/loader/Loader';
 import EmptySectionMessage from '../../components/feedback/EmptySection';
 import { useCart } from '../../context/CartContext';
-import { useAuthGuard } from '../../hooks/useAuthGuard';
+import AuthGuard from '@/account/AuthGuard';
 
 function CartPage() {
-  const loading = useLoader(1500);
   const { cart, subtotal, total } = useCart();
-  useAuthGuard();
-
-  if (loading) return <Loader />;
-
   return (
     <main className={`flex flex-col min-h-screen ${inter.className}`}>
-      <div className="mx-8 md:mx-16 lg:mx-32 mt-12 mb-4 flex-1">
-        <div className="flex md:justify-center my-2">
-          <p className="font-medium lg:text-6xl md:text-5xl text-4xl">Cart</p>
-        </div>
+      <AuthGuard>
+        <div className="mx-8 md:mx-16 lg:mx-32 mt-12 mb-4 flex-1">
+          <div className="flex md:justify-center my-2">
+            <p className="font-medium lg:text-6xl md:text-5xl text-4xl">Cart</p>
+          </div>
 
-        <CartNavigator />
+          <CartNavigator />
 
-        {cart.length > 0 ? (
-          <div>
-            <div className="w-full xl:flex xl:justify-between xl:gap-16">
-              <CartItemsTable cart={cart} />
-              <div className="xl:hidden">
+          {cart.length > 0 ? (
+            <div>
+              <div className="w-full xl:flex xl:justify-between xl:gap-16">
+                <CartItemsTable cart={cart} />
+                <div className="xl:hidden">
+                  <CouponInput />
+                </div>
+                <CartSummary subtotal={subtotal} total={total} />
+              </div>
+              <div className="hidden xl:flex w-full">
                 <CouponInput />
               </div>
-              <CartSummary subtotal={subtotal} total={total} />
             </div>
-            <div className="hidden xl:flex w-full">
-              <CouponInput />
+          ) : (
+            <div className="py-15 px-5">
+              <EmptySectionMessage message="No Products In Cart" />
             </div>
-          </div>
-        ) : (
-          <div className="py-15 px-5">
-            <EmptySectionMessage message="No Products In Cart" />
-          </div>
-        )}
-      </div>
-      <SiteFooter />
+          )}
+        </div>
+        <SiteFooter />
+      </AuthGuard>
     </main>
   );
 }

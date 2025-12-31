@@ -10,15 +10,14 @@ import { SiteFooter } from '../../components/layout/SiteFooter';
 import Loader from '../../components/feedback/loader/Loader';
 import { useCart } from '../../context/CartContext';
 import { useRouter } from 'next/navigation';
-import { useAuthGuard } from '../../hooks/useAuthGuard';
 import { Suspense, useState } from 'react';
 import { CircularProgress } from '@mui/material';
+import AuthGuard from '@/account/AuthGuard';
 
 function CheckoutPage() {
   const { total } = useCart();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  useAuthGuard();
 
   const placeOrder = async () => {
     try {
@@ -50,45 +49,47 @@ function CheckoutPage() {
   return (
     <Suspense>
       <main className={`${inter.className} `}>
-        <div className="mx-8 md:mx-16 lg:mx-32 my-12 flex flex-col gap-y-8">
-          <div className="flex md:justify-center mb-2">
-            <p className="font-medium lg:text-6xl md:text-5xl text-4xl my-2">
-              Checkout
-            </p>
-          </div>
-          <CartNavigator />
-          <form className="flex flex-col gap-15 md:flex-row md:justify-between">
-            <div className="flex-2 flex flex-col gap-y-8">
-              <ContactInfo />
-              <ShippingAddress />
-              <PaymentMethod />
-              <div className="md:hidden">
+        <AuthGuard>
+          <div className="mx-8 md:mx-16 lg:mx-32 my-12 flex flex-col gap-y-8">
+            <div className="flex md:justify-center mb-2">
+              <p className="font-medium lg:text-6xl md:text-5xl text-4xl my-2">
+                Checkout
+              </p>
+            </div>
+            <CartNavigator />
+            <form className="flex flex-col gap-15 md:flex-row md:justify-between">
+              <div className="flex-2 flex flex-col gap-y-8">
+                <ContactInfo />
+                <ShippingAddress />
+                <PaymentMethod />
+                <div className="md:hidden">
+                  <OrderSummary />
+                </div>
+                <div className="mt-5 md:mt-0">
+                  <button
+                    type="submit"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      placeOrder();
+                    }}
+                    disabled={loading}
+                    className="w-full bg-black text-white rounded-lg py-2 cursor-pointer md:px-5 font-semibold"
+                  >
+                    {loading ? (
+                      <CircularProgress size={18} color="inherit" />
+                    ) : (
+                      'Place Order'
+                    )}
+                  </button>
+                </div>
+              </div>
+              <div className=" flex-1 hidden md:block">
                 <OrderSummary />
               </div>
-              <div className="mt-5 md:mt-0">
-                <button
-                  type="submit"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    placeOrder();
-                  }}
-                  disabled={loading}
-                  className="w-full bg-black text-white rounded-lg py-2 cursor-pointer md:px-5 font-semibold"
-                >
-                  {loading ? (
-                    <CircularProgress size={18} color="inherit" />
-                  ) : (
-                    'Place Order'
-                  )}
-                </button>
-              </div>
-            </div>
-            <div className=" flex-1 hidden md:block">
-              <OrderSummary />
-            </div>
-          </form>
-        </div>
-        <SiteFooter />
+            </form>
+          </div>
+          <SiteFooter />
+        </AuthGuard>
       </main>
     </Suspense>
   );
