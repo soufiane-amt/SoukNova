@@ -1,10 +1,17 @@
-import { useEffect, useState } from "react";
-import { getPageSize } from "../utils/helpers";
+import { useEffect, useState } from 'react';
+import { getPageSize } from '../utils/helpers';
 
-const usePageResizer = (handlePageChange: (event: React.MouseEvent<HTMLButtonElement>, page: number) => void) => {
-  const [pageSize, setPageSize] = useState<number>(getPageSize());
+const usePageResizer = (
+  handlePageChange: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    page: number,
+  ) => void,
+) => {
+  const [pageSize, setPageSize] = useState<number>(() => getPageSize());
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const onResize = () => {
       handlePageChange({} as any, 1);
       setPageSize(getPageSize());
@@ -12,7 +19,7 @@ const usePageResizer = (handlePageChange: (event: React.MouseEvent<HTMLButtonEle
 
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
-  }, []);
+  }, [handlePageChange]);
 
   return { pageSize };
 };

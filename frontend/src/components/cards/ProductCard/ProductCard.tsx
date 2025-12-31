@@ -117,12 +117,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
   productName = getFirstTwoWords(productName);
   const isNew = isProductNew(date);
   const route = useRouter();
+  const [adding, setAdding] = useState(false);
+
   if (!image) return <></>;
   const handleClickProduct = () => {
     route.push(`/product/${productId}`);
   };
-
-  const [adding, setAdding] = useState(false);
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();

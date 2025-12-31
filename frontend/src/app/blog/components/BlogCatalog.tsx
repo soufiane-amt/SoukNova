@@ -6,7 +6,6 @@ import ArticleCard from './ArticalCard';
 import CustomPagination from '../../../components/ui/CustomPagination';
 import { ArticleType } from '../../../types/article.dt';
 import { Skeleton } from '@mui/material';
-import usePageResizer from '../../../hooks/usePageResizer';
 
 function ArticleCardSkeleton() {
   return (
