@@ -20,6 +20,7 @@ import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 @Controller('api/user')
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
   @Put()
   async updateProfile(
     @User('id') userId: number,
@@ -61,7 +62,7 @@ export class UsersController {
 
   @Get('profile')
   async getProfilePicture(@User('id') userId: number) {
-    const imageUrl = await this.usersService.getUserProfileImage(userId);
-    return { imageUrl: imageUrl };
+    const data = await this.usersService.getUserProfileImage(userId);
+    return data;
   }
 }
