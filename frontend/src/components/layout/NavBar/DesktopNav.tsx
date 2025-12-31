@@ -147,7 +147,7 @@ export function DesktopNav({
           </motion.button>
         </div>
       </motion.div>
-      <SideCart isOpen={isOpen} />
+      <SideCart isOpen={isOpen} toggleCartSideBar={toggleCartSideBar} />
       {isOpen && (
         <div
           className="fixed inset-0 bg-[#00000052] z-10"
