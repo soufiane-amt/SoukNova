@@ -32,7 +32,7 @@ export default function NewArrivalSection() {
         </div>
       </div>
       {recentProducts.length > 0 ? (
-        <div className="flex overflow-x-auto overflow-y-hidden space-x-6 py-10 custom-scrollbar">
+        <div className="flex overflow-x-auto overflow-y-hidden space-x-6 pt-5 pb-1 custom-scrollbar">
           {recentProducts.map((item, index) => (
             <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
               <Link href={`/product/${item.id}`}>

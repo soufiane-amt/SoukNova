@@ -47,7 +47,7 @@ body {
 
 .swiper-button-next::after,
 .swiper-button-prev::after {
-  color: rgba(0, 97, 214, 0.5) !important;
+  color: rgba(0, 0, 0, 0.5) !important;
   font-size: clamp(20px, 3vw, 35px) !important;
 }
 
