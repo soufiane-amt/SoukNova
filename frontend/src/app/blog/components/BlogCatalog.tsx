@@ -38,7 +38,7 @@ interface BlogProps {
   itemsData: {
     articles: ArticleType[];
     totalPages: number;
-  };
+  } | null;
   pageSize: number;
   page: number;
   handlePageChange: (e: React.ChangeEvent<unknown>, v: number) => void;
@@ -65,8 +65,9 @@ export default function BlogCatalog({
           Blogs
         </h2>
         <div className=" grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">
-          {(itemsData?.articles?.length ?? 0) > 0
-            ? itemsData.articles.map((article: any, index: number) => (
+          {itemsData && (itemsData?.articles?.length ?? 0) > 0 ? (
+            <>
+              {itemsData.articles.map((article: any, index: number) => (
                 <div
                   key={article.id}
                   data-aos="fade-up"
@@ -80,18 +81,24 @@ export default function BlogCatalog({
                     date={article.date}
                   />
                 </div>
-              ))
-            : Array.from({ length: pageSize }).map((_, idx) => (
-                <div key={`skeleton-${idx}`} className="flex justify-center">
-                  <ArticleCardSkeleton />
-                </div>
               ))}
+
+              <div className="col-span-full flex justify-center mt-6">
+                <CustomPagination
+                  pagesCount={itemsData.totalPages}
+                  page={page}
+                  handlePageChange={handlePageChange}
+                />
+              </div>
+            </>
+          ) : (
+            Array.from({ length: pageSize }).map((_, idx) => (
+              <div key={`skeleton-${idx}`} className="flex justify-center">
+                <ArticleCardSkeleton />
+              </div>
+            ))
+          )}
         </div>
-        <CustomPagination
-          pagesCount={itemsData.totalPages}
-          page={page}
-          handlePageChange={handlePageChange}
-        />
       </section>
     </div>
   );

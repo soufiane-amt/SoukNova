@@ -6,16 +6,11 @@ import { SiteFooter } from '../../components/layout/SiteFooter';
 import CartItemsTable from './components/CartItemsTable';
 import CartSummary from './components/CartSummary';
 import CouponInput from './components/CouponInput';
-import { useLoader } from '../../hooks/useLoader';
-import Loader from '../../components/feedback/loader/Loader';
 import EmptySectionMessage from '../../components/feedback/EmptySection';
 import { useCart } from '../../context/CartContext';
 
 function CartPage() {
-  const loading = useLoader(1500);
   const { cart, subtotal, total } = useCart();
-
-  if (loading) return <Loader />;
 
   return (
     <main className={`flex flex-col min-h-screen ${inter.className}`}>

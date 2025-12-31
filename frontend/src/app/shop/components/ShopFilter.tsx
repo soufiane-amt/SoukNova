@@ -65,7 +65,7 @@ interface ShopFilterProps {
   itemsData: {
     products: ProductType[];
     totalPages: number;
-  };
+  } | null;
   selectedCategory: string;
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
   priceRange: priceType;
@@ -128,7 +128,7 @@ export default function ShopFilter({
                 priceRange={priceRange}
               />
             )}
-            {(itemsData?.products?.length ?? 0) > 0 ? (
+            {itemsData && (itemsData?.products?.length ?? 0) > 0 ? (
               <ProductGrid
                 itemsData={itemsData}
                 selectedShape={selectedShape}
