@@ -57,7 +57,7 @@ export function getColumns(width: number) {
 
 export function getPageSize() {
   const ROWS = 4;
-  const width = window.innerWidth;
+  const width = typeof window !== 'undefined' ? window.innerWidth : 1200; // default desktop width during SSR
   const cols = getColumns(width);
   return cols * ROWS;
 }

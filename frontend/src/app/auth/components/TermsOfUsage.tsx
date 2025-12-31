@@ -8,12 +8,7 @@ interface ModalProps {
   onAccept?: () => void;
 }
 
-export default function InfoModal({
-  isOpen,
-  onClose,
-  title,
-  onAccept,
-}: ModalProps) {
+export default function InfoModal({ isOpen, onClose, onAccept }: ModalProps) {
   const [agreed, setAgreed] = useState(false);
 
   // Reset checkbox state whenever modal opens
@@ -70,52 +65,49 @@ export default function InfoModal({
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto p-6 text-sm text-gray-600 leading-relaxed">
               <div className="overflow-y-auto pr-4 text-sm text-gray-700 leading-relaxed custom-scrollbar">
-                {title === 'Terms of Use' ? (
-                  <div className="space-y-4">
-                    <p>
-                      <strong>1. Acceptance of Terms:</strong> By creating an
-                      account, you agree to follow our guidelines regarding the
-                      use of our cheat sheets and practice problems.
-                    </p>
-                    <p>
-                      <strong>2. Intellectual Property:</strong> All content,
-                      including the 70+ technical problems and solutions, are
-                      the property of this platform. You may use them for
-                      personal study but may not redistribute them for
-                      commercial gain.
-                    </p>
-                    <p>
-                      <strong>3. User Conduct:</strong> You agree not to attempt
-                      to scrape data or reverse-engineer the platform's API.
-                    </p>
-                    <p>
-                      <strong>4. Disclaimer:</strong> Materials are provided
-                      "as-is." While we strive for accuracy in our solutions, we
-                      are not liable for errors in technical content.
-                    </p>
-                  </div>
+                <div className="space-y-4">
+                  <p>
+                    <strong>1. Acceptance of Terms:</strong> By creating an
+                    account, you agree to follow our guidelines regarding the
+                    use of our cheat sheets and practice problems.
+                  </p>
+                  <p>
+                    <strong>2. Intellectual Property:</strong> All content,
+                    including the 70+ technical problems and solutions, are the
+                    property of this platform. You may use them for personal
+                    study but may not redistribute them for commercial gain.
+                  </p>
+                  <p>
+                    <strong>3. User Conduct:</strong> You agree not to attempt
+                    to scrape data or reverse-engineer the platform&apos;s API.
+                  </p>
+                  <p>
+                    <strong>4. Disclaimer:</strong> Materials are provided
+                    &quot;as-is.&quot; While we strive for accuracy in our solutions, we
+                    are not liable for errors in technical content.
+                  </p>
+                </div>
                 ) : (
-                  <div className="space-y-4">
-                    <p>
-                      <strong>1. Data Collection:</strong> We collect your name
-                      and email to personalize your learning experience and
-                      track your progress through the problem sets.
-                    </p>
-                    <p>
-                      <strong>2. Usage Tracking:</strong> We may track which
-                      problems you complete to improve our cheat sheet
-                      recommendations.
-                    </p>
-                    <p>
-                      <strong>3. Security:</strong> Your password is encrypted.
-                      We do not sell your personal data to third parties.
-                    </p>
-                    <p>
-                      <strong>4. Cookies:</strong> We use essential cookies to
-                      keep you signed in and maintain your session.
-                    </p>
-                  </div>
-                )}
+                <div className="space-y-4">
+                  <p>
+                    <strong>1. Data Collection:</strong> We collect your name
+                    and email to personalize your learning experience and track
+                    your progress through the problem sets.
+                  </p>
+                  <p>
+                    <strong>2. Usage Tracking:</strong> We may track which
+                    problems you complete to improve our cheat sheet
+                    recommendations.
+                  </p>
+                  <p>
+                    <strong>3. Security:</strong> Your password is encrypted. We
+                    do not sell your personal data to third parties.
+                  </p>
+                  <p>
+                    <strong>4. Cookies:</strong> We use essential cookies to
+                    keep you signed in and maintain your session.
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -129,7 +121,7 @@ export default function InfoModal({
                   className="w-5 h-5 rounded border-gray-300 text-black focus:ring-black"
                 />
                 <span className="text-sm font-medium text-gray-700">
-                  I have read and agree to the {title}
+                  I have read and agree to the Terms of Use & Privacy Policy
                 </span>
               </label>
 
