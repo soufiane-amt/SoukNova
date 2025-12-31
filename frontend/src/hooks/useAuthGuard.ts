@@ -23,6 +23,7 @@ export function useAuthGuard() {
           return;
         }
         setIsVerified(true);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
         if (!mounted) return;
         setIsVerified(false);
