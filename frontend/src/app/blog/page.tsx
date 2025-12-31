@@ -5,7 +5,6 @@ import SectionShow from '../../components/ui/SectionShow';
 import BlogCatalog from './components/BlogCatalog';
 import 'aos/dist/aos.css';
 import { SiteFooter } from '../../components/layout/SiteFooter';
-import Loader from '../../components/feedback/loader/Loader';
 import { usePagination } from '../../hooks/usePagination';
 import { ArticleType } from '../../types/article.dt';
 import { BLOG_PAGE_IMAGE } from '../../constants/assets';
@@ -15,7 +14,7 @@ function BlogPage() {
   const [itemsData, setItemsData] = useState<{
     articles: ArticleType[];
     totalPages: number;
-  } | null>();
+  } | null>(null);
   const { page, handlePageChange } = usePagination();
   const { pageSize } = usePageResizer(handlePageChange);
 
@@ -30,10 +29,6 @@ function BlogPage() {
     };
     fetchPageCatalog();
   }, [page, pageSize]);
-
-  if (!itemsData) {
-    return <Loader />;
-  }
 
   return (
     <main>
