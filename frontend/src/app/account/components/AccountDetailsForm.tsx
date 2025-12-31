@@ -48,9 +48,13 @@ function AccountDetailsForm() {
     );
 
     try {
-      const res = await fetch('/api/user', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
         method: 'PUT',
         body: JSON.stringify(cleanedPayload),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
       if (!res.ok) {
         const errorBody = await res.json().catch(() => ({}));
