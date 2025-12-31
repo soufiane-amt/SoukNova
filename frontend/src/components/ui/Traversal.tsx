@@ -35,7 +35,7 @@ const Traversal = ({ items }: TraversalProps) => {
       {items.map((item, index) => (
         <motion.div
           key={index}
-          className={`flex items-center gap-1 text-md lg:text-lg ${
+          className={`flex items-center gap-1 2xl:text-md ${
             index === items.length - 1 ? 'text-black truncate' : ''
           }`}
           variants={itemVariants}
