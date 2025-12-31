@@ -1,19 +1,14 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import Loader from '../../../components/feedback/loader/Loader';
 import { useCart } from '../../../context/CartContext';
-import { useLoader } from '../../../hooks/useLoader';
 import CartNavigator from '../../../components/ui/Cart/CartNavigator';
 import Order from './Order';
 
 function OrderCompleteContent() {
-  const loading = useLoader(1500);
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
   const { cart } = useCart();
-
-  if (loading) return <Loader />;
 
   if (!orderId) return <p className="text-center my-12">Invalid order ID</p>;
 

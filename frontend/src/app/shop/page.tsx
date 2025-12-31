@@ -6,19 +6,16 @@ import { useEffect, useState } from 'react';
 import SectionShow from '../../components/ui/SectionShow';
 import { inter } from '@/layout';
 import ShopFilter from './components/ShopFilter';
-import Loader from '../../components/feedback/loader/Loader';
 import { usePagination } from '../../hooks/usePagination';
 import { ProductType } from '../../types/product.dt';
 import { SHOP_PAGE_IMAGE } from '../../constants/assets';
 import usePageResizer from '../../hooks/usePageResizer';
 
-
 export default function ShopPage() {
   const [itemsData, setItemsData] = useState<{
     products: ProductType[];
     totalPages: number;
-  }>();
-  const [error, setError] = useState(null);
+  } | null>(null);
 
   const { page, handlePageChange } = usePagination();
   const { pageSize } = usePageResizer(handlePageChange);
@@ -61,17 +58,12 @@ export default function ShopPage() {
         const data = await res.json();
         setItemsData(data);
       } catch (e: any) {
-        setError(e.message);
+        console.error(e.message);
       }
     };
 
     fetchProducts();
   }, [priceRange, selectedCategory, selectedOrder, page, pageSize]);
-
-  if (!itemsData) {
-    return <Loader />;
-  }
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
