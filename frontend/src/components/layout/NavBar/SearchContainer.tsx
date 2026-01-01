@@ -27,7 +27,7 @@ function SearchedItemsList({
     <div
       className={`${
         isDesktop ? 'top-23 right-0' : 'z-50'
-      } absolute w-70 lg:w-96 max-h-[500px] bg-white shadow-lg rounded-lg border border-gray-200 `}
+      } absolute w-70 2xl:w-96 max-h-[500px] bg-white shadow-lg rounded-lg border border-gray-200 `}
     >
       <ul>
         {items.slice(0, len).map((item: any) => (
@@ -108,7 +108,7 @@ export default function SearchContainer({
       <input
         className={`${
           isDesktop ? 'absolute top-10 right-0' : ''
-        }  bg-white border border-gray-400 rounded text-gray-900 p-2 w-70 lg:w-96 lg:w-96 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+        }  bg-white border border-gray-400 rounded text-gray-900 p-2 w-70 2xl:w-96`}
         placeholder="Search"
         value={searchText}
         onChange={handleSearchTyping}
