@@ -73,7 +73,7 @@ const Toast = ({ mes }: toastProps) => {
       <div className={styleClasses} role="alert">
         <div className="flex items-center">
           <SuccessIcon />
-          <span className="font-medium text-sm sm:text-base">{mes}</span>
+          <span className="font-medium text-sm sm:text-base front-semibold">{mes}</span>
         </div>
         <button
           onClick={handleClose}
