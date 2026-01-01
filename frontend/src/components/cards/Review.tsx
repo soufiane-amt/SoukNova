@@ -12,8 +12,11 @@ interface ReviewProps {
 
 export const Review = ({ name, image, rate, comment }: ReviewProps) => {
   const imageUrl = image
-    ? `${process.env.NEXT_PUBLIC_API_URL}${image}`
+    ? image.startsWith('http')
+      ? image
+      : `${process.env.NEXT_PUBLIC_API_URL}${image}`
     : DEFAULT_USER_IMAGE;
+  console.log('Review Image URL:', imageUrl);
   return (
     <div className=" flex items-start mt-8 border-b border-gray-300 pb-8">
       <div className="flex-shrink-0 mr-5">
