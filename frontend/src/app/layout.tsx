@@ -36,6 +36,7 @@ export default function RootLayout({
     AOS.init({
       duration: 800,
       once: true,
+      offset: -50,
     });
   }, []);
 
