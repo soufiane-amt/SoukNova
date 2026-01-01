@@ -1,0 +1,72 @@
+[
+  {
+    "email": "alice@example.com",
+    "firstName": "Alice",
+    "lastName": "Johnson",
+    "password": "password123",
+    "image": "https://loremflickr.com/320/240/people?lock=1"
+  },
+  {
+    "email": "bob@example.com",
+    "firstName": "Bob",
+    "lastName": "Smith",
+    "password": "password123",
+    "image": "https://loremflickr.com/320/240/people?lock=2"
+  },
+  {
+    "email": "carol@example.com",
+    "firstName": "Carol",
+    "lastName": "Williams",
+    "password": "password123",
+    "image": "https://loremflickr.com/320/240/people?lock=3"
+  },
+  {
+    "email": "dave@example.com",
+    "firstName": "Dave",
+    "lastName": "Brown",
+    "password": "password123",
+    "image": "https://loremflickr.com/320/240/people?lock=4"
+  },
+  {
+    "email": "eve@example.com",
+    "firstName": "Eve",
+    "lastName": "Davis",
+    "password": "password123",
+    "image": "https://loremflickr.com/320/240/people?lock=5"
+  },
+  {
+    "email": "frank@example.com",
+    "firstName": "Frank",
+    "lastName": "Miller",
+    "password": "password123",
+    "image": "https://loremflickr.com/320/240/people?lock=6"
+  },
+  {
+    "email": "grace@example.com",
+    "firstName": "Grace",
+    "lastName": "Wilson",
+    "password": "password123",
+    "image": "https://loremflickr.com/320/240/people?lock=7"
+  },
+  {
+    "email": "henry@example.com",
+    "firstName": "Henry",
+    "lastName": "Moore",
+    "password": "password123",
+    "image": "https://loremflickr.com/320/240/people?lock=8"
+  },
+  {
+    "email": "irene@example.com",
+    "firstName": "Irene",
+    "lastName": "Taylor",
+    "password": "password123",
+    "image": "https://loremflickr.com/320/240/people?lock=9"
+  },
+  {
+    "email": "jack@example.com",
+    "firstName": "Jack",
+    "lastName": "Anderson",
+    "password": "password123",
+    "image": "https://loremflickr.com/320/240/people?lock=10"
+  }
+]
