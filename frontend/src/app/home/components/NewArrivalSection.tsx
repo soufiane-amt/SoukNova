@@ -1,7 +1,6 @@
 'use client';
 import { poppins } from '@/layout';
 import CustomButton from '../../../components/buttons/CustomButton';
-import Link from 'next/link';
 import ProductCard from '../../../components/cards/ProductCard/ProductCard';
 import ProductCarouselSkeleton from './ProductCarouselSkeleton';
 import { useEffect, useState } from 'react';
@@ -35,7 +34,6 @@ export default function NewArrivalSection() {
         <div className="flex overflow-x-auto overflow-y-hidden space-x-6 pt-5 pb-1 custom-scrollbar">
           {recentProducts.map((item, index) => (
             <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
-              <Link href={`/product/${item.id}`}>
                 <ProductCard
                   productId={item.id}
                   productName={item.title}
@@ -46,7 +44,6 @@ export default function NewArrivalSection() {
                   image={item.primary_image}
                   date={item.date ?? ''}
                 />
-              </Link>
             </div>
           ))}
         </div>
