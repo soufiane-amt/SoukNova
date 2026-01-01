@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from '../dto/createUser.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { User } from '@prisma/client';
@@ -53,13 +53,13 @@ export class UsersService {
     if (email) updateData.email = email;
     if (newPassword) {
       if (!oldPassword) {
-        throw new Error('Old password is required to change password');
+        throw new BadRequestException('Old password is required to change password');
       }
 
       const isValid = await this.comparePasswords(oldPassword, user.password);
 
       if (!isValid) {
-        throw new Error('Password is wrong');
+        throw new UnauthorizedException('Password is wrong');
       }
 
       updateData.password = await this.hashPassword(newPassword);
