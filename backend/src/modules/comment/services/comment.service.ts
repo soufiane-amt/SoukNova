@@ -29,6 +29,20 @@ export class CommentService {
       },
     });
 
+    const productComments = await this.prisma.comment.findMany({
+      where: { productId: comment.productId },
+      select: { rating: true },
+    });
+
+    const newRate =
+      productComments.map((c) => c.rating).reduce((a, b) => a + b, 0) /
+      productComments.length;
+
+    await this.prisma.product.update({
+      where: { id: comment.productId },
+      data: { rate: newRate },
+    });
+
     return {
       id: review.id,
       name: review.user.firstName + ' ' + review.user.lastName,
