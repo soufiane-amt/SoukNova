@@ -109,7 +109,7 @@ export function DesktopNav({
         <div className="hidden md:flex group relative">
           <motion.button
             aria-label="Search"
-            className="ml-4 transform transition-transform duration-200 hover:scale-110 cursor-pointer"
+            className="ml-2 md:ml-4 transform transition-transform duration-200 hover:scale-110 cursor-pointer"
             variants={listContainerVariants}
             onClick={toggleSearch}
           >
@@ -130,15 +130,15 @@ export function DesktopNav({
             </motion.button>
           </Link>
         </div>
-        <div className="ml-4 flex justify-end">
+        <div className="ml-2 md:ml-4 flex justify-end">
           <motion.button
             aria-label="Shopping bag"
-            className="transform transition-transform duration-200 hover:scale-110 cursor-pointer flex"
+            className="transform transition-transform duration-200 hover:scale-110 cursor-pointer flex relative"
             variants={listContainerVariants}
             onClick={toggleCartSideBar}
           >
             <ShoppingBag className="md:w-6 md:h-6 w-5 h-5 text-gray-800 mr-1" />
-            <span className="flex md:h-[21px] md:w-[21px] h-[18px] w-[18px] items-center justify-center rounded-[50%] bg-black font-inter md:text-xs text-[10px] font-bold text-white">
+            <span className="absolute -top-2 -right-2 flex h-[20px] w-[20px] items-center justify-center rounded-full bg-gradient-to-br from-[#141718] to-[#6C7275] font-inter text-xs font-bold text-white shadow-md border-2 border-white animate-bounce">
               {cart.length > 9 ? '9+' : cart.length}
             </span>
           </motion.button>

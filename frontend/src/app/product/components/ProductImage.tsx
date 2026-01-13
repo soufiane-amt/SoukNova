@@ -8,24 +8,22 @@ interface ProductImageProps {
 
 const ProductImage: React.FC<ProductImageProps> = ({ image, isNew }) => {
   return (
-    <div
-      className="relative bg-[#f4f4f4] h-[649px] flex items-center justify-center"
-      data-aos="fade-right"
-      data-aos-delay="200"
-    >
+    <div className="relative w-full h-full flex items-center justify-center p-8">
       <Image
         src={image}
         alt={`Product image${isNew ? ' - New' : ''}`}
         width={500}
-        height={349}
-        className="transition-transform duration-300 ease-in-out hover:scale-105"
+        height={500}
+        className="object-contain max-h-[500px] transition-transform duration-500 ease-out group-hover:scale-105"
         style={{ mixBlendMode: 'multiply' }}
+        priority
       />
-      <div className="absolute left-3 top-3 flex flex-col gap-2">
+      {/* Badges */}
+      <div className="absolute left-4 top-4 flex flex-col gap-2">
         {isNew && (
-          <Typography className="rounded flex justify-center !text-md !font-bold !bg-[#FFFFFF] px-3">
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-white shadow-sm">
             NEW
-          </Typography>
+          </span>
         )}
       </div>
     </div>

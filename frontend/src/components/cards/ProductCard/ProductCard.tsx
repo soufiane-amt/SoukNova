@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
 import React, { useState } from 'react';
 import { CircularProgress } from '@mui/material';
+import { routeModule } from 'next/dist/build/templates/pages';
 
 function getFirstTwoWords(title: string) {
   const words = title.split(' ');
@@ -33,6 +34,7 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [loading, setLoading] = useState(false);
   const { showToast } = useCart();
+  const route = useRouter();
 
   const handleAddWishlist = async (productId: string) => {
     if (loading) return;
@@ -49,7 +51,8 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
 
       if (!res?.ok) {
         setIsWishlisted(false);
-        showToast('Failed to add to wishlist');
+        route.push('/auth/signin');
+        showToast('Please sign in to add items to your wishlist.');
         return;
       }
 
@@ -57,7 +60,6 @@ const LikeButton = ({ productId }: LikeButtonProps) => {
     } catch (err) {
       setIsWishlisted(false);
       console.error(err);
-      showToast('Failed to add to wishlist');
     } finally {
       setLoading(false);
     }
