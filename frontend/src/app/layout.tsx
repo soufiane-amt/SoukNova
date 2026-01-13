@@ -8,17 +8,19 @@ import NavBar from '../components/layout/NavBar/Navbar';
 import { useEffect } from 'react';
 import AOS from 'aos';
 
-export const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-poppins',
-});
+// export const poppins = Poppins({
+//   subsets: ['latin'],
+//   weight: ['400', '500', '600', '700'],
+//   variable: '--font-poppins',
+// });
 
-export const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-inter',
-});
+// export const inter = Inter({
+//   subsets: ['latin'],
+//   weight: ['400', '500', '600', '700'],
+//   variable: '--font-inter',
+// });
+export const poppins = {}
+export const inter = {}
 
 export default function RootLayout({
   children,

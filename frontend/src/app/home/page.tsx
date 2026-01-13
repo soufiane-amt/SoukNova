@@ -9,13 +9,14 @@ import { PromoSection } from './components/PromoSection';
 
 function HomePage() {
   return (
-    <main>
-      <div className="px-6 md:px-12 lg:px-25 max-w-screen-2xl mx-auto">
+    <main className="overflow-hidden">
+      <div className="px-4 sm:px-6 md:px-12 lg:px-20 xl:px-25 max-w-screen-2xl mx-auto">
         <CustomCarousel />
         <PromoSection />
         <NewArrivalSection />
         <BenefitsDisplay />
       </div>
+
       <PromoHighlightSection />
       <ArticleSection />
       <NewsLetterSub />

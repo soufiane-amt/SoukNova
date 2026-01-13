@@ -11,28 +11,34 @@ const ThumbnailList: React.FC<ThumbnailListProps> = ({
   activeImage,
   onSelectImage,
 }) => {
-  if (!images) return <></>;
+  if (!images || images.length <= 1) return null;
+
   return (
-    <div className="flex justify-center mt-4 space-x-2" data-aos="fade-up">
+    <div className="flex justify-center gap-3 mt-4" data-aos="fade-up">
       {images.map((image, index) => {
         const img = image.trim();
+        const isActive = activeImage === img;
 
         return (
-          <div
+          <button
             key={img + index}
-            className={`cursor-pointer border-2 p-1 rounded-md ${
-              activeImage === img ? 'border-blue-500' : 'border-transparent'
+            className={`relative w-20 h-20 rounded-xl overflow-hidden bg-[#F5F5F5] transition-all duration-300 cursor-pointer ${
+              isActive
+                ? 'ring-2 ring-[#141718] ring-offset-2'
+                : 'opacity-60 hover:opacity-100 hover:ring-2 hover:ring-gray-300 hover:ring-offset-1'
             }`}
             onClick={() => onSelectImage(img)}
+            aria-label={`View image ${index + 1}`}
+            aria-pressed={isActive}
           >
             <Image
               src={img}
-              alt={`Thumbnail ${index + 1}`}
-              width={70}
-              height={70}
-              className="rounded-md"
+              alt={`Product thumbnail ${index + 1}`}
+              fill
+              className="object-contain p-2"
+              style={{ mixBlendMode: 'multiply' }}
             />
-          </div>
+          </button>
         );
       })}
     </div>
