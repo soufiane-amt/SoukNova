@@ -1,10 +1,7 @@
 'use client';
 
 import { poppins } from '@/layout';
-import { Typography } from '@mui/material';
-import React, { useState, useEffect, JSX } from 'react';
-
-
+import React, { useState, useEffect } from 'react';
 
 const targetDate = new Date();
 targetDate.setDate(targetDate.getDate() + 3);
@@ -15,10 +12,10 @@ function calculateTimeLeft() {
 
   if (difference > 0) {
     timeLeft = {
-      d: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      h: Math.floor((difference / (1000 * 60 * 60)) % 24),
-      m: Math.floor((difference / 1000 / 60) % 60),
-      s: Math.floor((difference / 1000) % 60),
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      mins: Math.floor((difference / 1000 / 60) % 60),
+      secs: Math.floor((difference / 1000) % 60),
     };
   }
 
@@ -41,46 +38,59 @@ const CountdownTimer: React.FC = () => {
     return () => clearTimeout(timer);
   });
 
-  const timerComponents: JSX.Element[] = [];
-
-  Object.keys(timeLeft).forEach((interval) => {
-    if (timeLeft[interval as keyof typeof timeLeft]) {
-      timerComponents.push(
-        <div
-          key={interval}
-          className="flex flex-col items-center justify-center  "
-        >
-          <span className="text-3xl font-medium bg-gray-100 md:p-5 p-3">
-            {timeLeft[interval as keyof typeof timeLeft]}
-          </span>
-          <span className="text-md text-black">{interval}</span>
-        </div>,
-      );
-    }
-  });
+  const timeUnits = [
+    { key: 'days', value: (timeLeft as any).days ?? 0 },
+    { key: 'hours', value: (timeLeft as any).hours ?? 0 },
+    { key: 'mins', value: (timeLeft as any).mins ?? 0 },
+    { key: 'secs', value: (timeLeft as any).secs ?? 0 },
+  ];
 
   return (
     <div className={`${poppins.className}`}>
       {isOfferExpired ? (
-        <span className={`text-sm font-semibold `}>
-          Offer Expired!
-        </span>
-      ) : (
-        <div>
-          <Typography
-            variant="h6"
-            color="#343839"
-            sx={{ fontWeight: 'thin', fontSize:17 ,color: "text-red-500"}}
+        <div className="flex items-center gap-2 text-red-500">
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-            Offer expires in:
-          </Typography>
-          <div className="flex items-center gap-2 mt-1">
-            {timerComponents.length ? (
-              timerComponents
-            ) : (
-              <span className="text-sm font-semibold">00:00:00</span>
-            )}
-          </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span className="text-sm font-semibold">Offer Expired!</span>
+        </div>
+      ) : (
+        <div className="flex items-center gap-3 sm:gap-4">
+          {timeUnits.map((unit, index) => (
+            <React.Fragment key={unit.key}>
+              {/* Time Unit Block */}
+              <div className="flex flex-col items-center">
+                <div className="relative bg-white rounded-xl shadow-sm border border-gray-100 px-3 py-2 sm:px-4 sm:py-3 min-w-[52px] sm:min-w-[64px]">
+                  <span className="text-xl sm:text-2xl md:text-3xl font-bold text-[#141718] tabular-nums">
+                    {String(unit.value).padStart(2, '0')}
+                  </span>
+                  {/* Decorative line */}
+                  <div className="absolute left-0 right-0 top-1/2 h-[1px] bg-gray-100 -translate-y-1/2 pointer-events-none" />
+                </div>
+                <span className="text-[10px] sm:text-xs text-[#6C7275] uppercase tracking-wider mt-1.5 font-medium">
+                  {unit.key}
+                </span>
+              </div>
+
+              {/* Separator (except for last item) */}
+              {index < timeUnits.length - 1 && (
+                <div className="flex flex-col gap-1.5 pb-5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#141718]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#141718]" />
+                </div>
+              )}
+            </React.Fragment>
+          ))}
         </div>
       )}
     </div>

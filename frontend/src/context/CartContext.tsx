@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { getFirstTwoWords } from '../utils/helpers';
 import Toast from '../components/ui/Toast';
+import { useRouter } from 'next/navigation';
 
 const calculateSubtotalCart = (cart: CartItemType[]) => {
   return cart.reduce((accumulator, currentItem) => {
@@ -57,6 +58,7 @@ export const useCart = () => {
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItemType[]>([]);
   const [toast, setToast] = useState<string | null>(null);
+  const route = useRouter();
 
   const showToast = useCallback((msg: string) => {
     setToast(msg);
@@ -106,7 +108,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             credentials: 'include',
           },
         );
-        if (!res?.ok) throw new Error('Failed to add to cart');
+        if (!res?.ok) {
+          route.push('/auth/signin');
+          throw new Error('Failed to add to cart');
+        }
         const item: CartItemType = await res?.json();
 
         setCart((prev) => {
@@ -155,7 +160,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             credentials: 'include',
           },
         );
-        if (!res?.ok) throw new Error('Failed to update cart');
+        if (!res?.ok) {
+          route.push('/auth/signin');
+          throw new Error('Failed to update the cart');
+        }
 
         if (quantity > 1)
           setCart((prev) =>

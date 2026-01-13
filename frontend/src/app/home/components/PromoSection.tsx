@@ -9,13 +9,14 @@ export const PromoSection = () => {
   return (
     <section
       aria-labelledby="promotions"
-      className={`my-12 ${poppins.className}`}
+      className={`my-16 ${poppins.className}`}
     >
-      <div className="md:flex md:items-center md:justify-between mb-8">
+      <div className="md:flex md:items-center md:justify-between mb-12">
         <div className="md:w-1/2" data-aos="fade-right">
-          <h1 className="font-medium md:text-[72px] text-[40px] md:leading-[80px] leading-[45px]">
-            Simply Unique<span className="text-red-400">/</span> Simply Better{' '}
-            <span className="text-red-400">.</span>
+          <h1 className="font-medium md:text-[72px] text-[40px] md:leading-[76px] leading-[45px] tracking-tight">
+            Simply Unique<span className="text-orange-400">/</span>
+            <br className="hidden md:block" />
+            Simply Better<span className="text-orange-400">.</span>
           </h1>
         </div>
         <div

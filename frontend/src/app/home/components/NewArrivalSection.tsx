@@ -8,47 +8,74 @@ import { ProductType } from '../../../types/product.dt';
 
 export default function NewArrivalSection() {
   const [recentProducts, setRecentProducts] = useState<ProductType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchRecentProduct = async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/product/recent`,
-      );
-      const data = await res.json();
-      setRecentProducts(data);
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/product/recent`,
+        );
+        const data = await res.json();
+        setRecentProducts(data);
+      } catch (error) {
+        console.error('Failed to fetch recent products:', error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchRecentProduct();
   }, []);
+
   return (
-    <section aria-labelledby="new-arrivals" className="my-12">
-      <div className="flex justify-between" data-aos="fade-up">
-        <div className="w-20">
-          <h1 className={`text-3xl font-medium ${poppins.className}`}>
+    <section aria-labelledby="new-arrivals" className="my-16">
+      {/* Header */}
+      <div
+        className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8"
+        data-aos="fade-up"
+      >
+        <div>
+          <span className="text-orange-500 text-sm font-medium uppercase tracking-wider mb-2 block">
+            Fresh Arrivals
+          </span>
+          <h2
+            className={`text-3xl md:text-4xl font-semibold text-[#141718] ${poppins.className}`}
+          >
             New Arrivals
-          </h1>
+          </h2>
         </div>
-        <div className="flex justify-end mt-8">
-          <CustomButton label="More products" href="/shop" />
-        </div>
+        <CustomButton label="View All Products" href="/shop" />
       </div>
-      {recentProducts.length > 0 ? (
-        <div className="flex overflow-x-auto overflow-y-hidden space-x-6 pt-5 pb-1 custom-scrollbar">
+
+      {/* Products Carousel */}
+      {isLoading ? (
+        <ProductCarouselSkeleton />
+      ) : recentProducts.length > 0 ? (
+        <div className="flex overflow-x-auto overflow-y-hidden space-x-6 pt-2 pb-4 custom-scrollbar -mx-2 px-2">
           {recentProducts.map((item, index) => (
-            <div data-aos="fade-up" data-aos-delay={index * 100} key={index}>
-                <ProductCard
-                  productId={item.id}
-                  productName={item.title}
-                  currentPrice={item.price}
-                  originalPrice={item.price}
-                  discountPercentage={item.discount}
-                  rating={item.rate ?? 5}
-                  image={item.primary_image}
-                  date={item.date ?? ''}
-                />
+            <div
+              data-aos="fade-up"
+              data-aos-delay={index * 80}
+              key={item.id}
+              className="flex-shrink-0"
+            >
+              <ProductCard
+                productId={item.id}
+                productName={item.title}
+                currentPrice={item.price}
+                originalPrice={item.price}
+                discountPercentage={item.discount}
+                rating={item.rate ?? 5}
+                image={item.primary_image}
+                date={item.date ?? ''}
+              />
             </div>
           ))}
         </div>
       ) : (
-        <ProductCarouselSkeleton />
+        <div className="text-center py-12 text-color-primary">
+          <p>No products available at the moment.</p>
+        </div>
       )}
     </section>
   );
