@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
 import React, { useState } from 'react';
 import { CircularProgress } from '@mui/material';
-import { routeModule } from 'next/dist/build/templates/pages';
 
 function getFirstTwoWords(title: string) {
   const words = title.split(' ');

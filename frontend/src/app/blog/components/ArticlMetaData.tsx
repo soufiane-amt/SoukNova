@@ -1,6 +1,3 @@
-import { Typography } from '@mui/material';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 import { poppins } from '@/layout';
 
 interface ArticlMetaDataProps {
@@ -10,18 +7,18 @@ interface ArticlMetaDataProps {
 
 function ArticlMetaData({ author, date }: ArticlMetaDataProps) {
   // Format the date nicely
-  const formatDate = (dateStr: string) => {
-    try {
-      const d = new Date(dateStr);
-      return d.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
-    } catch {
-      return dateStr.slice(0, -5);
-    }
-  };
+  // const formatDate = (dateStr: string) => {
+  //   try {
+  //     const d = new Date(dateStr);
+  //     return d.toLocaleDateString('en-US', {
+  //       year: 'numeric',
+  //       month: 'long',
+  //       day: 'numeric',
+  //     });
+  //   } catch {
+  //     return dateStr.slice(0, -5);
+  //   }
+  // };
 
   return (
     <div className={`flex items-center gap-4 mt-6 ${poppins.className}`}>
