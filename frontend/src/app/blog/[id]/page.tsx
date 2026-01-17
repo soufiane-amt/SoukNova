@@ -10,7 +10,7 @@ import ArticlMetaData from '../components/ArticlMetaData';
 import { ArticleSection } from '@/home/components/ArticleSection';
 import { ArticleType } from '../../../types/article.dt';
 import { Skeleton } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { Link } from 'lucide-react';
 
 // Skeleton loader for the article page
 function ArticlePageSkeleton() {
@@ -99,7 +99,7 @@ function ErrorState({ message }: { message: string }) {
           Article not found
         </h2>
         <p className="text-[#6C7275] mb-6">{message}</p>
-        <a
+        <Link
           href="/"
           className="inline-flex items-center gap-2 bg-[#141718] text-white px-6 py-3 rounded-xl font-medium hover:bg-[#2d3033] transition-colors"
         >
@@ -117,7 +117,7 @@ function ErrorState({ message }: { message: string }) {
             />
           </svg>
           Back to Home
-        </a>
+        </Link>
       </div>
     </div>
   );
@@ -186,6 +186,7 @@ function ArticlePage() {
       setTimeout(() => setCopySuccess(false), 2000);
     } catch (err) {
       setCopySuccess(false);
+      console.error('Failed to copy link: ', err);
     }
   };
 
