@@ -50,7 +50,7 @@ export function PromoHighlightSection() {
           <p
             className={`text-[#6C7275] text-base md:text-lg leading-relaxed mb-8 ${inter.className}`}
           >
-            It's more affordable than ever to give every room in your home a
+            It&apos;s more affordable than ever to give every room in your home a
             stylish makeover. Shop our sale items now!
           </p>
 

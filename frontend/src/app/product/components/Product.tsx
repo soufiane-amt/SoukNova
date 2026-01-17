@@ -2,11 +2,9 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import Traversal from '../../../components/ui/Traversal';
-import Carousel from 'react-material-ui-carousel';
 import { Typography, CircularProgress } from '@mui/material';
 import CountdownTimer from '../../../components/ui/CountDownTimer';
 import { getDiscountedPrice, isProductNew } from '../../../utils/helpers';
-import EastIcon from '@mui/icons-material/East';
 import ProductImage from './ProductImage';
 import ThumbnailList from './ThumbnailList';
 import RatingStars from '../../../components/inputs/RatingStars';
@@ -18,7 +16,6 @@ import ShowMoreButton from '../../../components/buttons/ShowMoreButton';
 import { useShowMore } from '../../../hooks/useShowMore';
 import { useRouter } from 'next/navigation';
 import { ProductType } from '../../../types/product.dt';
-import { routeModule } from 'next/dist/build/templates/pages';
 
 interface ProductTabsProps {
   productData: ProductType;

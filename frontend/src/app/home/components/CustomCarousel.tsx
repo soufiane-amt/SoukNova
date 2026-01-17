@@ -10,7 +10,6 @@ import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 import { CAROUSEL_IMAGES } from '../../../constants/carouselImages';
 import { poppins } from '@/layout';
-import CustomButton from '../../../components/buttons/CustomButton';
 
 const CustomCarousel = () => (
   <div
@@ -28,7 +27,7 @@ const CustomCarousel = () => (
       effect="fade"
       fadeEffect={{ crossFade: true }}
     >
-      {CAROUSEL_IMAGES.map((img, index) => (
+      {CAROUSEL_IMAGES.map((img) => (
         <SwiperSlide key={img.src}>
           <div className="relative">
             <img
