@@ -19,8 +19,6 @@ export const inter = Inter({
   weight: ['400', '500', '600', '700'],
   variable: '--font-inter',
 });
-// export const poppins = {}
-// export const inter = {}
 
 export default function RootLayout({
   children,
@@ -28,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const navBarExists = pathname.includes('/auth');
+  const navBarExists = pathname.includes('/auth') || pathname.includes('/admin');
 
   useEffect(() => {
     window.scrollTo(0, 0);
