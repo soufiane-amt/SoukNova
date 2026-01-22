@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { Search, MoreHorizontal } from 'lucide-react';
 import StatusBadge from './StatusBadge';
 
 type OrderItem = {

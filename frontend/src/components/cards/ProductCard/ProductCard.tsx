@@ -145,7 +145,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     >
       <div className="relative group bg-[#f4f4f4] w-full h-[349px] flex items-center justify-center">
         <Image
-          src={image}
+          src={image.startsWith('http') ? image : `${process.env.NEXT_PUBLIC_API_URL}${image}`}
           alt={`${productName}`}
           width={500}
           height={349}

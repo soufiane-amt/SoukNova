@@ -40,7 +40,7 @@ function SearchedItemsList({
                 <Image
                   width={50}
                   height={50}
-                  src={item.primary_image}
+                  src={item.primary_image.startsWith('http') ? item.primary_image : `${process.env.NEXT_PUBLIC_API_URL}${item.primary_image}`}
                   alt={item.title}
                   className="w-10 h-10"
                 />

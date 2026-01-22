@@ -19,6 +19,7 @@ export function CheckoutCartItem({
   quantity,
 }: CheckoutCartItemProps) {
   const { addToCart, decreaseFromCart } = useCart();
+  const productNameImg = productImage.startsWith('http') ? productImage : `${process.env.NEXT_PUBLIC_API_URL}${productImage}`;
 
   const processedName = getFirstTwoWords(productName);
   if (!quantity) return <></>;
@@ -26,7 +27,7 @@ export function CheckoutCartItem({
     <div className="w-full flex py-3 border-b border-gray-200">
       <div className="bg-[#f4f4f4] mr-4 h-[80px] min-w-[80px]">
         <Image
-          src={productImage}
+          src={productNameImg}
           width={50}
           height={50}
           alt="Wish product"

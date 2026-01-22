@@ -7,11 +7,13 @@ interface OrderedItemProps {
 }
 
 function OrderedItem({ productName, imageUrl, count }: OrderedItemProps) {
+  const productNameImg = imageUrl.startsWith('http') ? imageUrl : `${process.env.NEXT_PUBLIC_API_URL}${imageUrl}`;
+
   return (
     <div className="relative w-[85px]" data-aos="zoom-in" data-aos-delay="200">
       <div className="h-[90px] w-[85px] bg-[#f4f4f4]">
         <Image
-          src={imageUrl}
+          src={productNameImg}
           alt={`Product image of ${productName}`}
           width={85}
           height={90}

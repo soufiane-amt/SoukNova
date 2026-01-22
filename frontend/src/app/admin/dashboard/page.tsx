@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { ShoppingBag } from 'lucide-react';
-import StatCard from './StatCard';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -14,6 +13,7 @@ import {
   TimeScale,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import StatCard from './components/StatCard';
 
 ChartJS.register(
   CategoryScale,
@@ -211,7 +211,6 @@ export default function DashboardView(): JSX.Element {
             <h2 className="text-lg font-semibold">Revenue Analytics</h2>
           </div>
 
-          <div className="h-64 w-full mt-6">
             {revenueSeries.length === 0 ? (
               // simple skeleton
               <div className="h-64 bg-gray-50 rounded-md flex items-center justify-center text-sm text-gray-400">
@@ -220,7 +219,6 @@ export default function DashboardView(): JSX.Element {
             ) : (
               <Line data={chartData} options={chartOptions} />
             )}
-          </div>
 
         </div>
 

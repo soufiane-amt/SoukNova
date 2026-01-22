@@ -1,29 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { Search, ChevronRight } from 'lucide-react';
+"use client"
+import React, { JSX, useEffect, useState } from 'react';
+import { Search, ChevronRight, MoreHorizontal } from 'lucide-react';
+import StatusBadge from '../dashboard/components/StatusBadge';
 
-type CustomerItem = {
-  id: number | string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  ordersCount: number;
-  totalSpent: number;
+type OrderItem = {
+  id: string | number;
+  date: string;
+  customer: {
+    id?: string | number;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+  } | null;
+  total: number;
+  status: string;
 };
 
-type CustomersResponse = {
-  data: CustomerItem[];
-  meta?: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+type OrdersResponse = {
+  data: OrderItem[];
+  meta?: { page: number; limit: number; total: number; totalPages: number };
 };
 
-export default function CustomersView(): JSX.Element {
-  const [customers, setCustomers] = useState<CustomerItem[]>([]);
+export default function OrdersPage(): JSX.Element {
+  const [orders, setOrders] = useState<OrderItem[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(5);
+  const [limit, setLimit] = useState<number>(12);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
@@ -31,12 +32,12 @@ export default function CustomersView(): JSX.Element {
   const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
-    const t = setTimeout(() => fetchCustomers(page, limit, search), 150);
+    const t = setTimeout(() => fetchOrders(page, limit, search), 150);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, limit, search]);
 
-  async function fetchCustomers(pageNum = 1, pageLimit = limit, q = '') {
+  async function fetchOrders(pageNum = 1, pageLimit = limit, q = '') {
     setLoading(true);
     setError(null);
     try {
@@ -45,22 +46,19 @@ export default function CustomersView(): JSX.Element {
       params.append('limit', String(pageLimit));
       if (q && q.trim()) params.append('search', q.trim());
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/customers?${params.toString()}`,
-        {
-          method: 'GET',
-          credentials: 'include',
-          headers: { Accept: 'application/json' },
-        },
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/orders?${params.toString()}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: { Accept: 'application/json' },
+      });
 
       if (!res.ok) {
         const txt = await res.text();
-        throw new Error(txt || 'Failed to fetch customers');
+        throw new Error(txt || 'Failed to fetch orders');
       }
 
-      const json: CustomersResponse = await res.json();
-      setCustomers(json.data || []);
+      const json: OrdersResponse = await res.json();
+      setOrders(json.data || []);
       const meta = json.meta;
       if (meta) {
         setPage(meta.page || pageNum);
@@ -79,8 +77,8 @@ export default function CustomersView(): JSX.Element {
       }
     } catch (err: any) {
       console.error(err);
-      setError(err?.message || 'Unable to load customers');
-      setCustomers([]);
+      setError(err?.message || 'Unable to load orders');
+      setOrders([]);
       setTotal(0);
       setTotalPages(1);
     } finally {
@@ -88,9 +86,9 @@ export default function CustomersView(): JSX.Element {
     }
   }
 
-  function handlePageChange(newPage: number) {
-    if (newPage < 1 || newPage > totalPages || newPage === page) return;
-    setPage(newPage);
+  function handlePageChange(n: number) {
+    if (n < 1 || n > totalPages || n === page) return;
+    setPage(n);
   }
 
   function formatCurrency(n: number) {
@@ -104,13 +102,21 @@ export default function CustomersView(): JSX.Element {
     }
   }
 
+  function formatDate(d: string | number) {
+    try {
+      return new Date(d).toLocaleString();
+    } catch {
+      return String(d);
+    }
+  }
+
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
       <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold">Customers</h2>
+          <h2 className="text-xl font-semibold">Orders</h2>
           <p className="text-sm text-gray-500">
-            List of customers with orders count and total spent.
+            Recent orders with status and totals.
           </p>
         </div>
 
@@ -123,7 +129,7 @@ export default function CustomersView(): JSX.Element {
                 setPage(1);
                 setSearch(e.target.value);
               }}
-              placeholder="Search by name or email..."
+              placeholder="Search by order id, customer..."
               className="bg-transparent outline-none text-sm w-64 placeholder-gray-400"
             />
           </div>
@@ -150,10 +156,11 @@ export default function CustomersView(): JSX.Element {
         <table className="w-full text-left min-w-[720px]">
           <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider font-medium">
             <tr>
-              <th className="px-6 py-4">Name</th>
-              <th className="px-6 py-4">Email</th>
-              <th className="px-6 py-4">Orders</th>
-              <th className="px-6 py-4">Total Spent</th>
+              <th className="px-6 py-4">Order ID</th>
+              <th className="px-6 py-4">Date</th>
+              <th className="px-6 py-4">Customer</th>
+              <th className="px-6 py-4">Total</th>
+              <th className="px-6 py-4">Status</th>
               <th className="px-6 py-4 text-right">Action</th>
             </tr>
           </thead>
@@ -163,16 +170,19 @@ export default function CustomersView(): JSX.Element {
               Array.from({ length: limit }).map((_, i) => (
                 <tr key={i} className="animate-pulse">
                   <td className="px-6 py-4">
+                    <div className="h-4 bg-gray-200 rounded w-24" />
+                  </td>
+                  <td className="px-6 py-4">
                     <div className="h-4 bg-gray-200 rounded w-32" />
                   </td>
                   <td className="px-6 py-4">
-                    <div className="h-4 bg-gray-200 rounded w-48" />
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="h-4 bg-gray-200 rounded w-12" />
+                    <div className="h-4 bg-gray-200 rounded w-40" />
                   </td>
                   <td className="px-6 py-4">
                     <div className="h-4 bg-gray-200 rounded w-20" />
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="h-4 bg-gray-200 rounded w-24" />
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="h-4 bg-gray-200 rounded w-8 ml-auto" />
@@ -182,53 +192,54 @@ export default function CustomersView(): JSX.Element {
             ) : error ? (
               <tr>
                 <td
-                  colSpan={5}
+                  colSpan={6}
                   className="px-6 py-8 text-center text-sm text-red-600"
                 >
                   {error}
                 </td>
               </tr>
-            ) : customers.length === 0 ? (
+            ) : orders.length === 0 ? (
               <tr>
                 <td
-                  colSpan={5}
+                  colSpan={6}
                   className="px-6 py-8 text-center text-sm text-gray-500"
                 >
-                  No customers found.
+                  No orders found.
                 </td>
               </tr>
             ) : (
-              customers.map((c) => (
-                <tr key={c.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center space-x-3 min-w-0">
-                      <div className="w-8 h-8 rounded-full bg-gray-100 grid place-items-center text-sm font-medium text-gray-600">
-                        {String(c.firstName || c.email)
-                          .charAt(0)
-                          .toUpperCase()}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="font-medium text-gray-900 truncate">{`${c.firstName} ${c.lastName}`}</div>
-                      </div>
+              orders.map((o) => (
+                <tr
+                  key={String(o.id)}
+                  className="hover:bg-gray-50 transition-colors"
+                >
+                  <td className="px-6 py-4 font-medium text-gray-900">
+                    #{o.id}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600 font-semibold">
+                    {formatDate(o.date)}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-700">
+                    {o.customer
+                      ? `${o.customer.firstName ?? ''} ${o.customer.lastName ?? ''}`.trim()
+                      : 'Guest'}
+                    <div className="text-xs text-gray-400">
+                      {o.customer?.email ?? ''}
                     </div>
                   </td>
-
-                  <td className="px-6 py-4 text-sm text-gray-500 truncate">
-                    {c.email}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {c.ordersCount}
-                  </td>
                   <td className="px-6 py-4 font-medium text-gray-900">
-                    {formatCurrency(c.totalSpent)}
+                    {formatCurrency(Number(o.total || 0))}
+                  </td>
+                  <td className="px-6 py-4">
+                    <StatusBadge status={o.status || 'Unknown'} />
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button
-                      className="flex items-center gap-2 text-gray-500 hover:text-black"
+                      className="ml-2 text-gray-400 hover:text-black"
                       type="button"
-                      aria-label={`open-${c.id}`}
+                      aria-label={`more-${o.id}`}
                     >
-                      View <ChevronRight size={16} />
+                      <MoreHorizontal size={16} />
                     </button>
                   </td>
                 </tr>
@@ -238,7 +249,6 @@ export default function CustomersView(): JSX.Element {
         </table>
       </div>
 
-      {/* Pagination */}
       <div className="px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="text-sm text-gray-500">
           {total > 0
@@ -263,21 +273,23 @@ export default function CustomersView(): JSX.Element {
           </button>
 
           <div className="flex items-center gap-1">
-            {(() => {
-              const start = Math.max(1, page - 2);
-              const end = Math.min(totalPages, page + 2);
-              const pages: number[] = [];
-              for (let p = start; p <= end; p++) pages.push(p);
-              return pages.map((p) => (
-                <button
-                  key={p}
-                  onClick={() => handlePageChange(p)}
-                  className={`px-3 py-1 rounded-md text-sm border ${p === page ? 'bg-black text-white border-black' : 'bg-white border-gray-200'}`}
-                >
-                  {p}
-                </button>
-              ));
-            })()}
+            {Array.from({ length: totalPages })
+              .slice(Math.max(0, page - 3), Math.min(totalPages, page + 2))
+              .map((_, idx) => {
+                const p = Math.max(
+                  1,
+                  Math.min(totalPages, page - 2 + (idx + 1)),
+                );
+                return (
+                  <button
+                    key={p}
+                    onClick={() => handlePageChange(p)}
+                    className={`px-3 py-1 rounded-md text-sm border ${p === page ? 'bg-black text-white border-black' : 'bg-white border-gray-200'}`}
+                  >
+                    {p}
+                  </button>
+                );
+              })}
           </div>
 
           <button

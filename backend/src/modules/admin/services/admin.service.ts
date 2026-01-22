@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { getFirstTwoWords } from 'src/utils/helpers';
+import { CreateProductDto } from '../dto/create-product.dto';
+import * as fs from 'fs';
+import * as path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AdminService {
@@ -32,6 +36,7 @@ export class AdminService {
           firstName: true,
           lastName: true,
           email: true,
+          image: true,
           _count: { select: { orders: true } },
           orders: { select: { price: true } },
         },
@@ -50,6 +55,7 @@ export class AdminService {
         firstName: u.firstName,
         lastName: u.lastName,
         email: u.email,
+        avatar: u.image,
         ordersCount,
         totalSpent,
       };
@@ -157,6 +163,7 @@ export class AdminService {
           title: true,
           price: true,
           primary_image: true,
+          categories: true,
         },
       }),
       this.prisma.product.count({ where }),
@@ -166,10 +173,9 @@ export class AdminService {
       return {
         id: p.id,
         title: getFirstTwoWords(p.title),
-        category:
-          p.categories && p.categories.length > 0 ? p.categories[0].name : null,
+        categories: p.categories,
         price: p.price ?? null,
-        status: p.status ?? 'Unknown',
+        status: p.status ?? 'Available',
         primary_image: p.primary_image ?? null,
       };
     });
@@ -235,7 +241,6 @@ export class AdminService {
       orderBy: { addedAt: 'asc' },
     });
 
-    console.log('Fetched orders for revenue series:', orders);
     if (orders.length === 0) {
       return { data: [] };
     }
@@ -281,5 +286,158 @@ export class AdminService {
       total,
     }));
     return { data: series };
+  }
+
+  async createProduct(dto: CreateProductDto, files: Express.Multer.File[]) {
+    // Ensure upload directory exists
+    const uploadDir = path.join(process.cwd(), 'uploads', 'products');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    // Process and save images
+    const imageUrls: string[] = [];
+    for (const file of files) {
+      const ext = path.extname(file.originalname) || '.jpg';
+      const filename = `${uuidv4()}${ext}`;
+      const filepath = path.join(uploadDir, filename);
+
+      // Write file to disk
+      fs.writeFileSync(filepath, file.buffer);
+
+      // Store relative URL
+      imageUrls.push(`/uploads/products/${filename}`);
+    }
+
+    // Primary image is first, rest are secondary
+    const primaryImage = imageUrls[0];
+    const secondaryImages = imageUrls.slice(1);
+
+    // Format dimensions string if provided
+    let dimensionsStr: string | undefined;
+    if (dto.dimensions) {
+      const { length, width, height, unit } = dto.dimensions;
+      if (length && width && height) {
+        dimensionsStr = `${length} x ${width} x ${height} ${unit}`;
+      }
+    }
+
+    // Create product in database
+    const product = await this.prisma.product.create({
+      data: {
+        title: dto.name,
+        price: dto.price,
+        availability: dto.status,
+        about_item: dto.description || '',
+        primary_image: primaryImage,
+        images: secondaryImages,
+        categories: dto.categories,
+        package_dimensions: dimensionsStr,
+        item_model_number: dto.sku,
+      },
+    });
+
+    return {
+      success: true,
+      message: 'Product created successfully',
+      product,
+    };
+  }
+
+  async updateProduct(id: string, dto: any, files: Express.Multer.File[]) {
+    const product = await this.prisma.product.findUnique({ where: { id } });
+    if (!product) return null;
+
+    // Handle images (replace if new ones uploaded)
+    let primaryImage = product.primary_image;
+    let secondaryImages = product.images || [];
+    if (files && files.length > 0) {
+      // Save new images as in createProduct
+      const fs = require('fs');
+      const path = require('path');
+      const { v4: uuidv4 } = require('uuid');
+      const uploadDir = path.join(process.cwd(), 'uploads', 'products');
+      if (!fs.existsSync(uploadDir))
+        fs.mkdirSync(uploadDir, { recursive: true });
+      const imageUrls: string[] = [];
+      for (const file of files) {
+        const ext = path.extname(file.originalname) || '.jpg';
+        const filename = `${uuidv4()}${ext}`;
+        const filepath = path.join(uploadDir, filename);
+        fs.writeFileSync(filepath, file.buffer);
+        imageUrls.push(`/uploads/products/${filename}`);
+      }
+      primaryImage = imageUrls[0];
+      secondaryImages = imageUrls.slice(1);
+    }
+
+    // Dimensions formatting
+    let dimensionsStr: string | undefined;
+    if (dto.dimensions) {
+      try {
+        const dims =
+          typeof dto.dimensions === 'string'
+            ? JSON.parse(dto.dimensions)
+            : dto.dimensions;
+        const { length, width, height, unit } = dims;
+        if (length && width && height) {
+          dimensionsStr = `${length} x ${width} x ${height} ${unit}`;
+        }
+      } catch {}
+    }
+
+    // Update product
+    return await this.prisma.product.update({
+      where: { id },
+      data: {
+        title: dto.name ?? dto.title,
+        item_model_number: dto.sku,
+        categories: dto.categories
+          ? typeof dto.categories === 'string'
+            ? JSON.parse(dto.categories)
+            : dto.categories
+          : undefined,
+        price: dto.price ? parseFloat(dto.price) : undefined,
+        discount: dto.discount,
+        availability: dto.status,
+        about_item: dto.description,
+        package_dimensions: dimensionsStr,
+        primary_image: primaryImage,
+        images: secondaryImages,
+      },
+    });
+  }
+
+  async deleteUserAndRelations(userId: number): Promise<boolean> {
+    // Delete related tables first (order matters due to FK constraints)
+    await this.prisma.wishlist.deleteMany({ where: { userId } });
+    await this.prisma.cartItem.deleteMany({ where: { userId } });
+    await this.prisma.order.deleteMany({ where: { userId } });
+    await this.prisma.comment.deleteMany({ where: { userId } });
+
+    // Then delete the user
+    const user = await this.prisma.user
+      .delete({ where: { id: userId } })
+      .catch(() => null);
+    return !!user;
+  }
+
+  async deleteProductAndRelations(productId: string): Promise<boolean> {
+    // Delete related tables first (order matters due to FK constraints)
+    await this.prisma.wishlist.deleteMany({ where: { productId } });
+    await this.prisma.cartItem.deleteMany({ where: { productId } });
+    await this.prisma.comment.deleteMany({ where: { productId } });
+
+    // Then delete the product
+    const product = await this.prisma.product
+      .delete({ where: { id: productId } })
+      .catch(() => null);
+    return !!product;
+  }
+
+  async getProductById(id: string) {
+    return this.prisma.product.findUnique({
+      where: { id },
+    });
   }
 }

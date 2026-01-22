@@ -55,7 +55,7 @@ export class UsersController {
     @User('id') userId: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const imageUrl = `/uploads/profile-pictures/${file.filename}`;
+    const imageUrl = `$/uploads/profile-pictures/${file.filename}`;
     await this.usersService.updateUserProfileImage(userId, imageUrl);
     return { url: imageUrl };
   }

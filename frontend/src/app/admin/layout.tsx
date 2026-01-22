@@ -1,76 +1,31 @@
 'use client';
 import {
   LayoutDashboard,
-  ShoppingBag,
   ShoppingCart,
   Users,
   Settings,
-  Search,
   Bell,
   Menu,
-  ChevronRight,
-  MoreHorizontal,
-  ArrowUpRight,
-  ArrowDownRight,
-  Filter,
-  Plus,
   Package,
-  Link,
-  ImageIcon,
-  DollarSign,
-  Tag,
-  X,
-  Check,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { JSX, useEffect, useRef, useState } from 'react';
-import AddProduct from './components/AddProduct';
-import { Stat } from '../../../types/Stat.dt';
-import DashboardView from './components/DashboardView';
-import ProductsView from './components/ProductsView';
-import OrdersView from './components/OrdersView';
-import CustomersView from './components/CustomersView';
-import SidebarItem from './components/SidebarItem';
+import { useState } from 'react';
 import { poppins } from '@/layout';
+import SidebarItem from './dashboard/components/SidebarItem';
+import { usePathname, useRouter } from 'next/navigation';
 
-export default function AdminPanel(): JSX.Element {
-  const [activeTab, setActiveTab] = useState<
-    | 'dashboard'
-    | 'products'
-    | 'orders'
-    | 'customers'
-    | 'settings'
-    | 'add product'
-  >('dashboard');
+export default function AdminPanelLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const handleActiveTabChange = (
-    tab:
-      | 'dashboard'
-      | 'products'
-      | 'orders'
-      | 'customers'
-      | 'settings'
-      | 'add product',
-  ) => {
-    setActiveTab(tab);
-  };
-  const renderContent = (): JSX.Element => {
-    switch (activeTab) {
-      case 'dashboard':
-        return <DashboardView />;
-      case 'products':
-        return <ProductsView handleActiveTabChange={handleActiveTabChange} />;
-      case 'orders':
-        return <OrdersView />;
-      case 'customers':
-        return <CustomersView />;
-      case 'add product':
-        return <AddProduct />;
-      default:
-        return <DashboardView />;
-    }
-  };
+  // "/dashboard/products" → ["dashboard", "products"]
+  const segments = pathname.split('/').filter(Boolean);
+  // first segment after admin root
+  const activeTab = segments[segments.length - 1] ?? 'dashboard';
 
   return (
     <div
@@ -97,7 +52,10 @@ export default function AdminPanel(): JSX.Element {
           {/* Logo */}
           <div className="h-20 flex items-center px-8 border-b border-gray-100">
             <h1 className="text-2xl font-bold tracking-tight">
-              Souknova<span className="pl-2 text-gray-400 text-xs font-medium">admin</span>
+              Souknova
+              <span className="pl-2 text-gray-400 text-xs font-medium">
+                admin
+              </span>
             </h1>
           </div>
 
@@ -108,7 +66,7 @@ export default function AdminPanel(): JSX.Element {
               label="Dashboard"
               active={activeTab === 'dashboard'}
               onClick={() => {
-                setActiveTab('dashboard');
+                router.push('/admin/dashboard');
                 setIsSidebarOpen(false);
               }}
             />
@@ -117,7 +75,7 @@ export default function AdminPanel(): JSX.Element {
               label="Products"
               active={activeTab === 'products'}
               onClick={() => {
-                setActiveTab('products');
+                router.push('/admin/products');
                 setIsSidebarOpen(false);
               }}
             />
@@ -126,7 +84,7 @@ export default function AdminPanel(): JSX.Element {
               label="Orders"
               active={activeTab === 'orders'}
               onClick={() => {
-                setActiveTab('orders');
+                router.push('/admin/orders');
                 setIsSidebarOpen(false);
               }}
             />
@@ -135,7 +93,7 @@ export default function AdminPanel(): JSX.Element {
               label="Customers"
               active={activeTab === 'customers'}
               onClick={() => {
-                setActiveTab('customers');
+                router.push('/admin/customers');
                 setIsSidebarOpen(false);
               }}
             />
@@ -195,8 +153,8 @@ export default function AdminPanel(): JSX.Element {
         </header>
 
         {/* Scrollable Content Area */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-8">
-          <div className="max-w-7xl mx-auto">{renderContent()}</div>
+        <main className="flex-1 overflow-y-auto p-2 lg:p-4">
+          <div className="max-w-7xl mx-auto">{children}</div>
         </main>
       </div>
     </div>

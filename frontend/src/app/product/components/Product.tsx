@@ -350,7 +350,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
     showToast('Please sign in to add items to your wishlist.');
   };
   const [activeImage, setActiveImage] = useState(
-    productData?.images?.[0] || '',
+     productData.primary_image,
   );
 
   const handleAddWishlist = async (productId: string) => {
@@ -376,10 +376,6 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
       setWishlistLoading(false);
     }
   };
-
-  useEffect(() => {
-    setActiveImage(productData?.images?.[0] || '');
-  }, [productData]);
 
   const handleSelectImage = (image: string) => {
     setActiveImage(image);
@@ -430,6 +426,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
         ]}
       />
 
+
       {/* Main Product Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-8">
         {/* Image Gallery Section */}
@@ -438,7 +435,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
           <div className="relative bg-gradient-to-br from-[#F8F8F8] to-[#F0F0F0] rounded-2xl overflow-hidden aspect-square flex items-center justify-center group">
             {activeImage && (
               <ProductImage
-                image={activeImage}
+                image={activeImage.startsWith('http') ? activeImage : `${process.env.NEXT_PUBLIC_API_URL}${activeImage}`}
                 isNew={isProductNew(productData.date)}
               />
             )}
