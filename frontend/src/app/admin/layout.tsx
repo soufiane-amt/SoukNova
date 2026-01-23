@@ -105,7 +105,7 @@ export default function AdminPanelLayout({
               icon={Settings}
               label="Settings"
               active={activeTab === 'settings'}
-              onClick={() => setActiveTab('settings')}
+              // onClick={() => setActiveTab('settings')}
             />
             <div className="px-4 py-3 flex items-center space-x-3">
               <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">

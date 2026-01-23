@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import { ShoppingBag } from 'lucide-react';
 import StatCard from './StatCard';
 import { Line } from 'react-chartjs-2';
@@ -174,21 +174,21 @@ export default function DashboardView(): JSX.Element {
     ],
   };
 
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { display: false },
-      tooltip: { mode: 'index', intersect: false },
-    },
-    scales: {
-      x: {
-        type: 'time' as const,
-        time: { unit: 'day' },
-        grid: { display: false },
-      },
-      y: { ticks: { callback: (v: any) => `$${Number(v).toLocaleString()}` } },
-    },
-  };
+  // const chartOptions = {
+  //   responsive: true,
+  //   plugins: {
+  //     legend: { display: false },
+  //     tooltip: { mode: 'index', intersect: false },
+  //   },
+  //   scales: {
+  //     x: {
+  //       type: 'time' as const,
+  //       time: { unit: 'day' },
+  //       grid: { display: false },
+  //     },
+  //     y: { ticks: { callback: (v: any) => `$${Number(v).toLocaleString()}` } },
+  //   },
+  // };
 
   return (
     <div className="space-y-8">
@@ -211,15 +211,14 @@ export default function DashboardView(): JSX.Element {
             <h2 className="text-lg font-semibold">Revenue Analytics</h2>
           </div>
 
-            {revenueSeries.length === 0 ? (
-              // simple skeleton
-              <div className="h-64 bg-gray-50 rounded-md flex items-center justify-center text-sm text-gray-400">
-                No revenue data
-              </div>
-            ) : (
-              <Line data={chartData} options={chartOptions} />
-            )}
-
+          {revenueSeries.length === 0 ? (
+            // simple skeleton
+            <div className="h-64 bg-gray-50 rounded-md flex items-center justify-center text-sm text-gray-400">
+              No revenue data
+            </div>
+          ) : (
+            <Line data={chartData} />
+          )}
         </div>
 
         {/* Recent Orders Mini */}

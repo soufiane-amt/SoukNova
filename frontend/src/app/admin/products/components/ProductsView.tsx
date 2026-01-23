@@ -1,12 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import {
-  MoreHorizontal,
-  Plus,
-  Trash2,
-  Loader2,
-  Pencil,
-} from 'lucide-react';
+import { MoreHorizontal, Plus, Trash2, Loader2, Pencil } from 'lucide-react';
 import StatusBadge from '../../dashboard/components/StatusBadge';
 import { ProductType } from '../../../../types/product.dt';
 
@@ -16,7 +10,7 @@ type ProductsResponse = {
 };
 
 type ProductsViewProps = {
-  handleActiveTabChange?: (
+  handleActiveTabChange: (
     tab: 'products' | 'add product' | 'edit product',
   ) => void;
   setSelectedProductId?: (id: string | null) => void;
@@ -24,7 +18,7 @@ type ProductsViewProps = {
 
 export default function ProductsView({
   handleActiveTabChange,
-  setSelectedProductId
+  setSelectedProductId,
 }: ProductsViewProps) {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -234,15 +228,17 @@ export default function ProductsView({
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-4 min-w-0">
-                      <img
-                        src={
-                          product?.primary_image.startsWith('http')
-                            ? product.primary_image
-                            : `${process.env.NEXT_PUBLIC_API_URL}${product.primary_image}`
-                        }
-                        alt={product.title || 'Product Image'}
-                        className="w-12 h-12 rounded-lg object-cover bg-gray-200"
-                      />
+                      {product?.primary_image && (
+                        <img
+                          src={
+                            product?.primary_image.startsWith('http')
+                              ? product.primary_image
+                              : `${process.env.NEXT_PUBLIC_API_URL}${product.primary_image}`
+                          }
+                          alt={product.title || 'Product Image'}
+                          className="w-12 h-12 rounded-lg object-cover bg-gray-200"
+                        />
+                      )}
                       <span className="font-medium text-gray-900 truncate">
                         {product.title}
                       </span>
@@ -250,14 +246,15 @@ export default function ProductsView({
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">
                     <div className="flex flex-wrap gap-2">
-                      {product.categories.map((category, index) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center px-3 py-1.5 bg-[#F5F5F5] hover:bg-[#E8E8E8] text-[#141718] text-xs font-medium rounded-full transition-colors cursor-default"
-                        >
-                          {category}
-                        </span>
-                      ))}
+                      {product?.categories &&
+                        product?.categories.map((category, index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center px-3 py-1.5 bg-[#F5F5F5] hover:bg-[#E8E8E8] text-[#141718] text-xs font-medium rounded-full transition-colors cursor-default"
+                          >
+                            {category}
+                          </span>
+                        ))}
                     </div>
                   </td>
                   <td className="px-6 py-4">

@@ -80,13 +80,7 @@ export default function EditProduct({ selectedProductId }: EditProductProps) {
         setDiscount(p.discount);
         setStatus((p.availability as any) || 'In Stock');
         setDescription(p.description || '');
-        setDimensions({
-          length: p.packageDimensions?.split(' x ')[0] || '',
-          width: p.packageDimensions?.split(' x ')[1] || '',
-          height: p.packageDimensions?.split(' x ')[2]?.split(' ')[0] || '',
-          unit: (p.packageDimensions?.split(' ')?.[3] as any) || 'in',
-        });
-        setExistingPrimaryImage(p.primaryImage || p.primary_image || null);
+        setExistingPrimaryImage( p.primary_image || null);
         setExistingSecondaryImages(p.images || []);
       } catch (err: any) {
         setError(err.message || 'Error loading product');

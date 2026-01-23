@@ -97,7 +97,7 @@ interface ProductCardProps {
   productName: string;
   currentPrice: number;
   originalPrice?: number;
-  discountPercentage?: number;
+  discountPercentage?: string;
   rating: number;
   image: string | undefined;
   date: string;

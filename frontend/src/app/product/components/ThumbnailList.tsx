@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 interface ThumbnailListProps {
   images: string[] | undefined;
-  activeImage: string;
+  activeImage: string  | undefined;
   onSelectImage: (image: string) => void;
 }
 

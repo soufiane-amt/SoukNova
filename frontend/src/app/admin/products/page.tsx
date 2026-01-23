@@ -14,7 +14,7 @@ const RenderTab = (tab: string, handleActiveTabChange: (tab: 'products' | 'add p
     case 'edit product':
       return <EditProduct selectedProductId={selectedProductId} />;
     default:
-      return <ProductsView />;
+      return <ProductsView handleActiveTabChange={handleActiveTabChange} setSelectedProductId={setSelectedProductId} />;
   }
 };
 

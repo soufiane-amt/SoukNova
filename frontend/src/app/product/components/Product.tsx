@@ -349,9 +349,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
     route.push('/auth/signin');
     showToast('Please sign in to add items to your wishlist.');
   };
-  const [activeImage, setActiveImage] = useState(
-     productData.primary_image,
-  );
+  const [activeImage, setActiveImage] = useState(productData.primary_image);
 
   const handleAddWishlist = async (productId: string) => {
     if (wishlistLoading) return;
@@ -406,7 +404,7 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
   };
 
   const discountedPrice = Number(
-    getDiscountedPrice(productData.price, productData.discount),
+    getDiscountedPrice(productData.price, Number(productData.discount)),
   ).toFixed(2);
   const originalPrice = Number(productData.price).toFixed(2);
   const discountPercent = productData.discount
@@ -426,7 +424,6 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
         ]}
       />
 
-
       {/* Main Product Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-8">
         {/* Image Gallery Section */}
@@ -435,7 +432,11 @@ const Product: React.FC<ProductProps> = ({ productData }) => {
           <div className="relative bg-gradient-to-br from-[#F8F8F8] to-[#F0F0F0] rounded-2xl overflow-hidden aspect-square flex items-center justify-center group">
             {activeImage && (
               <ProductImage
-                image={activeImage.startsWith('http') ? activeImage : `${process.env.NEXT_PUBLIC_API_URL}${activeImage}`}
+                image={
+                  activeImage.startsWith('http')
+                    ? activeImage
+                    : `${process.env.NEXT_PUBLIC_API_URL}${activeImage}`
+                }
                 isNew={isProductNew(productData.date)}
               />
             )}

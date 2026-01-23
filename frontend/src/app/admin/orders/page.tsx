@@ -1,6 +1,6 @@
 "use client"
 import React, { JSX, useEffect, useState } from 'react';
-import { Search, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { Search, MoreHorizontal } from 'lucide-react';
 import StatusBadge from '../dashboard/components/StatusBadge';
 
 type OrderItem = {
