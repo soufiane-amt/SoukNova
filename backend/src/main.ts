@@ -6,12 +6,9 @@ import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
-import { PrismaService } from './prisma/prisma.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
-  // --- Standard NestJS setup ---
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -20,41 +17,34 @@ async function bootstrap() {
   );
 
   const configService = app.get(ConfigService);
-  const allowedPrefix = configService.get<string>('FRONTEND_URL_PREFIX');
+  let allowedPrefix = configService.get<string>('FRONTEND_URL_PREFIX');
 
   app.enableCors({
     origin: (origin, callback) => {
+      // allow server-to-server or tools like Postman
       if (!origin) return callback(null, true);
-      if (allowedPrefix && origin.startsWith(allowedPrefix)) return callback(null, true);
-      return callback(null, false);
+
+      if (allowedPrefix && origin.startsWith(allowedPrefix)) {
+        return callback(null, true);
+      }
+
+      // explicitly deny
+      return callback(null, false); // ✅ must be null, not new Error
     },
     credentials: true,
   });
-
   app.use(cookieParser());
 
   const uploadsPath = join(process.cwd(), 'uploads');
-  app.useStaticAssets(uploadsPath, { prefix: '/uploads/' });
+
+  app.useStaticAssets(uploadsPath, {
+    prefix: '/uploads/',
+  });
   app.use(compression());
 
-  // --- Bind to the port immediately ---
-  const port = parseInt(process.env.PORT!, 10);
+const port = parseInt(process.env.PORT!, 10);
   await app.listen(port, '0.0.0.0');
   console.log(`NestJS running on port ${port}`);
-
-  // --- Connect to Prisma AFTER listening ---
-  try {
-    const prisma = app.get(PrismaService); // assumes you have a PrismaService provider
-    await prisma.$connect();
-    console.log('Prisma connected');
-  } catch (err) {
-    console.error('Prisma connection failed:', err);
-  }
-
-  // --- Optional: connect to Redis here as well ---
-  // const redisClient = app.get(RedisService);
-  // await redisClient.connect();
-  // console.log('Redis connected');
 }
-
 void bootstrap();
+
