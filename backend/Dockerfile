@@ -36,15 +36,5 @@ COPY --from=builder /app/prisma/seed-data ./dist/prisma/seed-data
 EXPOSE 3001
 
 # ✅ START SERVER IMMEDIATELY
-CMD ["sh", "-c", "\
-  echo 'Running Prisma migrations...'; \
-  npx prisma migrate deploy --preview-feature || echo 'Migrations failed'; \
-  if [ -f dist/prisma/seed.js ]; then \
-    echo 'Running seed script...'; \
-    node dist/prisma/seed.js || echo 'Seed failed'; \
-  else \
-    echo 'No seed file found, skipping'; \
-  fi; \
-  echo 'Starting NestJS...'; \
-  node dist/src/main.js \
-"]
+COPY entrypoint.sh /app/entrypoint.sh
+CMD ["/app/entrypoint.sh"]
