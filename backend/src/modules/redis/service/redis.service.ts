@@ -13,18 +13,21 @@ export class RedisService implements OnModuleInit {
     });
   }
 
-  private createClientFromEnv(): Redis {
-    const url = process.env.REDIS_URL;
-    if (url && url.trim().length > 0) {
-      return new Redis(url);
-    }
+private createClientFromEnv(): Redis {
+  const url = process.env.REDIS_URL;
+  const password = process.env.REDIS_PASSWORD;
 
-    return new Redis({
-      host: process.env.REDIS_HOST ?? '127.0.0.1',
-      port: process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : 6379,
-      password: process.env.REDIS_PASSWORD || undefined,
-    });
+  if (url && url.trim().length > 0) {
+    const redisUrl = password ? `redis://:${password}@${url}` : `redis://${url}`;
+    return new Redis(redisUrl);
   }
+
+  return new Redis({
+    host: process.env.REDIS_HOST ?? '127.0.0.1',
+    port: process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : 6379,
+    password: process.env.REDIS_PASSWORD || undefined,
+  });
+}
 
   getClient(): Redis {
     if (!this.client) {
