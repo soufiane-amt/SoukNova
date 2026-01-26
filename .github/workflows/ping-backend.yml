@@ -1,0 +1,15 @@
+name: Ping Render
+
+on:
+  schedule:
+    # Every 5 minutes
+    - cron: "*/5 * * * *"
+  workflow_dispatch: # optional: allows you to run it manually too
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping the Render backend
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" "https://souknova.onrender.com/api/product?order=rate_desc&page=1&pageSize=24"
