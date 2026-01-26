@@ -5,113 +5,139 @@ import { RedisService } from 'src/modules/redis/service/redis.service';
 
 describe('WishlistService', () => {
   let service: WishlistService;
-
-  const now = new Date();
-
-  const prismaMock = {
-    wishlist: {
-      findUnique: jest.fn(),
-      create: jest.fn(),
-      delete: jest.fn(),
-      count: jest.fn().mockResolvedValue(1),
-      findMany: jest.fn().mockResolvedValue([
-        {
-          product: {
-            id: 'p1',
-            title: 'P1',
-            primary_image: 'i.png',
-            price: 12.5,
-          },
-        },
-      ]),
-    },
-  } as any;
-
-  const redisClient = {
-    get: jest.fn().mockResolvedValue(null),
-    set: jest.fn().mockResolvedValue('OK'),
-    del: jest.fn().mockResolvedValue(1),
-  };
-  const redisServiceMock = { getClient: () => redisClient };
+  let prismaMock: any;
+  let redisMock: any;
+  let redisClientMock: any;
 
   beforeEach(async () => {
-    jest.resetAllMocks();
+    redisClientMock = {
+      get: jest.fn(),
+      set: jest.fn(),
+      unlink: jest.fn(),
+      scanStream: jest.fn().mockReturnValue({
+        [Symbol.asyncIterator]: async function* () {
+          yield [];
+        },
+      }),
+    };
+    redisMock = {
+      getClient: jest.fn(() => redisClientMock),
+    };
+    prismaMock = {
+      wishlist: {
+        findUnique: jest.fn(),
+        create: jest.fn(),
+        delete: jest.fn(),
+        count: jest.fn(),
+        findMany: jest.fn(),
+      },
+    };
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [WishlistService],
-    })
-      .useMocker((token) => {
-        if (token === PrismaService) return prismaMock;
-        if (token === RedisService) return redisServiceMock;
-      })
-      .compile();
+      providers: [
+        WishlistService,
+        { provide: PrismaService, useValue: prismaMock },
+        { provide: RedisService, useValue: redisMock },
+      ],
+    }).compile();
 
     service = module.get<WishlistService>(WishlistService);
   });
 
-  it('addToWishlist should return existing if found', async () => {
-    const existing = { id: 1, userId: 1, productId: 'p1' };
-    prismaMock.wishlist.findUnique.mockResolvedValueOnce(existing);
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-    const res = await service.addToWishlist(1, 'p1');
+  it('should add to wishlist if not existing and clear cache', async () => {
+    prismaMock.wishlist.findUnique.mockResolvedValue(null);
+    prismaMock.wishlist.create.mockResolvedValue({
+      userId: 1,
+      productId: 'p1',
+    });
+    const clearSpy = jest
+      .spyOn(service, 'clearWishlistCache')
+      .mockResolvedValue();
+
+    const result = await service.addToWishlist(1, 'p1');
     expect(prismaMock.wishlist.findUnique).toHaveBeenCalledWith({
       where: { userId_productId: { userId: 1, productId: 'p1' } },
     });
-    expect(res).toBe(existing);
-  });
-
-  it('addToWishlist should create and clear cache when not existing', async () => {
-    prismaMock.wishlist.findUnique.mockResolvedValueOnce(null);
-    const created = { id: 2, userId: 1, productId: 'p2' };
-    prismaMock.wishlist.create.mockResolvedValueOnce(created);
-
-    const res = await service.addToWishlist(1, 'p2');
-
     expect(prismaMock.wishlist.create).toHaveBeenCalledWith({
-      data: { userId: 1, productId: 'p2' },
+      data: { userId: 1, productId: 'p1' },
     });
-    expect(redisClient.del).toHaveBeenCalledWith('wishlist:1');
-    expect(res).toBe(created);
+    expect(clearSpy).toHaveBeenCalledWith(1);
+    expect(result).toEqual({ userId: 1, productId: 'p1' });
   });
 
-  it('removeFromWishlist should delete and clear cache', async () => {
-    prismaMock.wishlist.delete.mockResolvedValueOnce({ id: 3 });
+  it('should return existing wishlist item if already exists', async () => {
+    prismaMock.wishlist.findUnique.mockResolvedValue({
+      userId: 1,
+      productId: 'p1',
+    });
+    const clearSpy = jest
+      .spyOn(service, 'clearWishlistCache')
+      .mockResolvedValue();
 
-    const res = await service.removeFromWishlist(1, 'p3');
+    const result = await service.addToWishlist(1, 'p1');
+    expect(prismaMock.wishlist.findUnique).toHaveBeenCalled();
+    expect(prismaMock.wishlist.create).not.toHaveBeenCalled();
+    expect(clearSpy).not.toHaveBeenCalled();
+    expect(result).toEqual({ userId: 1, productId: 'p1' });
+  });
 
+  it('should remove from wishlist and clear cache', async () => {
+    prismaMock.wishlist.delete.mockResolvedValue({
+      userId: 1,
+      productId: 'p1',
+    });
+    const clearSpy = jest
+      .spyOn(service, 'clearWishlistCache')
+      .mockResolvedValue();
+
+    const result = await service.removeFromWishlist(1, 'p1');
+    expect(clearSpy).toHaveBeenCalledWith(1);
     expect(prismaMock.wishlist.delete).toHaveBeenCalledWith({
-      where: { userId_productId: { userId: 1, productId: 'p3' } },
+      where: { userId_productId: { userId: 1, productId: 'p1' } },
     });
-    expect(redisClient.del).toHaveBeenCalledWith('wishlist:1');
-    expect(res).toEqual({ id: 3 });
+    expect(result).toEqual({ userId: 1, productId: 'p1' });
   });
 
-  it('getWishlist should return cached when present', async () => {
-    const cached = { items: [], totalPages: 1 };
-    redisClient.get.mockResolvedValueOnce(JSON.stringify(cached));
-
-    const res = await service.getWishlist(1, 2, 10);
-    expect(redisClient.get).toHaveBeenCalledWith(
-      'wishlist:user:1:page:2:size:10',
+  it('should get wishlist from cache if available', async () => {
+    redisClientMock.get.mockResolvedValue(
+      JSON.stringify({ items: [], totalPages: 1 }),
     );
-    expect(res).toEqual(cached);
+
+    const result = await service.getWishlist(1, 1, 10);
+    expect(redisClientMock.get).toHaveBeenCalledWith(
+      'wishlist:user:1:page:1:size:10',
+    );
+    expect(result).toEqual({ items: [], totalPages: 1 });
   });
 
-  it('getWishlist should fetch from db and cache when not cached', async () => {
-    redisClient.get.mockResolvedValueOnce(null);
-    prismaMock.wishlist.count.mockResolvedValueOnce(5);
-    prismaMock.wishlist.findMany.mockResolvedValueOnce([
+  it('should get wishlist from db and cache it if not in cache', async () => {
+    redisClientMock.get.mockResolvedValue(null);
+    prismaMock.wishlist.count.mockResolvedValue(2);
+    prismaMock.wishlist.findMany.mockResolvedValue([
       {
         product: {
-          id: 'p9',
-          title: 'P9',
-          primary_image: 'img.png',
-          price: 7.5,
+          id: 'p1',
+          title: 'Product 1',
+          primary_image: 'img1',
+          price: 100,
+        },
+      },
+      {
+        product: {
+          id: 'p2',
+          title: 'Product 2',
+          primary_image: 'img2',
+          price: 200,
         },
       },
     ]);
+    redisClientMock.set.mockResolvedValue('OK');
 
-    const res = await service.getWishlist(1, 1, 2);
-
+    const result = await service.getWishlist(1, 1, 2);
     expect(prismaMock.wishlist.count).toHaveBeenCalledWith({
       where: { userId: 1 },
     });
@@ -122,23 +148,51 @@ describe('WishlistService', () => {
       orderBy: { addedAt: 'desc' },
       select: {
         product: {
-          select: { id: true, title: true, primary_image: true, price: true },
+          select: {
+            id: true,
+            title: true,
+            primary_image: true,
+            price: true,
+          },
         },
       },
     });
-
-    expect(res.items[0]).toEqual({
-      productId: 'p9',
-      productName: 'P9',
-      image: 'img.png',
-      price: 7.5,
+    expect(redisClientMock.set).toHaveBeenCalled();
+    expect(result).toEqual({
+      items: [
+        {
+          productId: 'p1',
+          productName: 'Product 1',
+          image: 'img1',
+          price: 100,
+        },
+        {
+          productId: 'p2',
+          productName: 'Product 2',
+          image: 'img2',
+          price: 200,
+        },
+      ],
+      totalPages: 1,
     });
-    expect(res.totalPages).toBe(Math.ceil(5 / 2));
-    expect(redisClient.set).toHaveBeenCalledWith(
-      'wishlist:user:1:page:1:size:2',
-      expect.any(String),
-      'EX',
-      60 * 5,
+  });
+
+  it('should clear wishlist cache', async () => {
+    // Simulate scanStream yielding keys
+    redisClientMock.scanStream.mockReturnValue({
+      [Symbol.asyncIterator]: async function* () {
+        yield [
+          'wishlist:user:1:page:1:size:10',
+          'wishlist:user:1:page:2:size:10',
+        ];
+      },
+    });
+    redisClientMock.unlink.mockResolvedValue(2);
+
+    await service.clearWishlistCache(1);
+    expect(redisClientMock.unlink).toHaveBeenCalledWith(
+      'wishlist:user:1:page:1:size:10',
+      'wishlist:user:1:page:2:size:10',
     );
   });
 });
