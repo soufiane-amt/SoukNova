@@ -1,60 +1,79 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const onMock = jest.fn();
-const mockClient = { on: onMock } as any;
-const RedisConstructorMock = jest.fn().mockImplementation((opts) => mockClient);
-
-jest.mock('ioredis', () => ({ Redis: RedisConstructorMock }));
-
 import { RedisService } from './redis.service';
+import Redis from 'ioredis';
+
+jest.mock('ioredis', () => {
+  const RedisMock = jest.fn().mockImplementation(() => ({
+    on: jest.fn(),
+  }));
+  return {
+    __esModule: true,
+    default: RedisMock,
+    // Add this line to support named import
+    Redis: RedisMock,
+  };
+});
 
 describe('RedisService', () => {
-  const OLD_ENV = process.env;
+  let service: RedisService;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    process.env = { ...OLD_ENV };
-  });
-
-  afterAll(() => {
-    process.env = OLD_ENV;
-  });
-
-  it('getClient should be undefined before init', () => {
-    const svc = new RedisService();
-    expect(svc.getClient()).toBeUndefined();
-  });
-
-  it('onModuleInit should create a Redis client with env config and register error handler', () => {
-    process.env.REDIS_HOST = 'redis-host';
-    process.env.REDIS_PORT = '6379';
-    process.env.REDIS_PASSWORD = 'secret';
-
-    const svc = new RedisService();
-    svc.onModuleInit();
-
-    expect(RedisConstructorMock).toHaveBeenCalledWith({
-      host: 'redis-host',
-      port: 6379,
-      password: 'secret',
-    });
-
-    expect(onMock).toHaveBeenCalledWith('error', expect.any(Function));
-    expect(svc.getClient()).toBe(mockClient);
-  });
-
-  it('onModuleInit should still set client when some env vars are missing', () => {
+    delete process.env.REDIS_URL;
+    delete process.env.REDIS_HOST;
+    delete process.env.REDIS_PORT;
     delete process.env.REDIS_PASSWORD;
-    process.env.REDIS_HOST = 'h';
-    process.env.REDIS_PORT = '1234';
 
-    const svc = new RedisService();
-    svc.onModuleInit();
+    service = new RedisService();
+  });
 
-    expect(RedisConstructorMock).toHaveBeenCalledWith({
-      host: 'h',
-      port: 1234,
-      password: undefined,
+  describe('createClientFromEnv (via behavior)', () => {
+    it('should create client using REDIS_URL if provided', () => {
+      process.env.REDIS_URL = 'redis://localhost:6380';
+
+      service.getClient();
+
+      expect(Redis).toHaveBeenCalledWith('redis://localhost:6380');
     });
-    expect(svc.getClient()).toBe(mockClient);
+
+    it('should create client using host/port/password when REDIS_URL is missing', () => {
+      process.env.REDIS_HOST = 'redis-host';
+      process.env.REDIS_PORT = '6381';
+      process.env.REDIS_PASSWORD = 'secret';
+
+      service.getClient();
+
+      expect(Redis).toHaveBeenCalledWith({
+        host: 'redis-host',
+        port: 6381,
+        password: 'secret',
+      });
+    });
+
+    it('should fallback to default host and port', () => {
+      service.getClient();
+
+      expect(Redis).toHaveBeenCalledWith({
+        host: '127.0.0.1',
+        port: 6379,
+        password: undefined,
+      });
+    });
+  });
+
+  describe('getClient', () => {
+    it('should lazily create redis client if not initialized', () => {
+      const client = service.getClient();
+
+      expect(client).toBeDefined();
+      expect(Redis).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return the same client instance on multiple calls', () => {
+      const client1 = service.getClient();
+      const client2 = service.getClient();
+
+      expect(client1).toBe(client2);
+      expect(Redis).toHaveBeenCalledTimes(1);
+    });
   });
 });
