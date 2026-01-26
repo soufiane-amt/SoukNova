@@ -31,8 +31,10 @@ RUN npm ci --omit=dev --silent || npm install --production --silent
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma /app/node_modules/.prisma
+COPY --from=builder /app/prisma/seed-data ./dist/prisma/seed-data
 
 EXPOSE 3001
 
 # ✅ START SERVER IMMEDIATELY
-CMD ["node", "dist/src/main.js"]
+COPY entrypoint.sh /app/entrypoint.sh
+CMD ["/app/entrypoint.sh"]

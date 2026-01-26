@@ -10,4 +10,4 @@ else
 fi
 
 echo "Starting NestJS..."
-# exec node dist/src/main.js
+exec node dist/src/main.js
