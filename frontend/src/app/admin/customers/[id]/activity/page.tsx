@@ -14,12 +14,10 @@ import {
   User,
   Activity,
   ArrowLeft,
-  MoreVertical,
 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { poppins } from '@/layout';
 
-// --- TYPES ---
 type Order = {
   id: number | string;
   date: string;

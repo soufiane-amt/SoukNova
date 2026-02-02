@@ -82,6 +82,7 @@ export default function OrderDetailsPage() {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function getStatusColor(status: string) {
     const statusLower = 'completed'.toLowerCase();
     if (statusLower === 'completed')
@@ -161,7 +162,7 @@ export default function OrderDetailsPage() {
             Order Not Found
           </h3>
           <p className="text-gray-500 mb-6">
-            We couldn't find the order you're looking for.
+            We couldn&apos;t find the order you&apos;re looking for.
           </p>
           <button
             className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
@@ -360,7 +361,7 @@ export default function OrderDetailsPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {order.items.map((item, index) => (
+                    {order.items.map((item) => (
                       <tr
                         key={item.productId}
                         className="hover:bg-gray-50 transition-colors"
