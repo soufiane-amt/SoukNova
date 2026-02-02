@@ -1,11 +1,6 @@
 'use client';
 import React, { JSX, useEffect, useState } from 'react';
-import {
-  Search,
-  MoreHorizontal,
-  Trash2,
-  Loader2,
-} from 'lucide-react';
+import { Search, MoreHorizontal, Trash2, Loader2, Eye } from 'lucide-react';
 
 type CustomerItem = {
   id: number | string;
@@ -37,8 +32,6 @@ export default function CustomersView(): JSX.Element {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState<string>('');
   const [actionMenu, setActionMenu] = useState<number | string | null>(null);
-  const [deletingId, setDeletingId] = useState<number | string | null>(null);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => fetchCustomers(page, limit, search), 150);
@@ -95,30 +88,6 @@ export default function CustomersView(): JSX.Element {
       setTotalPages(1);
     } finally {
       setLoading(false);
-    }
-  }
-
-  async function handleDeleteCustomer(id: number | string) {
-    setDeletingId(id);
-    setDeleteError(null);
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/users/${id}`,
-        {
-          method: 'DELETE',
-          credentials: 'include',
-        },
-      );
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || 'Failed to delete user');
-      }
-      setCustomers((prev) => prev.filter((c) => c.id !== id));
-      setActionMenu(null);
-    } catch (err: any) {
-      setDeleteError(err?.message || 'Failed to delete user');
-    } finally {
-      setDeletingId(null);
     }
   }
 
@@ -284,22 +253,14 @@ export default function CustomersView(): JSX.Element {
                     {actionMenu === c.id && (
                       <div className="absolute right-0 z-20 mt-2 w-36 bg-white border border-gray-200 rounded-lg shadow-lg">
                         <button
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full"
-                          onClick={() => handleDeleteCustomer(c.id)}
-                          disabled={deletingId === c.id}
+                          className="flex items-center gap-2 px-4 py-2 text-sm w-full"
+                          onClick={() => {
+                            window.location.href = `/admin/customers/${c.id}/activity`;
+                          }}
                         >
-                          {deletingId === c.id ? (
-                            <Loader2 size={16} className="animate-spin" />
-                          ) : (
-                            <Trash2 size={16} />
-                          )}
-                          Remove
+                          <Eye size={16} />
+                          View
                         </button>
-                        {deleteError && (
-                          <div className="px-4 py-2 text-xs text-red-500">
-                            {deleteError}
-                          </div>
-                        )}
                       </div>
                     )}
                   </td>

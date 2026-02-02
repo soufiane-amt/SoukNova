@@ -14,7 +14,7 @@ import { Suspense, useState } from 'react';
 import { CircularProgress } from '@mui/material';
 
 function CheckoutPage() {
-  const { total } = useCart();
+  const { total, cart } = useCart();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -24,6 +24,13 @@ function CheckoutPage() {
         method: 'POST',
         body: JSON.stringify({
           orderTotal: total,
+          items: cart.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            unitPrice:
+              item.price -
+              (item.discount ? (item.price * item.discount) / 100 : 0),
+          })),
         }),
         headers: {
           'content-type': 'application/json',

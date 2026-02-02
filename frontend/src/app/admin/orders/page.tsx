@@ -1,6 +1,6 @@
-"use client"
+'use client';
 import React, { JSX, useEffect, useState } from 'react';
-import { Search, MoreHorizontal } from 'lucide-react';
+import { Search, MoreHorizontal, Eye } from 'lucide-react'; // <-- Add Eye import
 import StatusBadge from '../dashboard/components/StatusBadge';
 
 type OrderItem = {
@@ -30,6 +30,9 @@ export default function OrdersPage(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState<string>('');
+  const [openMenuOrderId, setOpenMenuOrderId] = useState<
+    string | number | null
+  >(null);
 
   useEffect(() => {
     const t = setTimeout(() => fetchOrders(page, limit, search), 150);
@@ -46,11 +49,14 @@ export default function OrdersPage(): JSX.Element {
       params.append('limit', String(pageLimit));
       if (q && q.trim()) params.append('search', q.trim());
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/orders?${params.toString()}`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: { Accept: 'application/json' },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/orders?${params.toString()}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+          headers: { Accept: 'application/json' },
+        },
+      );
 
       if (!res.ok) {
         const txt = await res.text();
@@ -233,14 +239,31 @@ export default function OrdersPage(): JSX.Element {
                   <td className="px-6 py-4">
                     <StatusBadge status={o.status || 'Unknown'} />
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-right relative">
                     <button
                       className="ml-2 text-gray-400 hover:text-black"
                       type="button"
                       aria-label={`more-${o.id}`}
+                      onClick={() =>
+                        setOpenMenuOrderId(
+                          openMenuOrderId === o.id ? null : o.id,
+                        )
+                      }
                     >
                       <MoreHorizontal size={16} />
                     </button>
+                    {openMenuOrderId === o.id && (
+                      <div className="absolute bottom-10 right-15 z-20 mt-2 w-36 bg-white border border-gray-200 rounded-lg shadow-lg">
+                        <a
+                          href={`/admin/orders/${o.id}`}
+                          className="flex items-center gap-2 px-4 py-2 text-sm"
+                          aria-label={`view-details-${o.id}`}
+                        >
+                          <Eye size={16} /> {/* Eye icon */}
+                          View Details
+                        </a>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))
