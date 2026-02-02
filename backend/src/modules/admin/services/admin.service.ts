@@ -1,18 +1,53 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { getFirstTwoWords } from 'src/utils/helpers';
 import { CreateProductDto } from '../dto/create-product.dto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { UserCredentialsDto } from 'src/modules/users/dto/userCredentials.dto';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { Admin } from '.prisma/client';
 
 @Injectable()
 export class AdminService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
-  /**
-   * Returns paginated customers with order count and total spent
-   */
+  private async checkIfCredentialsAreValid(
+    userCredentials: UserCredentialsDto,
+  ): Promise<Admin | null> {
+    const admin = await this.prisma.admin.findUnique({
+      where: { email: userCredentials.email },
+    });
+    if (
+      admin &&
+      (await bcrypt.compare(userCredentials.password, admin.password))
+    )
+      return admin;
+    return null;
+  }
+
+  async signIn(
+    userCredentialsDto: UserCredentialsDto,
+  ): Promise<{ access_token: string }> {
+    const admin = await this.checkIfCredentialsAreValid(userCredentialsDto);
+    if (!admin)
+      throw new UnauthorizedException('Invalid credentials!');
+    const payload = { sub: admin?.id, username: admin?.email };
+
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
+  }
+
   async getCustomers(page = 1, limit = 10, search?: string) {
     const skip = (page - 1) * limit;
     const where = search
@@ -438,6 +473,173 @@ export class AdminService {
   async getProductById(id: string) {
     return this.prisma.product.findUnique({
       where: { id },
+    });
+  }
+
+  async getOrderDetails(orderId: number) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        user: {
+          select: { id: true, firstName: true, lastName: true, email: true },
+        },
+        items: {
+          include: {
+            product: {
+              select: { id: true, title: true, primary_image: true },
+            },
+          },
+        },
+      },
+    });
+
+    if (!order) return null;
+
+    return {
+      id: order.id,
+      date: order.addedAt,
+      customer: order.user
+        ? {
+            id: order.user.id,
+            firstName: order.user.firstName,
+            lastName: order.user.lastName,
+            email: order.user.email,
+          }
+        : null,
+      total: order.price,
+      items: order.items.map((item) => ({
+        productId: item.productId,
+        productName: getFirstTwoWords(item.product?.title),
+        image: item.product?.primary_image,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        total: item.total,
+      })),
+    };
+  }
+
+  async getCustomerActivity(id: number) {
+    // Account info
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        createdAt: true,
+        image: true,
+        status: true,
+      },
+    });
+
+    if (!user) return null;
+
+    // Order stats
+    const orders = await this.prisma.order.findMany({
+      where: { userId: id },
+      orderBy: { addedAt: 'desc' },
+      select: { id: true, price: true, addedAt: true },
+      take: 10,
+    });
+    const totalOrders = await this.prisma.order.count({
+      where: { userId: id },
+    });
+    const totalSpent = await this.prisma.order.aggregate({
+      where: { userId: id },
+      _sum: { price: true },
+    });
+
+    const sessions = (await this.prisma.session)
+      ? await this.prisma.session.findMany({
+          where: { userId: id },
+          orderBy: { createdAt: 'desc' },
+          select: { createdAt: true, ip: true, device: true },
+          take: 5,
+        })
+      : [];
+
+    const timeline: any[] = [
+      ...orders.map((o) => ({
+        date: o.addedAt,
+        type: 'Order',
+        description: `Placed order #${o.id} (COMPLETED)`,
+      })),
+    ].sort((a, b) => +new Date(b.date) - +new Date(a.date));
+
+    const wishlist = await this.prisma.wishlist.findMany({
+      where: { userId: id },
+      include: {
+        product: { select: { id: true, title: true, primary_image: true } },
+      },
+      orderBy: { addedAt: 'desc' },
+      take: 10,
+    });
+
+    const cart = await this.prisma.cartItem.findMany({
+      where: { userId: id },
+      include: {
+        product: { select: { id: true, title: true, primary_image: true } },
+      },
+      orderBy: { addedAt: 'desc' },
+      take: 10,
+    });
+
+    return {
+      account: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        registeredAt: user.createdAt,
+        avatar: user.image,
+        status: user.status,
+      },
+      orderStats: {
+        totalOrders,
+        totalSpent: totalSpent._sum.price || 0,
+        avgOrderValue: totalOrders
+          ? (totalSpent._sum.price || 0) / totalOrders
+          : 0,
+      },
+      recentOrders: orders.map((o) => ({
+        id: o.id,
+        date: o.addedAt,
+        status: 'COMPLETED',
+        total: o.price,
+      })),
+      recentLogins: sessions.map((s) => ({
+        date: s.createdAt,
+        ip: s.ip,
+        device: s.device,
+      })),
+      timeline,
+      wishlist: wishlist.map((w) => ({
+        productId: w.productId,
+        productName: w.product?.title,
+        image: w.product?.primary_image,
+        addedAt: w.addedAt,
+      })),
+      cart: cart.map((c) => ({
+        productId: c.productId,
+        productName: c.product?.title,
+        image: c.product?.primary_image,
+        quantity: c.quantity,
+        addedAt: c.addedAt,
+      })),
+    };
+  }
+
+  async freezeUser(userId: number) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { status: 'frozen' },
+    });
+  }
+  async unFreezeUser(userId: number) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { status: 'active' },
     });
   }
 }
