@@ -22,7 +22,7 @@ export default function AdminPanelLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
-  const navBarExists = !pathname.startsWith('/admin/login');
+  const isAdminLogin = pathname === '/admin/login';
 
   // "/dashboard/products" → ["dashboard", "products"]
   const segments = pathname.split('/').filter(Boolean);
@@ -33,7 +33,7 @@ export default function AdminPanelLayout({
     <div
       className={`min-h-screen bg-[#F9F9F9] flex text-gray-900 selection:bg-black selection:text-white ${poppins.className}`}
     >
-      {navBarExists && (
+      {!isAdminLogin && (
         <>
           {/* Mobile Sidebar Overlay */}
           {isSidebarOpen && (
@@ -135,7 +135,7 @@ export default function AdminPanelLayout({
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Header */}
-        {navBarExists && (
+        {!isAdminLogin && (
           <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-4 lg:px-8">
             <div className="flex items-center">
               <button
@@ -165,9 +165,13 @@ export default function AdminPanelLayout({
 
         {/* Scrollable Content Area */}
         <main className="flex-1 overflow-y-auto p-2 lg:p-4">
-          <AuthGuard redirectedTo='/admin/login'>
-            <div className="max-w-7xl mx-auto">{children}</div>
-          </AuthGuard>
+          {isAdminLogin ? (
+            children
+          ) : (
+            <AuthGuard redirectedTo="/admin/login">
+              <div className="max-w-7xl mx-auto">{children}</div>
+            </AuthGuard>
+          )}
         </main>
       </div>
     </div>
