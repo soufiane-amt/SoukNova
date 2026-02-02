@@ -1,6 +1,6 @@
 'use client';
 import React, { JSX, useEffect, useState } from 'react';
-import { Search, MoreHorizontal, Trash2, Loader2, Eye } from 'lucide-react';
+import { Search, MoreHorizontal, Eye } from 'lucide-react';
 
 type CustomerItem = {
   id: number | string;

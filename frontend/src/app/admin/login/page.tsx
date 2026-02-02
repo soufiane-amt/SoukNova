@@ -14,7 +14,6 @@ import {
 import { SignInInput, SignInSchema } from '@/auth/schemas/signInSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { preprocess } from 'zod';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -49,6 +48,7 @@ export default function AdminLoginPage() {
       router.push('dashboard');
     } catch (error: any) {
       const msg = error.response?.data?.message || 'Signin failed';
+      setError(msg);
       setServerMessage(msg);
     } finally {
       setLoading(false);
