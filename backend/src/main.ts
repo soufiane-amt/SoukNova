@@ -42,9 +42,9 @@ async function bootstrap() {
   });
   app.use(compression());
 
-const port = parseInt(process.env.PORT!, 10);
+
+  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
   await app.listen(port, '0.0.0.0');
-  console.log(`NestJS running on port ${port}`);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 void bootstrap();
-

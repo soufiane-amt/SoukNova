@@ -34,7 +34,6 @@ export class AdminController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const { access_token } = await this.adminService.signIn(adminCredentials);
-    console.log('---------------2---------------');
 
     res.cookie('jwt', access_token, {
       httpOnly: true,
@@ -42,8 +41,6 @@ export class AdminController {
       secure: true,
       sameSite: 'none',
     });
-    console.log('---------------3---------------');
-    console.log('-access_token----', access_token);
 
     return { message: 'Login successful' };
   }
