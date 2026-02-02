@@ -25,6 +25,9 @@ function WishItem({
   const [addingToCart, setAddingToCart] = useState(false);
   const { addToCart } = useCart();
 
+  const productImgSrc = productImage.startsWith('http')
+    ? productImage
+    : `${process.env.NEXT_PUBLIC_API_URL}${productImage}`;
   const handleDeleteClick = async () => {
     if (deleting) return;
     try {
@@ -63,7 +66,7 @@ function WishItem({
           </button>
           <div className="bg-[#f4f4f4] mr-3 h-[60px] min-w-[60px] relative">
             <Image
-              src={productImage}
+              src={productImgSrc}
               alt="Wish product"
               fill
               className="object-cover"

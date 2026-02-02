@@ -5,7 +5,7 @@ import * as cookie from 'cookie';
 export async function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
 
-  const publicPaths = ['/auth', '/_next', '/favicon.ico'];
+  const publicPaths = ['/auth', '/admin/login', '/_next', '/favicon.ico'];
   if (publicPaths.some((p) => url.pathname.startsWith(p))) {
     return NextResponse.next();
   }
@@ -23,8 +23,16 @@ export async function middleware(req: NextRequest) {
       headers,
     });
     if (res.ok) {
+      console.log('Token is valid, proceeding to requested page.');
       return NextResponse.next();
-    } else {
+    }
+    else if (url.pathname.startsWith("/admin"))
+    {
+      console.log('Token is invalid or missing, redirecting to admin login page.');
+      url.pathname = '/admin/login';
+      return NextResponse.redirect(url);
+    }
+     else {
       url.pathname = '/auth/signin';
       return NextResponse.redirect(url);
     }
@@ -36,5 +44,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/account/:path*', '/cart', '/checkout', '/orderComplete'],
+  matcher: ['/admin/:path*', '/account/:path*', '/cart', '/checkout', '/orderComplete'],
 };

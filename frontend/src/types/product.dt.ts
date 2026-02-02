@@ -11,16 +11,19 @@ export interface ProductType {
   id: string;
   title: string;
   price: number;
-  discount: number;
+  discount: string;
 
   rate?: number;
+  availability? :'In Stock' | 'Low Stock' | 'Out of Stock';
   comments?: ProductReview[];
   package_dimensions?: string;
   originalPrice?: number;
   primary_image?: string;
   categories?: string[];
   item_model_number?: string;
-  about_item?: string;
+  description?: string;
   images?: string[];
   date?: string;
+  status?: string;
+  about_item?: string;
 }

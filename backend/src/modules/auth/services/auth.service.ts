@@ -8,6 +8,7 @@ import { CreateUserDto } from 'src/modules/users/dto/createUser.dto';
 import { UserCredentialsDto } from 'src/modules/users/dto/userCredentials.dto';
 import { UsersService } from '../../users/services/users.service';
 import { ConfigService } from '@nestjs/config';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,7 @@ export class AuthService {
     private userService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private prismaService: PrismaService,
   ) {}
 
   getSecret() {
@@ -23,12 +25,13 @@ export class AuthService {
 
   async signUp(
     createUserDto: CreateUserDto,
-  ): Promise<{ access_token: string }> {
+  ): Promise<{ userId: number, access_token: string }> {
     const user = await this.userService.checkIfExists(createUserDto.email);
     if (!user) {
       const user = await this.userService.createUser(createUserDto);
       const payload = { sub: user.id, email: user.email };
       return {
+        userId: user.id,
         access_token: await this.jwtService.signAsync(payload),
       };
     } else {
@@ -38,15 +41,26 @@ export class AuthService {
 
   async signIn(
     userCredentialsDto: UserCredentialsDto,
-  ): Promise<{ access_token: string }> {
+  ): Promise<{userId: number, access_token: string }> {
     const user =
       await this.userService.checkIfCredentialsAreValid(userCredentialsDto);
 
-    if (!user) throw new UnauthorizedException('Invalid credentials!');
+    if (!user || user.status === 'frozen') throw new UnauthorizedException('Invalid credentials!');
     const payload = { sub: user?.id, username: user?.email };
 
     return {
+      userId: user?.id,
       access_token: await this.jwtService.signAsync(payload),
     };
+  }
+
+  async logSession(request: any, userId: number) {
+    await this.prismaService.session.create({
+      data: {
+        userId,
+        device: request.headers['user-agent'],
+        ip: request.ip,
+      },
+    });
   }
 }
