@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { poppins } from '@/layout';
 import SidebarItem from './dashboard/components/SidebarItem';
 import { usePathname, useRouter } from 'next/navigation';
+import AuthGuard from '@/account/AuthGuard';
 
 export default function AdminPanelLayout({
   children,
@@ -164,7 +165,9 @@ export default function AdminPanelLayout({
 
         {/* Scrollable Content Area */}
         <main className="flex-1 overflow-y-auto p-2 lg:p-4">
-          <div className="max-w-7xl mx-auto">{children}</div>
+          <AuthGuard>
+            <div className="max-w-7xl mx-auto">{children}</div>
+          </AuthGuard>
         </main>
       </div>
     </div>
