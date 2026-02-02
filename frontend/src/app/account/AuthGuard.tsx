@@ -4,8 +4,8 @@ import React from 'react';
 import { useAuthGuard } from '../../hooks/useAuthGuard';
 import Loader from '../../components/feedback/loader/Loader';
 
-export default function AuthGuard({ children }: { children: React.ReactNode }) {
-  const isVerified = useAuthGuard();
+export default function AuthGuard({redirectedTo, children }: { children: React.ReactNode, redirectedTo?: string }) {
+  const isVerified = useAuthGuard({ redirectTo: redirectedTo });
 
   if (isVerified === null) {
     return <Loader />;

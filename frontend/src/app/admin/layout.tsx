@@ -165,7 +165,7 @@ export default function AdminPanelLayout({
 
         {/* Scrollable Content Area */}
         <main className="flex-1 overflow-y-auto p-2 lg:p-4">
-          <AuthGuard>
+          <AuthGuard redirectedTo='/admin/login'>
             <div className="max-w-7xl mx-auto">{children}</div>
           </AuthGuard>
         </main>

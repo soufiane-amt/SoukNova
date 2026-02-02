@@ -2,7 +2,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export function useAuthGuard() {
+interface useAuthGuardProps {
+  redirectTo?: string;
+}
+export function useAuthGuard({ redirectTo = '/auth/signin' }: useAuthGuardProps = {}) {
   const router = useRouter();
   const [isVerified, setIsVerified] = useState<boolean | null>(null);
 
@@ -19,7 +22,7 @@ export function useAuthGuard() {
         if (!mounted) return;
         if (!res.ok) {
           setIsVerified(false);
-          router.replace('/auth/signin');
+          router.replace(redirectTo);
           return;
         }
         setIsVerified(true);
@@ -27,7 +30,7 @@ export function useAuthGuard() {
       } catch (err) {
         if (!mounted) return;
         setIsVerified(false);
-        router.replace('/auth/signin');
+        router.replace(redirectTo);
       }
     };
 
