@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const navBarExists = pathname.includes('/auth');
+  const navBarExists = pathname.includes('/auth') || pathname.includes('/admin');
 
   useEffect(() => {
     window.scrollTo(0, 0);

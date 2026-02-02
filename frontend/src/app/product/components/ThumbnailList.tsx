@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 interface ThumbnailListProps {
   images: string[] | undefined;
-  activeImage: string;
+  activeImage: string  | undefined;
   onSelectImage: (image: string) => void;
 }
 
@@ -31,8 +31,9 @@ const ThumbnailList: React.FC<ThumbnailListProps> = ({
             aria-label={`View image ${index + 1}`}
             aria-pressed={isActive}
           >
+
             <Image
-              src={img}
+              src={img.startsWith('http') ? img : `${process.env.NEXT_PUBLIC_API_URL}${img}`}
               alt={`Product thumbnail ${index + 1}`}
               fill
               className="object-contain p-2"

@@ -21,8 +21,18 @@ export class OrderService {
       data: {
         userId,
         price: orderData.orderTotal,
+        items: {
+          create: orderData.items.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            total: item.quantity * item.unitPrice,
+          })),
+        },
       },
+      include: { items: true },
     });
+
     const redis = this.redisService.getClient();
     await redis.del(this.getCacheKey(userId));
 

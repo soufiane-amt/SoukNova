@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
 }
 
@@ -14,29 +14,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Admin {
+  id        String   @id @default(uuid())
+  email     String     @unique
+  username  String      @unique
+  firstName String
+  lastName  String
+  password  String
+  image     String?
+  createdAt DateTime   @default(now())
+}
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  firstName      String
-  lastName      String
-  password      String
-  image      String?
-  createdAt DateTime @default(now())
-  wishlist      Wishlist[]
-  cartItems          CartItem[]
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  firstName String
+  lastName  String
+  password  String
+  image     String?
+  createdAt DateTime   @default(now())
+  status    String   @default("active")
+  wishlist  Wishlist[]
+  cartItems CartItem[]
   orders    Order[]
-  comments    Comment[]
+  comments  Comment[]
+  sessions  Session[]
 }
 
 model Wishlist {
-  id        Int      @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   userId    Int
   productId String
 
-  user      User     @relation(fields: [userId], references: [id])
-  product   Product  @relation(fields: [productId], references: [id])
-  addedAt   DateTime @default(now())
+  user    User     @relation(fields: [userId], references: [id])
+  product Product  @relation(fields: [productId], references: [id])
+  addedAt DateTime @default(now())
 
   @@unique([userId, productId], name: "userId_productId")
 }
@@ -48,74 +60,92 @@ model CartItem {
   quantity  Int      @default(1)
   addedAt   DateTime @default(now())
 
-  user      User     @relation(fields: [userId], references: [id])
-  product   Product  @relation(fields: [productId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
 
-  @@unique([userId, productId]) 
+  @@unique([userId, productId])
 }
-
 
 model Order {
-  id   Int   @id @default(autoincrement())
-  price    Float
+  id      Int         @id @default(autoincrement())
+  price   Float
   userId  Int
-  user      User   @relation(fields: [userId], references: [id])
-
-  addedAt   DateTime @default(now())
+  user    User        @relation(fields: [userId], references: [id])
+  addedAt DateTime    @default(now())
+  items   OrderItem[]
 }
 
+model OrderItem {
+  id        Int    @id @default(autoincrement())
+  orderId   Int
+  productId String
+  quantity  Int
+  unitPrice Float // price per product at order time
+  total     Float // quantity * unitPrice
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
 
 model Comment {
-  id   Int   @id @default(autoincrement())
-  userId  Int
+  id        Int      @id @default(autoincrement())
+  userId    Int
   productId String
-  user      User   @relation(fields: [userId], references: [id])
-  product   Product  @relation(fields: [productId], references: [id]) 
-  content    String
-  rating     Float
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  content   String
+  rating    Float
   addedAt   DateTime @default(now())
 }
 
-
 model Product {
-  id String @id @default(cuid())
-  title             String
-  brand             String?
-  price             Float
-  availability      String?
-  categoriesText    String?
-  primary_image     String
-  manufacturer      String?
-  item_model_number String?
+  id                 String   @id @default(cuid())
+  title              String
+  brand              String?
+  price              Float
+  availability       String?
+  categoriesText     String?
+  primary_image      String
+  manufacturer       String?
+  item_model_number  String?
   package_dimensions String?
-  date              String?
-  country_of_origin String?
-  color             String?
-  material          String?
-  style             String?
-  product_overview  String?
-  about_item        String?
-  description       String?
-  specifications    String?
-  rate              Int?
-  discount          String?
-  images            String[]   // store as array
-  colors            String[]
-  categories        String[]
+  date               String?
+  country_of_origin  String?
+  color              String?
+  material           String?
+  style              String?
+  product_overview   String?
+  about_item         String?
+  description        String?
+  specifications     String?
+  rate               Int?
+  discount           String?
+  images             String[] // store as array
+  colors             String[]
+  categories         String[]
 
   cartItems  CartItem[]
   comments   Comment[]
-  wishlist   Wishlist[] 
-  addedAt   DateTime @default(now())
+  wishlist   Wishlist[]
+  addedAt    DateTime    @default(now())
+  orderItems OrderItem[]
 }
 
-
 model article {
-    id   Int   @id @default(autoincrement())
-    title String
-    author String
-    date String
-    images String[]
-    text String
-    addedAt   DateTime @default(now())
+  id      Int      @id @default(autoincrement())
+  title   String
+  author  String
+  date    String
+  images  String[]
+  text    String
+  addedAt DateTime @default(now())
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  ip        String?
+  device    String?
 }

@@ -9,6 +9,7 @@ import { CommentModule } from '../comment/comment.module';
 import { ProductModule } from '../product/product.module';
 import { ArticleModule } from '../article/article.module';
 import { RedisModule } from '../redis/redis.module';
+import { AdminModule } from '../admin/admin.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RedisModule } from '../redis/redis.module';
     CommentModule,
     ProductModule,
     ArticleModule,
+    AdminModule,
     RedisModule,
   ],
   controllers: [],
