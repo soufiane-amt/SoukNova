@@ -12,7 +12,7 @@ import {
   MapPin,
   Smartphone,
   User,
-  Activity,
+  Activity, 
   ArrowLeft,
 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
