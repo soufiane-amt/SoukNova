@@ -11,13 +11,13 @@ import { AuthService } from '../services/auth.service';
 import { CreateUserDto } from '../../users/dto/createUser.dto';
 import { UserCredentialsDto } from '../../users/dto/userCredentials.dto';
 import { Response } from 'express';
-import { AuthGuard } from '../guards/auth.guard';
+import { AuthOrAdminGuard } from '../guards/authoradmin.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthOrAdminGuard)
   @Get('verify-token')
   verifyToken() {
     return { valid: true };
@@ -29,13 +29,15 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     try {
-      const token = await this.authService.signUp(user);
-      res.cookie('jwt', token.access_token, {
+      const { access_token, userId } = await this.authService.signUp(user);
+      res.cookie('jwt', access_token, {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 240,
         secure: true,
         sameSite: 'none',
       });
+      this.authService.logSession(res.req, userId);
+
       return { message: 'Signup is successful' };
     } catch (e) {
       if (e instanceof ConflictException) {
@@ -52,13 +54,14 @@ export class AuthController {
     @Body() user: UserCredentialsDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const token = await this.authService.signIn(user);
-    res.cookie('jwt', token.access_token, {
+    const { access_token, userId } = await this.authService.signIn(user);
+    res.cookie('jwt', access_token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
       secure: true,
       sameSite: 'none',
     });
+    this.authService.logSession(res.req, userId);
     return { message: 'Login successful' };
   }
   catch(e) {
