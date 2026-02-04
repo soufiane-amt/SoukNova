@@ -42,9 +42,6 @@ export default function AdminPanelLayout({
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [loadingNotifications, setLoadingNotifications] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
-  const [loading, setLoading] = useState(true);
-
-  const [error, setError] = useState<string | null>(null);
 
   const [profile, setProfile] = useState({
     firstName: '',
@@ -61,7 +58,7 @@ export default function AdminPanelLayout({
   const segments = pathname.split('/').filter(Boolean);
   const activeTab = segments[segments.length - 1] ?? 'dashboard';
 
-  const socket = useSocket({
+  useSocket({
     onNewNotification: (notification: any) => {
       // Add new notification to the list
       setNotifications((prev) => [notification, ...prev.slice(0, 19)]);
@@ -107,7 +104,7 @@ export default function AdminPanelLayout({
         });
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to load profile');
+      console.error(err.message || 'Failed to load profile');
     }
   };
 
