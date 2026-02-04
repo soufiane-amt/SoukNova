@@ -12,15 +12,22 @@ import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 import { User } from 'src/modules/users/user.decorator';
 import { OrderService } from '../services/order.service';
 import { OrderDto } from '../dto/order.dto';
+import { NotificationService } from 'src/modules/notification/services/notification.service';
 
 @UseGuards(AuthGuard)
 @Controller('api/order')
 export class OrderController {
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService, private notificationService: NotificationService) {}
 
   @Post()
   async addOrder(@User('id') userId: number, @Body() orderData: OrderDto) {
-    return await this.orderService.createOrder(userId, orderData);
+    const order = await this.orderService.createOrder(userId, orderData);
+    this.notificationService.notifyNewOrder({
+      id: order.id,
+      total: order.price,
+      userId: order.userId.toString(),
+    });
+    return order
   }
 
   @Get()

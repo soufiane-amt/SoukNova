@@ -5,8 +5,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '../auth/services/auth.service';
 import { UsersService } from '../users/services/users.service';
+import { NotificationModule } from '../notification/notification.module';
 
 @Module({
+  imports: [NotificationModule],
   controllers: [OrderController],
   providers: [
     OrderService,
