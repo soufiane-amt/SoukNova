@@ -95,6 +95,9 @@
     },
     "setupFiles": [
       "tsconfig-paths/register"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(uuid)/)"
     ]
   }
 }
