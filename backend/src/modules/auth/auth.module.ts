@@ -8,9 +8,11 @@ import { UsersModule } from '../users/users.module';
 import { AuthGuard } from './guards/auth.guard';
 import { AuthOrAdminGuard } from './guards/authoradmin.guard';
 import { AdminGuard } from './guards/admin.guard';
+import { NotificationModule } from '../notification/notification.module';
 
 @Module({
   imports: [
+    NotificationModule,
     forwardRef(() => UsersModule),
     ConfigModule,
     JwtModule.registerAsync({

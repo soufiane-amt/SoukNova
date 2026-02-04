@@ -10,6 +10,7 @@ import { ProductModule } from '../product/product.module';
 import { ArticleModule } from '../article/article.module';
 import { RedisModule } from '../redis/redis.module';
 import { AdminModule } from '../admin/admin.module';
+import { NotificationModule } from '../notification/notification.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AdminModule } from '../admin/admin.module';
     ArticleModule,
     AdminModule,
     RedisModule,
+    NotificationModule,
   ],
   controllers: [],
   providers: [],
