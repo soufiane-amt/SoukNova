@@ -465,7 +465,7 @@ describe('AdminService', () => {
       categories: ['Electronics'],
       status: 'In Stock',
       sku: 'SKU-123',
-      dimensions: { length: "10", width: "5", height: "3", unit: 'cm' },
+      dimensions: { length: '10', width: '5', height: '3', unit: 'cm' },
     };
 
     const mockFiles = [
@@ -1148,6 +1148,8 @@ describe('AdminService', () => {
     });
 
     it('should handle file deletion errors gracefully', async () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+
       mockPrismaService.admin.findUnique.mockResolvedValue(mockAdmin);
       mockPrismaService.admin.update.mockResolvedValue({
         ...mockAdmin,
@@ -1162,6 +1164,12 @@ describe('AdminService', () => {
       const result = await service.uploadAvatar('admin-123', mockFile);
 
       expect(result).toBeDefined();
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Failed to delete avatar file:',
+        expect.any(Error),
+      );
+
+      consoleErrorSpy.mockRestore();
     });
   });
 
