@@ -12,10 +12,11 @@ import { CreateUserDto } from '../../users/dto/createUser.dto';
 import { UserCredentialsDto } from '../../users/dto/userCredentials.dto';
 import { Response } from 'express';
 import { AuthOrAdminGuard } from '../guards/authoradmin.guard';
+import { NotificationService } from 'src/modules/notification/services/notification.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly notificationService: NotificationService) {}
 
   @UseGuards(AuthOrAdminGuard)
   @Get('verify-token')
@@ -37,7 +38,11 @@ export class AuthController {
         sameSite: 'none',
       });
       this.authService.logSession(res.req, userId);
-
+      this.notificationService.notifyNewUser({
+        id: userId,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName});
       return { message: 'Signup is successful' };
     } catch (e) {
       if (e instanceof ConflictException) {
