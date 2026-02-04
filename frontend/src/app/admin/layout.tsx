@@ -20,6 +20,7 @@ import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { useSocket } from '../../hooks/useSocket';
 import { DEFAULT_USER_IMAGE } from '../../constants/assets';
+import AuthGuard from '@/account/AuthGuard';
 
 interface Notification {
   id: string;
@@ -114,19 +115,19 @@ export default function AdminPanelLayout({
 
   // Request notification permission on mount
   useEffect(() => {
-    if (navBarExists && 'Notification' in window) {
+    if (!isAdminLogin && 'Notification' in window) {
       if (Notification.permission === 'default') {
         Notification.requestPermission();
       }
     }
-  }, [navBarExists]);
+  }, [isAdminLogin]);
 
   // Fetch initial notifications and unread count
   useEffect(() => {
-    if (navBarExists) {
+    if (!isAdminLogin) {
       fetchUnreadCount();
     }
-  }, [navBarExists]);
+  }, [isAdminLogin]);
 
   // Close notification dropdown when clicking outside
   useEffect(() => {
