@@ -19,7 +19,7 @@ async function bootstrap() {
   );
 
   const configService = app.get(ConfigService);
-  let allowedPrefix = configService.get<string>('FRONTEND_URL_PREFIX');
+  const frontend_url = configService.get<string>('FRONTEND_URL');
 
   // CORS for HTTP requests
   app.enableCors({
@@ -27,7 +27,7 @@ async function bootstrap() {
       // allow server-to-server or tools like Postman
       if (!origin) return callback(null, true);
 
-      if (allowedPrefix && origin.startsWith(allowedPrefix)) {
+      if (frontend_url && origin === frontend_url) {
         return callback(null, true);
       }
 
