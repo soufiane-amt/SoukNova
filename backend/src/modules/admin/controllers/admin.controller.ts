@@ -16,13 +16,22 @@ import {
   Res,
   ConflictException,
   UseGuards,
+  UnauthorizedException,
+  UploadedFile,
 } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { AdminService } from '../services/admin.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UserCredentialsDto } from 'src/modules/users/dto/userCredentials.dto';
 import { AdminGuard } from '../../auth/guards/admin.guard';
 import { Response } from 'express';
+import { UpdateProfileDto } from '../dto/update-profile.dto';
+import { User } from 'src/modules/users/user.decorator';
+import { ChangePasswordDto } from '../dto/change-password.dto';
+import { UpdateNotificationPreferencesDto } from '../dto/update-notification-preferences.dto';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 @Controller('api/admin')
 export class AdminController {
@@ -171,5 +180,213 @@ export class AdminController {
   async unFreezeUser(@Param('id', ParseIntPipe) id: number) {
     await this.adminService.unFreezeUser(id);
     return { success: true };
+  }
+
+  /**
+   * GET /api/admin/profile
+   * Get current admin's profile
+   */
+  @UseGuards(AdminGuard)
+  @Get('profile')
+  async getProfile(@User('id') adminId: string) {
+    const profile = await this.adminService.getProfile(adminId);
+
+    if (!profile) {
+      throw new NotFoundException('Admin not found');
+    }
+
+    return { data: profile };
+  }
+
+  /**
+   * PATCH /api/admin/profile
+   * Update current admin's profile
+   */
+  @UseGuards(AdminGuard)
+  @Patch('profile')
+  async updateProfile(
+    @User('id') adminId: string,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ) {
+    try {
+      const updatedProfile = await this.adminService.updateProfile(
+        adminId,
+        updateProfileDto,
+      );
+
+      return {
+        success: true,
+        message: 'Profile updated successfully',
+        data: updatedProfile,
+      };
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+      throw new BadRequestException('Failed to update profile');
+    }
+  }
+
+  /**
+   * POST /api/admin/change-password
+   * Change admin's password
+   */
+  @UseGuards(AdminGuard)
+  @Post('change-password')
+  async changePassword(
+    @User('id') adminId: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    try {
+      await this.adminService.changePassword(adminId, changePasswordDto);
+
+      return {
+        success: true,
+        message: 'Password changed successfully',
+      };
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
+      throw new BadRequestException('Failed to change password');
+    }
+  }
+
+  /**
+   * GET /api/admin/notifications/preferences
+   * Get admin's notification preferences
+   */
+  @UseGuards(AdminGuard)
+  @Get('notifications/preferences')
+  async getNotificationPreferences(@User('id') adminId: string) {
+    try {
+      const preferences =
+        await this.adminService.getNotificationPreferences(adminId);
+
+      return {
+        success: true,
+        data: preferences,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new BadRequestException('Failed to fetch notification preferences');
+    }
+  }
+
+  /**
+   * PATCH /api/admin/notifications/preferences
+   * Update admin's notification preferences
+   */
+  @UseGuards(AdminGuard)
+  @Patch('notifications/preferences')
+  async updateNotificationPreferences(
+    @User('id') adminId: string,
+    @Body() dto: UpdateNotificationPreferencesDto,
+  ) {
+    try {
+      const preferences = await this.adminService.updateNotificationPreferences(
+        adminId,
+        dto,
+      );
+
+      return {
+        success: true,
+        message: 'Notification preferences updated successfully',
+        data: preferences,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new BadRequestException(
+        'Failed to update notification preferences',
+      );
+    }
+  }
+
+  /**
+   * POST /api/admin/profile/avatar
+   * Upload or update admin avatar
+   */
+  @UseGuards(AdminGuard)
+  @Post('profile/avatar')
+  @UseInterceptors(
+    FileInterceptor('avatar', {
+      storage: diskStorage({
+        destination: './uploads/avatars',
+        filename: (req, file, callback) => {
+          const uniqueSuffix = uuidv4();
+          const ext = extname(file.originalname).toLowerCase();
+          callback(null, `avatar-${uniqueSuffix}${ext}`);
+        },
+      }),
+      limits: {
+        fileSize: 2 * 1024 * 1024, // 2MB
+      },
+      fileFilter: (req, file, callback) => {
+        const allowedMimes = [
+          'image/jpeg',
+          'image/png',
+          'image/gif',
+          'image/webp',
+        ];
+        if (allowedMimes.includes(file.mimetype)) {
+          callback(null, true);
+        } else {
+          callback(
+            new BadRequestException(
+              'Invalid file type. Only JPG, PNG, GIF, and WebP are allowed.',
+            ),
+            false,
+          );
+        }
+      },
+    }),
+  )
+  async uploadAvatar(
+    @User('id') adminId: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
+
+    try {
+      const updated = await this.adminService.uploadAvatar(adminId, file);
+      return {
+        success: true,
+        message: 'Avatar uploaded successfully',
+        data: updated,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new BadRequestException('Failed to upload avatar');
+    }
+  }
+
+  /**
+   * DELETE /api/admin/profile/avatar
+   * Delete admin avatar
+   */
+  @UseGuards(AdminGuard)
+  @Delete('profile/avatar')
+  async deleteAvatar(@User('id') adminId: string) {
+    try {
+      const updated = await this.adminService.deleteAvatar(adminId);
+      return {
+        success: true,
+        message: 'Avatar deleted successfully',
+        data: updated,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new BadRequestException('Failed to delete avatar');
+    }
   }
 }

@@ -1,7 +1,8 @@
 import {
   Injectable,
-  BadRequestException,
   UnauthorizedException,
+  ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { getFirstTwoWords } from 'src/utils/helpers';
@@ -12,13 +13,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserCredentialsDto } from 'src/modules/users/dto/userCredentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { Admin } from '.prisma/client';
+import { ChangePasswordDto } from '../dto/change-password.dto';
+import { Admin } from '@prisma/client';
+import { UpdateProfileDto } from '../dto/update-profile.dto';
+import { UpdateNotificationPreferencesDto } from '../dto/update-notification-preferences.dto';
+import { join } from 'path';
+import { existsSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class AdminService {
   constructor(
     private readonly prisma: PrismaService,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
   ) {}
 
   private async checkIfCredentialsAreValid(
@@ -39,8 +45,7 @@ export class AdminService {
     userCredentialsDto: UserCredentialsDto,
   ): Promise<{ access_token: string }> {
     const admin = await this.checkIfCredentialsAreValid(userCredentialsDto);
-    if (!admin)
-      throw new UnauthorizedException('Invalid credentials!');
+    if (!admin) throw new UnauthorizedException('Invalid credentials!');
     const payload = { sub: admin?.id, username: admin?.email };
 
     return {
@@ -641,5 +646,303 @@ export class AdminService {
       where: { id: userId },
       data: { status: 'active' },
     });
+  }
+
+  /**
+   * Get admin profile by ID
+   */
+  async getProfile(adminId: string) {
+    const admin = await this.prisma.admin.findUnique({
+      where: { id: adminId },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        phone: true,
+        avatar: true,
+        createdAt: true,
+      },
+    });
+
+    if (!admin) return null;
+
+    return {
+      id: admin.id,
+      firstName: admin.firstName || '',
+      lastName: admin.lastName || '',
+      email: admin.email,
+      phone: admin.phone || '',
+      avatar: admin.avatar || '',
+      createdAt: admin.createdAt,
+    };
+  }
+
+  /**
+   * Update admin profile
+   */
+  async updateProfile(adminId: string, data: UpdateProfileDto) {
+    if (data.email) {
+      const existingAdmin = await this.prisma.admin.findFirst({
+        where: {
+          email: data.email,
+          NOT: { id: adminId },
+        },
+      });
+
+      if (existingAdmin) {
+        throw new ConflictException('Email already in use');
+      }
+    }
+
+    const updatedAdmin = await this.prisma.admin.update({
+      where: { id: adminId },
+      data: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        phone: true,
+        avatar: true,
+      },
+    });
+
+    return updatedAdmin;
+  }
+
+  /**
+   * Change admin password
+   */
+  async changePassword(adminId: string, dto: ChangePasswordDto) {
+    // Get admin with current password
+    const admin = await this.prisma.admin.findUnique({
+      where: { id: adminId },
+      select: {
+        id: true,
+        password: true,
+      },
+    });
+
+    if (!admin) {
+      throw new UnauthorizedException('Admin not found');
+    }
+
+    // Verify current password
+    const isCurrentPasswordValid = await bcrypt.compare(
+      dto.currentPassword,
+      admin.password,
+    );
+
+    if (!isCurrentPasswordValid) {
+      throw new UnauthorizedException('Current password is incorrect');
+    }
+
+    // Check if new password is same as current
+    const isSamePassword = await bcrypt.compare(
+      dto.newPassword,
+      admin.password,
+    );
+    if (isSamePassword) {
+      throw new UnauthorizedException(
+        'New password must be different from current password',
+      );
+    }
+
+    // Hash new password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(dto.newPassword, saltRounds);
+
+    // Update password
+    await this.prisma.admin.update({
+      where: { id: adminId },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    return { success: true };
+  }
+
+  /**
+   * Get admin notification preferences
+   */
+  async getNotificationPreferences(adminId: string) {
+    const admin = await this.prisma.admin.findUnique({
+      where: { id: adminId },
+      select: {
+        notifyOrders: true,
+        notifyNewUsers: true,
+        notifyReviews: true,
+      },
+    });
+
+    if (!admin) {
+      throw new NotFoundException('Admin not found');
+    }
+
+    return {
+      pushOrders: admin.notifyOrders,
+      pushNewUsers: admin.notifyNewUsers,
+      pushReviews: admin.notifyReviews,
+    };
+  }
+
+  /**
+   * Update admin notification preferences
+   */
+  async updateNotificationPreferences(
+    adminId: string,
+    dto: UpdateNotificationPreferencesDto,
+  ) {
+    const admin = await this.prisma.admin.findUnique({
+      where: { id: adminId },
+    });
+
+    if (!admin) {
+      throw new NotFoundException('Admin not found');
+    }
+
+    const updatedAdmin = await this.prisma.admin.update({
+      where: { id: adminId },
+      data: {
+        notifyOrders: dto.notifyOrders ?? admin.notifyOrders,
+        notifyNewUsers: dto.notifyNewUsers ?? admin.notifyNewUsers,
+        notifyReviews: dto.notifyReviews ?? admin.notifyReviews,
+      },
+      select: {
+        notifyOrders: true,
+        notifyNewUsers: true,
+        notifyReviews: true,
+      },
+    });
+
+    return {
+      pushOrders: updatedAdmin.notifyOrders,
+      pushNewUsers: updatedAdmin.notifyNewUsers,
+      pushReviews: updatedAdmin.notifyReviews,
+    };
+  }
+
+  /**
+   * Check if admin should receive a specific notification type
+   */
+  async shouldNotify(
+    adminId: string,
+    type: 'orders' | 'newUsers' | 'reviews',
+  ): Promise<boolean> {
+    const admin = await this.prisma.admin.findUnique({
+      where: { id: adminId },
+      select: {
+        notifyOrders: true,
+        notifyNewUsers: true,
+        notifyReviews: true,
+      },
+    });
+
+    if (!admin) return false;
+
+    switch (type) {
+      case 'orders':
+        return admin.notifyOrders;
+      case 'newUsers':
+        return admin.notifyNewUsers;
+      case 'reviews':
+        return admin.notifyReviews;
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Upload or update admin avatar
+   */
+  async uploadAvatar(adminId: string, file: Express.Multer.File) {
+    // Get current admin to check for existing avatar
+    const currentAdmin = await this.prisma.admin.findUnique({
+      where: { id: adminId },
+      select: { avatar: true },
+    });
+
+    if (!currentAdmin) {
+      throw new NotFoundException('Admin not found');
+    }
+
+    // Delete old avatar file if exists
+    if (currentAdmin.avatar) {
+      this.deleteAvatarFile(currentAdmin.avatar);
+    }
+
+    // Update admin with new avatar path
+    const avatarPath = `/uploads/avatars/${file.filename}`;
+    const updated = await this.prisma.admin.update({
+      where: { id: adminId },
+      data: { avatar: avatarPath },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        phone: true,
+        avatar: true,
+      },
+    });
+
+    return updated;
+  }
+
+  /**
+   * Delete admin avatar
+   */
+  async deleteAvatar(adminId: string) {
+    // Get current admin
+    const currentAdmin = await this.prisma.admin.findUnique({
+      where: { id: adminId },
+      select: { avatar: true },
+    });
+
+    if (!currentAdmin) {
+      throw new NotFoundException('Admin not found');
+    }
+
+    // Delete avatar file if exists
+    if (currentAdmin.avatar) {
+      this.deleteAvatarFile(currentAdmin.avatar);
+    }
+
+    // Update admin to remove avatar
+    const updated = await this.prisma.admin.update({
+      where: { id: adminId },
+      data: { avatar: null },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        phone: true,
+        avatar: true,
+      },
+    });
+
+    return updated;
+  }
+
+  /**
+   * Helper method to delete avatar file from disk
+   */
+  private deleteAvatarFile(avatarPath: string): void {
+    const fullPath = join(process.cwd(), avatarPath.replace(/^\//, ''));
+    if (existsSync(fullPath)) {
+      try {
+        unlinkSync(fullPath);
+      } catch (err) {
+        console.error('Failed to delete avatar file:', err);
+      }
+    }
   }
 }

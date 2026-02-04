@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { getFirstTwoWords } from '../utils/helpers';
 import Toast from '../components/ui/Toast';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const calculateSubtotalCart = (cart: CartItemType[]) => {
   return cart.reduce((accumulator, currentItem) => {
@@ -59,6 +59,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItemType[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const route = useRouter();
+  const routePathname = usePathname()
 
   const showToast = useCallback((msg: string) => {
     setToast(msg);
@@ -72,6 +73,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchCart = useCallback(async () => {
     try {
+      if (routePathname.startsWith('/auth') || routePathname.startsWith('/admin')) return;
+      
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
         method: 'GET',
         credentials: 'include',

@@ -5,8 +5,10 @@ import { CommentController } from './controller/comment.controller';
 import { CommentService } from './services/comment.service';
 import { AuthService } from '../auth/services/auth.service';
 import { UsersService } from '../users/services/users.service';
+import { NotificationModule } from '../notification/notification.module';
 
 @Module({
+  imports:[NotificationModule],
   controllers: [CommentController],
   providers: [
     CommentService,
