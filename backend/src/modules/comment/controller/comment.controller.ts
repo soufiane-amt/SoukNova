@@ -3,10 +3,14 @@ import { CommentService } from '../services/comment.service';
 import { AuthGuard } from 'src/modules/auth/guards/auth.guard';
 import { User } from 'src/modules/users/user.decorator';
 import { commentInfoDto } from '../dto/commentInfo.dto';
+import { NotificationService } from 'src/modules/notification/services/notification.service';
 
 @Controller('api/comment')
 export class CommentController {
-  constructor(private readonly commentService: CommentService) {}
+  constructor(
+    private readonly commentService: CommentService,
+    private readonly notificationService: NotificationService,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Post(':productId')
@@ -21,6 +25,13 @@ export class CommentController {
       content: body.content,
       rating: body.rating,
     };
-    return await this.commentService.createComment(comment);
+    const createdComment = await this.commentService.createComment(comment);
+    this.notificationService.notifyNewReview({
+      id: createdComment.id,
+      productId: productId,
+      rating: createdComment.rate,
+      customerName: createdComment.name,
+    });
+    return createdComment;
   }
 }
