@@ -18,17 +18,13 @@ export class AdminGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromCookie(request);
-    console.log("token : ", token)
     if (!token) {
-      console.log("No token found");
       throw new UnauthorizedException();
     }
     try {
-      console.log("verifyAsync token ");
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.authService.getSecret(),
       });
-      console.log("payload : ", payload)
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException();
