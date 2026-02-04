@@ -38,7 +38,6 @@ export class NotificationService {
       select: { id: true },
     });
 
-    console.log('Admins to notify:', admins);
     if (admins.length === 0) return [];
 
     // Create notifications for all eligible admins
