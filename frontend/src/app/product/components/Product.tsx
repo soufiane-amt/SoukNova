@@ -213,21 +213,24 @@ function ProductTabs({ productData }: ProductTabsProps) {
                 </p>
               </div>
             ) : (
-              visibleItems.map((item: any, index: number) => (
-                <div
-                  key={item.id}
-                  data-aos="fade-up"
-                  data-aos-delay={`${index * 50}`}
-                  className="bg-white rounded-xl p-5 border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all"
-                >
-                  <Review
-                    name={item.name}
-                    image={item.avatar}
-                    rate={item.rate}
-                    comment={item.content}
-                  />
-                </div>
-              ))
+              visibleItems.map((item: any, index: number) => {
+                console.log("item.id", item.id);
+                return (
+                  <div
+                    key={item.id}
+                    data-aos="fade-up"
+                    data-aos-delay={`${index * 50}`}
+                    className="bg-white rounded-xl p-5 border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all"
+                  >
+                    <Review
+                      name={item.name}
+                      image={item.avatar}
+                      rate={item.rate}
+                      comment={item.content}
+                    />
+                  </div>
+                );
+              })
             )}
           </div>
           {hasMore && <ShowMoreButton handleShowMore={handleShowMore} />}
