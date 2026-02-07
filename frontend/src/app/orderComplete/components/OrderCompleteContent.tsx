@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
 import CartNavigator from '../../../components/ui/Cart/CartNavigator';
 import Order from './Order';
@@ -9,7 +9,12 @@ function OrderCompleteContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
   const { cart } = useCart();
+  const router = useRouter();
 
+  if (!cart.length) {
+    router.push('/cart');
+    return null;
+  }
   if (!orderId) return <p className="text-center my-12">Invalid order ID</p>;
 
   return (
