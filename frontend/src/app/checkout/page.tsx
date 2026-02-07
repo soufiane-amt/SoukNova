@@ -19,6 +19,11 @@ function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  if (!cart.length)
+  {
+    router.push('/cart');
+    return null;
+  }
   const placeOrder = async () => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order`, {
