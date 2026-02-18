@@ -14,7 +14,7 @@ export class ShoppingConciergeController {
   @Post()
   async chat(@Body('messages') messages: ChatMessage[]): Promise<ChatResponse> {
     console.log('Received messages count:', messages.length);
-    const response = await this.conciergeService.handleChat(messages);
+    const response = await this.conciergeService.handleChat("1",messages[messages.length - 1].content);
     return response;
   }
 }
