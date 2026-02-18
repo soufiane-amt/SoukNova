@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import NavBar from '../components/layout/NavBar/Navbar';
 import { useEffect } from 'react';
 import AOS from 'aos';
+import ShoppingConcierge from '../components/ai/ShoppingConcierge';
 
 export const poppins = Poppins({
   subsets: ['latin'],
@@ -26,7 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const navBarExists = pathname.includes('/auth') || pathname.includes('/admin');
+  const navBarExists =
+    pathname.includes('/auth') || pathname.includes('/admin');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -48,6 +50,7 @@ export default function RootLayout({
           <div className={navBarExists ? '' : 'md:mt-15 sm:mt-0'}>
             {children}
           </div>
+          {!navBarExists && <ShoppingConcierge />}
         </CartProvider>
       </body>
     </html>
