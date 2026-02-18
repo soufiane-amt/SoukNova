@@ -11,6 +11,7 @@ import { ArticleModule } from '../article/article.module';
 import { RedisModule } from '../redis/redis.module';
 import { AdminModule } from '../admin/admin.module';
 import { NotificationModule } from '../notification/notification.module';
+import { ShoppingConciergeModule } from '../shopping-concierge/shopping-concierge.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { NotificationModule } from '../notification/notification.module';
     AdminModule,
     RedisModule,
     NotificationModule,
+    ShoppingConciergeModule, 
   ],
   controllers: [],
   providers: [],
