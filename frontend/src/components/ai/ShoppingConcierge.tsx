@@ -12,6 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Product {
   id: string;
@@ -52,8 +53,27 @@ const suggestedPrompts = [
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+const STORAGE_KEY = 'concierge_session_id';
+
+const getSessionId = (): string => {
+  if (typeof window === 'undefined') return ''; // SSR guard
+  let sessionId = sessionStorage.getItem(STORAGE_KEY);
+  if (!sessionId) {
+    sessionId = uuidv4();
+    sessionStorage.setItem(STORAGE_KEY, sessionId);
+  }
+  return sessionId;
+};
+
 export default function ShoppingConcierge() {
   const [isOpen, setIsOpen] = useState(false);
+  const [sessionId, setSessionId] = useState<string>('');
+
+  // Initialize session ID on client only
+  useEffect(() => {
+    setSessionId(getSessionId());
+  }, []);
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -91,88 +111,74 @@ export default function ShoppingConcierge() {
     };
   }, []);
 
-  const handleSend = useCallback(async (text?: string) => {
-    const messageText = text || input.trim();
-    if (!messageText || isTyping) return;
+  const handleSend = useCallback(
+    async (text?: string) => {
+      const messageText = text || input.trim();
+      if (!messageText || isTyping || !sessionId) return;
 
-    // Cancel any ongoing request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    abortControllerRef.current = new AbortController();
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: messageText,
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-    setIsTyping(true);
-
-    // Build chat history for context - now includes products!
-    const chatHistory: ChatMessage[] = messages
-      .filter((m) => !m.isLoading && m.id !== '1') // Exclude welcome message
-      .map((m) => ({
-        role: m.role,
-        content: m.content,
-        products: m.products, // Include products in history
-      }));
-
-    // Add the new user message
-    chatHistory.push({
-      role: 'user',
-      content: messageText,
-    });
-
-    try {
-      console.log('Sending chat history to API:', chatHistory);
-      const response = await fetch(`${API_BASE_URL}/shopping-concierge`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ messages: chatHistory }),
-        signal: abortControllerRef.current.signal,
-      });
-
-      console.log('response:', response);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      // Cancel any ongoing request
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
       }
+      abortControllerRef.current = new AbortController();
 
-      // Parse JSON response from backend
-      const data: ChatResponse = await response.json();
-      console.log('Chat response:', data);
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.message,
-        products: data.products,
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        role: 'user',
+        content: messageText,
       };
 
-      setMessages((prev) => [...prev, assistantMessage]);
-    } catch (error) {
-      if (error instanceof Error && error.name === 'AbortError') {
-        // Request was cancelled, do nothing
-        return;
+      setMessages((prev) => [...prev, userMessage]);
+      setInput('');
+      setIsTyping(true);
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/shopping-concierge`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sessionId,
+            message: messageText,
+          }),
+          signal: abortControllerRef.current.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: ChatResponse = await response.json();
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: data.message,
+          products: data.products,
+        };
+
+        setMessages((prev) => [...prev, assistantMessage]);
+      } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') {
+          return;
+        }
+
+        console.error('Chat error:', error);
+
+        const errorMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content:
+            "I'm sorry, I encountered an error. Please try again in a moment.",
+        };
+
+        setMessages((prev) => [...prev, errorMessage]);
+      } finally {
+        setIsTyping(false);
       }
-
-      console.error('Chat error:', error);
-
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content:
-          "I'm sorry, I encountered an error. Please try again in a moment.",
-      };
-
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsTyping(false);
-    }
-  }, [input, isTyping, messages]);
+    },
+    [input, isTyping, sessionId],
+  );
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -181,12 +187,27 @@ export default function ShoppingConcierge() {
     }
   };
 
-  const clearChat = () => {
-    // Cancel any ongoing request
+  const clearChat = useCallback(async () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
     setIsTyping(false);
+
+    await fetch(`${API_BASE_URL}/shopping-concierge/clear`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sessionId,
+      }),
+    });
+
+    // Generate new session ID
+    const newSessionId = uuidv4();
+    sessionStorage.setItem(STORAGE_KEY, newSessionId);
+    setSessionId(newSessionId);
+
     setMessages([
       {
         id: '1',
@@ -195,7 +216,7 @@ export default function ShoppingConcierge() {
           "Welcome to SoukNova! 👋 I'm your personal shopping assistant. Tell me what you're looking for and I'll help you find the perfect products.",
       },
     ]);
-  };
+  }, [sessionId]);
 
   return (
     <>
@@ -242,7 +263,9 @@ export default function ShoppingConcierge() {
                     Shopping Assistant
                   </h3>
                   <div className="flex items-center gap-1.5">
-                    <span className={`h-2 w-2 rounded-full ${isTyping ? 'bg-yellow-500 animate-pulse' : 'bg-emerald-500'}`}></span>
+                    <span
+                      className={`h-2 w-2 rounded-full ${isTyping ? 'bg-yellow-500 animate-pulse' : 'bg-emerald-500'}`}
+                    ></span>
                     <p className="text-xs text-gray-400">
                       {isTyping ? 'Thinking...' : 'Online'}
                     </p>
