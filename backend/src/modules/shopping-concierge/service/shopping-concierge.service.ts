@@ -5,8 +5,8 @@ import { createGroq } from '@ai-sdk/groq';
 import { z } from 'zod';
 import { ChatResponse, Product } from '../dto/chat-response.dto';
 import { Prisma } from '@prisma/client';
+import { RedisService } from 'src/modules/redis/service/redis.service';
 
-// chat-session.interface.ts
 export interface ChatSession {
   activeProducts: Product[];
   latestKeywords?: string[];
@@ -19,6 +19,9 @@ export interface ChatSession {
   offset: number;
   contextSummary: string;
 }
+
+const SESSION_PREFIX = 'concierge:session:';
+const SESSION_TTL = 60 * 60; // 1 hour
 
 const IntentSchema = z.object({
   intent: z.enum([
@@ -46,44 +49,100 @@ const IntentSchema = z.object({
   confidence: z.number().optional(),
   contextSummary: z.string().optional(),
 });
+
 @Injectable()
 export class ConciergeService {
   private groq: ReturnType<typeof createGroq>;
 
-  // In production, use Redis or similar for session state
-  private sessions: Map<string, ChatSession> = new Map();
-
-  constructor(private prisma: PrismaService) {
+  constructor(
+    private prisma: PrismaService,
+    private redis: RedisService,
+  ) {
     this.groq = createGroq({
       apiKey: process.env.GROQ_API_KEY,
     });
   }
 
+  async clearChat(sessionId: string): Promise<void> {
+    const key = `${SESSION_PREFIX}${sessionId}`;
+    await this.redis.getClient().del(key);
+  }
+
+  private async getSession(sessionId: string): Promise<ChatSession> {
+    const key = `${SESSION_PREFIX}${sessionId}`;
+    const data = await this.redis.getClient().get(key);
+
+    if (data) {
+      return JSON.parse(data) as ChatSession;
+    }
+
+    const newSession: ChatSession = {
+      activeProducts: [],
+      latestKeywords: [],
+      filters: {},
+      offset: 0,
+      contextSummary: '',
+    };
+
+    await this.saveSession(sessionId, newSession);
+    return newSession;
+  }
+
+  private async saveSession(
+    sessionId: string,
+    session: ChatSession,
+  ): Promise<void> {
+    const key = `${SESSION_PREFIX}${sessionId}`;
+    await this.redis
+      .getClient()
+      .set(key, JSON.stringify(session), 'EX', SESSION_TTL);
+  }
+
   async handleChat(sessionId: string, userMessage: string) {
-    const session = this.getSession(sessionId);
+    console.log(`Received message for session ${sessionId}: "${userMessage}"`);
+    const session = await this.getSession(sessionId);
 
-    const intentData = await this.extractIntent(userMessage);
+    const intentData = await this.extractIntent(session, userMessage);
 
+    console.log('Extracted intent data:', intentData);
     // Store the updated context summary
     if (intentData.contextSummary) {
       session.contextSummary = intentData.contextSummary;
     }
 
-    if (intentData?.confidence && intentData?.confidence < 0.6)
-      return this.handleGeneral(session, userMessage);
+    if (intentData?.confidence && intentData?.confidence < 0.6) {
+      const response = await this.handleGeneral(session, userMessage);
+      await this.saveSession(sessionId, session);
+      return response;
+    }
+
+    let response: ChatResponse;
 
     switch (intentData.intent) {
       case 'product_search':
-        return this.handleSearch(session, intentData, userMessage);
+        response = await this.handleSearch(session, intentData, userMessage);
+        break;
       case 'product_reference':
-        return this.handleReference(session, intentData);
+        response = await this.handleReference(session, intentData);
+        break;
       case 'product_comparison':
-        return this.handleComparison(session, intentData, userMessage);
+        response = await this.handleComparison(
+          session,
+          intentData,
+          userMessage,
+        );
+        break;
       case 'pagination':
-        return this.handlePagination(session, intentData);
+        response = await this.handlePagination(session, intentData);
+        break;
       default:
-        return this.handleGeneral(session, userMessage);
+        response = await this.handleGeneral(session, userMessage);
     }
+
+    // Save session after every interaction
+    await this.saveSession(sessionId, session);
+
+    return response;
   }
 
   private async generateProductResponse(products: any[], userMessage: string) {
@@ -129,10 +188,11 @@ Respond helpfully:
     intentData,
     userMessage: string,
   ) {
-    session.filters = intentData.filters;
+    session.filters = intentData.filters ?? session.filters;
     session.offset = 0;
 
     const rawKeywords = intentData.searchKeywords ?? [];
+    console.log('Extracted raw keywords:', rawKeywords);
     const expandedKeywords = await this.expandKeywords(rawKeywords);
     session.latestKeywords = expandedKeywords;
 
@@ -174,7 +234,6 @@ Respond helpfully:
       url: undefined,
     }));
 
-    console.log('relevantProducts:', relevantProducts);
     const response = await this.generateProductResponse(
       relevantProducts,
       'talk to me briefly about these products',
@@ -190,8 +249,8 @@ Respond helpfully:
     const indices = intentData.referenceIndices || [];
 
     const referenced = indices
-      .map((i) => session.activeProducts[i])
-      .filter(Boolean);
+      .filter((i) => i >= 0 && i < session.activeProducts.length)
+      .map((i) => session.activeProducts[i]);
 
     if (referenced.length === 0) {
       return { message: "I couldn't identify which product you mean." };
@@ -222,8 +281,6 @@ Respond helpfully:
     };
   }
 
-  // Add this inside the ConciergeService class, after handleReference
-
   private async handleComparison(
     session: ChatSession,
     intentData: z.infer<typeof IntentSchema>,
@@ -238,7 +295,6 @@ Respond helpfully:
       };
     }
 
-    // If user referenced specific products, only compare those
     const indices = intentData.referenceIndices ?? [];
     const toCompare =
       indices.length > 0
@@ -251,7 +307,6 @@ Respond helpfully:
       };
     }
 
-    // Fetch full product details for comparison
     const fullProducts = await this.prisma.product.findMany({
       where: { id: { in: toCompare.map((p) => p.id) } },
       select: {
@@ -308,7 +363,7 @@ RULES:
     return {
       message:
         result.text || "Here's what I can tell you about these products.",
-      products: toCompare, // Re-show the compared products
+      products: toCompare,
     };
   }
 
@@ -332,18 +387,16 @@ RULES:
       .replace(/[^a-zA-Z0-9\s]/g, '')
       .split(/\s+/)
       .map((word) => `${word}:*`)
-      .join(' | '); // ← CHANGED from ' & ' to ' | ' (OR instead of AND)
+      .join(' | ');
 
     if (!rawQuery || rawQuery === ':*') return [];
 
-    // 🔹 Build dynamic WHERE filters
     const filterConditions: Prisma.Sql[] = [];
 
     if (filters?.category) {
       const normalizedCategory = filters.category.toLowerCase();
 
       console.log('Filtering by category:', normalizedCategory);
-      // Match the keyword inside categoriesText (case-insensitive)
       filterConditions.push(
         Prisma.sql`LOWER("Product"."categoriesText") LIKE '%' || ${normalizedCategory} || '%'`,
       );
@@ -362,7 +415,6 @@ RULES:
         ? Prisma.sql`AND ${Prisma.join(filterConditions, ' AND ')}`
         : Prisma.empty;
 
-    // 🔹 Dynamic ORDER BY
     let orderBySql: Prisma.Sql;
 
     switch (filters?.sortBy) {
@@ -402,20 +454,6 @@ RULES:
     return results;
   }
 
-  private getSession(sessionId: string): ChatSession {
-    if (!this.sessions.has(sessionId)) {
-      this.sessions.set(sessionId, {
-        activeProducts: [],
-        latestKeywords: [],
-        filters: {},
-        offset: 0,
-        contextSummary: '',
-      });
-    }
-
-    return this.sessions.get(sessionId)!;
-  }
-
   private async handlePagination(session: ChatSession, intentData: any) {
     if (!session.latestKeywords?.length) {
       return { message: 'What would you like to search for?' };
@@ -424,22 +462,34 @@ RULES:
     session.offset += 15;
     console.log('Handling pagination with filters:', session.latestKeywords);
     console.log('session.filters', session.filters);
-    const products = await this.queryProducts(
+    const fetchedProducts = await this.queryProducts(
       session,
       session.latestKeywords ?? [],
       session.filters,
     );
 
-    if (!products.length) {
+    if (!fetchedProducts.length) {
       return {
         message:
           "I couldn't find matching products. Would you like to try something else?",
       };
     }
 
+    const products = fetchedProducts.map((p) => ({
+      id: p.id,
+      title: p.title,
+      price: (
+        p.price - (p.discount ? p.price * (parseFloat(p.discount) / 100) : 0)
+      ).toFixed(2),
+      discount: p.discount ?? undefined,
+      primary_image: p.primary_image ?? undefined,
+      rating: p.rate ?? undefined,
+      url: undefined,
+    }));
+
     session.activeProducts = [
       ...session.activeProducts,
-      ...products.map((p) => ({
+      ...fetchedProducts.map((p) => ({
         id: p.id,
         title: p.title,
         price: (
@@ -458,22 +508,17 @@ RULES:
     };
   }
 
-  private async extractIntent(userMessage: string) {
-    const activeProducts = this.getSession("1").activeProducts ?? [];
+  private async extractIntent(session: ChatSession, userMessage: string) {
+    const activeProducts = session.activeProducts ?? [];
     const lastIndex = activeProducts.length - 1;
 
     const prompt = `
 You are an intent extraction engine for a HOME DECOR e-commerce store.
 
 CONVERSATION CONTEXT:
-${this.getSession("1").contextSummary || '(new conversation, no prior context)'}
+${session.contextSummary || '(new conversation, no prior context)'}
 
-${(() => {
-  const session = this.getSession("1");
-  return session && session.latestKeywords?.length
-    ? `Previous search keywords: [${session.latestKeywords.join(', ')}]`
-    : '';
-})()}
+${session.latestKeywords?.length ? `Previous search keywords: [${session.latestKeywords.join(', ')}]` : ''}
 
 CURRENT MESSAGE: "${userMessage}"
 
@@ -496,6 +541,28 @@ Respond ONLY with valid JSON:
   "confidence": number,
   "contextSummary": string
 }
+Before extracting keywords, check if the message contains ANY price/quality signal:
+
+PRICE_ASC triggers (set sortBy: "price_asc"):
+"cheap", "cheapest", "affordable", "budget", "inexpensive", "low price",
+"lowest price", "most affordable", "under $X", "bargain", "economical",
+"not expensive", "good deal", "value"
+
+PRICE_DESC triggers (set sortBy: "price_desc"):
+"expensive", "most expensive", "luxury", "luxurious", "premium",
+"high-end", "high end", "top of the line", "finest", "best quality"
+
+RATING triggers (set sortBy: "rating"):
+"best", "best rated", "highest rated", "top rated", "best reviews",
+"most popular", "recommended", "highest quality"
+
+IMPORTANT:
+- "cheap chairs" → sortBy: "price_asc", searchKeywords: ["chairs"]
+- "expensive tables" → sortBy: "price_desc", searchKeywords: ["tables"]
+- "best sofas" → sortBy: "rating", searchKeywords: ["sofas"]
+- "I need cheap chairs" → sortBy: "price_asc", searchKeywords: ["chairs"]
+- DO NOT put price/quality words in searchKeywords
+- DO NOT leave sortBy as null if any trigger word is present
 
 CONTEXT SUMMARY RULES:
 - "contextSummary" must be a SHORT (1-2 sentence) summary of the ENTIRE conversation so far, INCLUDING the current message.
@@ -506,14 +573,42 @@ CONTEXT SUMMARY RULES:
   - Follow-up "tell me about the first one" → "User searched for chairs, was shown results. Asking about the first chair."
   - Follow-up "hello" → "User previously searched for chairs. Now greeting."
 
+═══════════════════════════════════════════════════════════════
+CRITICAL: SEARCH KEYWORD RULES FOR REFINED SEARCHES
+═══════════════════════════════════════════════════════════════
+
+A message is a REFINED SEARCH (not a new search) when:
+- There are "Previous search keywords" AND previously shown products
+- AND the user's message does NOT contain a new product type noun (like "chair", "table", "lamp", "sofa", "bed", "desk", "rug", "mirror")
+- AND the user's message contains ONLY style/attribute/quality words OR comparative phrases
+
+Examples of REFINED SEARCH messages:
+"something modern", "I want modern ones", "something cheaper", "anything blue",
+"more premium", "something bigger", "in leather", "wooden ones", "anything rustic",
+"something better", "more affordable", "higher quality", "something minimalist"
+
+When the search is REFINED:
+1. ALWAYS include ALL previous search keywords in "searchKeywords"
+2. ADD any new style/attribute/material words from the current message
+3. The result should be: [previous keywords] + [new modifiers]
+
+Example flow:
+- User: "I need tables" → searchKeywords: ["tables"]
+- User: "I want something modern" → searchKeywords: ["tables", "modern"]  (NOT just ["modern"])
+- User: "in wood" → searchKeywords: ["tables", "modern", "wood"]  (adds to existing)
+- User: "actually show me chairs" → searchKeywords: ["chairs"]  (NEW search, drops previous)
+
+When the search is NEW (user mentions a completely different product type):
+- Drop all previous keywords
+- Extract only from the current message
+
+═══════════════════════════════════════════════════════════════
+
 CONTEXT-AWARE RULES:
-- If the user says something vague like "something better", "anything else", "what about cheaper ones" AND there are previously shown products → this is a REFINED SEARCH.
-- For a refined search: use intent "product_search" but carry over the SAME keywords from "Previous search keywords" and apply new filters.
 - "something better" → keep same keywords, sortBy: "rating"
 - "something cheaper" / "anything more affordable" → keep same keywords, sortBy: "price_asc"
 - "something more expensive" / "more premium" → keep same keywords, sortBy: "price_desc"
 - "do you have more" / "show me more" → intent: "pagination"
-- "what about in blue/leather/wood" → keep same keywords, add modifier to searchKeywords
 
 SORTING RULES:
 - "cheapest", "lowest price", "most affordable" → "price_asc"
@@ -529,12 +624,14 @@ Intent definitions:
 1. product_search
 User wants to find, buy, browse, see, explore, or get recommendations for products.
 
-In addition to filters, extract the main search keywords from the message (e.g., nouns, product names, adjectives describing the product) and put them in the array "searchKeywords". If you cannot extract any, return an empty array.
+Extract the main search keywords and put them in "searchKeywords".
+REMEMBER: If this is a refined search, ALWAYS include the previous search keywords too.
+If you cannot extract any keywords AND there are no previous keywords, return an empty array.
 If intent is NOT "product_search", return an empty array [] for "searchKeywords".
 
 Examples:
 - "I need chairs" => { "searchKeywords": ["chairs"] }
-- "Looking for cheap beds" => { "searchKeywords": ["beds"] } don't include "cheap" because it's a price filter, not a keyword.
+- "Looking for cheap beds" => { "searchKeywords": ["beds"] }
 - "Do you have office desks?" => { "searchKeywords": ["office", "desks"] }
 - "Recommend me a mirror" => { "searchKeywords": ["mirror"] }
 
@@ -544,17 +641,6 @@ Choose "product_reference" ONLY if:
   "first", "second", "third", "last", "that one", "this one"
 - OR refers to one of the indexed products shown above.
 - AND the message is clearly about one of those previously shown products.
-Examples:
-- Tell me more about the first one
-- Is the second cheaper?
-- What about that one?
-
-put in mind that these following products were previously shown to the user:
-
-${this.sessions
-  .get('1')
-  ?.activeProducts.map((p, i) => `[${i}] ${p.title}`)
-  .join('\n')}
 
 IMPORTANT RULES:
 - Indices are ZERO-BASED (0 to ${lastIndex}).
@@ -587,9 +673,15 @@ Message: "${userMessage}"
     try {
       parsed = JSON.parse(result.text);
     } catch {
-      throw new Error('Intent parsing failed');
+      return {
+        intent: 'general' as const,
+        searchKeywords: session.latestKeywords ?? [],
+        filters: {},
+        confidence: 0,
+        contextSummary: session.contextSummary,
+      };
     }
-    console.log('Extracted intent data:', parsed);
+
     return IntentSchema.parse(parsed);
   }
 
@@ -696,7 +788,6 @@ JSON array:`,
     return searchKeywords;
   }
 
-  // Add this method to the ConciergeService class
   private async filterRelevantProducts(
     products: any[],
     searchKeywords: string[],
@@ -711,7 +802,6 @@ JSON array:`,
       )
       .join('\n');
 
-    console.log('productList:', productList);
     const result = await generateText({
       model: this.groq('llama-3.3-70b-versatile'),
       temperature: 0,
@@ -749,13 +839,18 @@ Do NOT include any explanation.
     });
 
     try {
-      console.log('LLM filter raw response:', result.text);
-
       const indices = JSON.parse(result.text);
       if (Array.isArray(indices) && indices.length > 0) {
         const filtered = indices
           .filter((i: number) => i >= 0 && i < products.length)
           .map((i: number) => products[i]);
+
+        if (filtered.length === 0) {
+          console.warn(
+            'LLM filter returned indices, but none were valid. Returning all products.',
+          );
+          return products;
+        }
         return filtered;
       }
     } catch {
